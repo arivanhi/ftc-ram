@@ -3,7 +3,7 @@ import { and, eq, isNull } from 'drizzle-orm';
 import { db } from '@/db';
 import { assets } from '@/db/schema';
 import { isValidUuid } from '@/lib/uuid';
-import { buildAssetPublicUrl, generateAssetQrPngBuffer } from '@/lib/qr';
+import { buildAssetPublicUrl, generateAssetQrPngBuffer, resolveRequestOrigin } from '@/lib/qr';
 
 export async function GET(
   req: Request,
@@ -24,7 +24,7 @@ export async function GET(
     return NextResponse.json({ error: 'Aset tidak ditemukan.' }, { status: 404 });
   }
 
-  const origin = process.env.NEXT_PUBLIC_APP_URL || new URL(req.url).origin;
+  const origin = resolveRequestOrigin(req);
   const png = await generateAssetQrPngBuffer(buildAssetPublicUrl(uuid, origin));
 
   return new NextResponse(new Uint8Array(png), {

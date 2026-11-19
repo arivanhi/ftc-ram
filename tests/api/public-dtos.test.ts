@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import ExcelJS from 'exceljs';
 import { buildAssetsWorkbookBuffer } from '@/lib/export-xlsx';
-import { generateAssetQrPngBuffer, buildAssetPublicUrl } from '@/lib/qr';
+import { generateAssetQrPngBuffer, buildAssetPublicUrl, resolveRequestOrigin } from '@/lib/qr';
 import { GET as getAssetByUuid } from '@/app/api/assets/[uuid]/route';
 
 describe('XLSX export, QR generator, and UUID route guard', () => {
@@ -37,6 +37,21 @@ describe('XLSX export, QR generator, and UUID route guard', () => {
     expect(url).toBe('http://ssh.haweb.my.id:4031/aset/550e8400-e29b-41d4-a716-446655440000');
     const png = await generateAssetQrPngBuffer(url);
     expect(png.subarray(0, 4)).toEqual(Buffer.from([0x89, 0x50, 0x4e, 0x47]));
+  });
+
+  it('derives QR origin from X-Forwarded-Host/Proto behind Cloudflare/reverse-proxy tunnels', () => {
+    const req = new Request('http://127.0.0.1:4031/api/assets/x/qr', {
+      headers: {
+        'x-forwarded-host': 'ftc-ram.haweb.my.id',
+        'x-forwarded-proto': 'https',
+      },
+    });
+    expect(resolveRequestOrigin(req)).toBe('https://ftc-ram.haweb.my.id');
+
+    const badReq = new Request('http://127.0.0.1:4031/api/assets/x/qr', {
+      headers: { 'x-forwarded-host': 'evil.com/path?x=1', 'x-forwarded-proto': 'javascript' },
+    });
+    expect(resolveRequestOrigin(badReq)).toBe('http://127.0.0.1:4031');
   });
 
   it('returns 400 on non-UUID asset parameter without hitting DB (Review Focus #5)', async () => {
