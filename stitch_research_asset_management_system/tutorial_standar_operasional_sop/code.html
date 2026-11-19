@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary-container":"#254b7f","background":"#faf8ff","on-primary-fixed-variant":"#03468a","on-secondary":"#ffffff","inverse-surface":"#283044","primary-fixed":"#d6e3ff","error-container":"#ffdad6","primary-container":"#0d4a8e","on-primary-fixed":"#001b3d","secondary-fixed-dim":"#ffb955","surface-dim":"#d2d9f4","on-tertiary-fixed":"#001b3c","tertiary-fixed-dim":"#a8c8ff","on-secondary-container":"#6b4500","surface-container-low":"#f2f3ff","on-primary-container":"#94bcff","tertiary-fixed":"#d5e3ff","surface-variant":"#dae2fd","on-background":"#131b2e","on-surface-variant":"#424751","primary-fixed-dim":"#a9c7ff","surface-container-lowest":"#ffffff","surface":"#faf8ff","primary":"#003369","outline-variant":"#c2c6d2","on-tertiary-fixed-variant":"#20477b","surface-tint":"#2c5ea3","error":"#ba1a1a","surface-container":"#eaedff","on-tertiary-container":"#99bcf7","on-primary":"#ffffff","inverse-primary":"#a9c7ff","on-error-container":"#93000a","on-surface":"#131b2e","surface-container-high":"#e2e7ff","outline":"#737782","tertiary":"#033467","on-tertiary":"#ffffff","on-secondary-fixed":"#291800","surface-container-highest":"#dae2fd","secondary-fixed":"#ffddb4","on-error":"#ffffff","surface-bright":"#faf8ff","on-secondary-fixed-variant":"#633f00","secondary":"#835500","inverse-on-surface":"#eef0ff","secondary-container":"#feae2c"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"gutter":"1.25rem","space-xl":"2rem","space-sm":"0.5rem","space-xs":"0.25rem","space-lg":"1.5rem","gutter-mobile":"0.75rem","margin":"2rem","margin-mobile":"1rem","space-md":"1rem"},fontFamily:{"title-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-xl-mobile":["Plus Jakarta Sans"],"mono-data":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"]},fontSize:{"title-sm":["14px",{"lineHeight":"20px","fontWeight":"600"}],"headline-md":["22px",{"lineHeight":"30px","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","fontWeight":"600"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","fontWeight":"700"}],"mono-data":["13px",{"lineHeight":"18px","fontWeight":"500"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"headline-xl":["36px",{"lineHeight":"44px","fontWeight":"700"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"headline-lg":["28px",{"lineHeight":"36px","fontWeight":"700"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","fontWeight":"700"}],"label-sm":["11px",{"lineHeight":"16px","fontWeight":"700"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 w-full px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md min-w-max"><img alt="logo_dinus_new.png" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrCQl_e96mOG6BvHhuDZJxl8D9Kz5MQUlhpS_ikv-QOCpuY3Qgms_Svw3Kvr-aOXY1lY94WIa3NMOrn1MdJmYoygB71KOwTInrgyDIlporlaFb8NVSR-2ZrR4oMNLfRNFIlZSqT7MWSUpJqoKls9GcG5wbsFGkFBkDB6WjpfVybw-rerzzd2y1RcSDzE8FaCQwSvON9nIBWkQt3-qEX7QP4GTtIHH_rG60Xn8ypecJa2xnllc-o7EiiOtX3x"/><div class="flex flex-col justify-center"><div class="flex items-center gap-space-xs"><span class="font-title-md text-title-md text-primary font-bold tracking-tight">SIM-Aset Penelitian</span><span class="px-space-xs py-0.5 rounded-full bg-secondary/10 text-secondary font-label-sm text-label-sm uppercase font-semibold">LPPM</span></div><span class="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline-block leading-tight">Lembaga Penelitian &amp; Pengabdian Masyarakat (LPPM) UDINUS</span></div></div><div class="hidden xl:flex items-center flex-1 max-w-md mx-space-lg"><div class="w-full flex items-center bg-surface-container-low rounded-lg px-space-md py-space-xs focus-within:bg-surface-container-lowest transition-colors"><span class="material-symbols-outlined text-outline text-[20px] mr-space-xs">search</span><input class="w-full bg-transparent font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none" placeholder="Cari alat, instrumen, kode inventaris..." type="text"/></div></div><div class="flex items-center gap-space-md min-w-max"><button class="relative p-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-1 right-1 w-2.5 h-2.5 bg-secondary-container rounded-full"></span></button><div class="flex items-center gap-space-sm pl-space-xs border-l border-outline-variant/30"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-title-sm text-title-sm text-on-surface leading-tight font-semibold">Dr. Hendra Gunawan, S.Kom., M.T.</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Lab Admin / Peneliti</span></div></div></div></div><nav class="w-full bg-surface-container-low px-gutter py-space-xs flex items-center gap-space-xs overflow-x-auto shadow-[0_1px_4px_rgba(0,0,0,0.02)]" data-active-classes="bg-primary-container text-on-primary font-title-sm rounded-lg"><a class="px-space-md py-space-xs font-title-sm text-title-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors whitespace-nowrap" data-path="katalog-dan-kondisi-aset" href="#">Katalog &amp; Kondisi Aset</a><a class="px-space-md py-space-xs font-title-sm text-title-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors whitespace-nowrap" data-path="penempatan-dan-denah-lab" href="#">Penempatan &amp; Denah Lab</a><a class="px-space-md py-space-xs font-title-sm text-title-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors whitespace-nowrap" data-path="peminjaman-aset" href="#">Peminjaman Aset</a><a aria-current="page" class="px-space-md py-space-xs transition-colors whitespace-nowrap bg-primary-container text-on-primary font-title-sm rounded-lg" data-path="tutorial-dan-sop" href="#">Tutorial &amp; SOP</a><a class="px-space-md py-space-xs font-title-sm text-title-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors whitespace-nowrap" data-path="narahubung-dan-bantuan" href="#">Narahubung &amp; Bantuan</a></nav></header><main class="w-full pt-32 bg-surface min-h-[calc(100vh-140px)]"><div class="flex flex-col w-full">
+<div class="w-full max-w-[1440px] mx-auto px-gutter py-space-md flex flex-col gap-space-xl">
+<!-- Top Meta Context Bar -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="px-space-sm py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm uppercase tracking-wider font-bold">
+          Direktorat LPPM Riset Terpadu
+        </span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+<span class="font-mono-data text-mono-data text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-secondary">verified_user</span> Standar ISO/IEC 17025:2017
+        </span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Terakhir diperbarui:</span>
+<span class="font-mono-data text-mono-data text-primary font-semibold bg-surface-container-high px-space-xs py-0.5 rounded">18 Februari 2025</span>
+</div>
+</div>
+<!-- Banner & Header Search Section -->
+<section class="relative rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary p-space-lg md:p-space-xl overflow-hidden shadow-sm">
+<div class="absolute right-0 top-0 translate-x-12 -translate-y-8 w-96 h-96 bg-secondary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute right-1/4 bottom-0 w-64 h-64 bg-on-primary-container/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="relative z-10 max-w-3xl flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary-fixed text-[26px]">menu_book</span>
+<span class="font-title-sm text-title-sm text-secondary-fixed tracking-wide uppercase font-bold">Dokumentasi &amp; Penjaminan Mutu Riset</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-primary tracking-tight leading-snug">
+          Pusat Edukasi &amp; Prosedur Operasional Standar (SOP) Peralatan Laboratorium Penelitian UDINUS
+        </h1>
+<p class="font-body-lg text-body-lg text-on-primary/90 max-w-2xl leading-relaxed">
+          Koleksi komprehensif manual instrumen canggih, video kalibrasi, modul mitigasi K3, serta uji sertifikasi mandiri sebelum memperoleh otorisasi akses fisik alat Level 3.
+        </p>
+<!-- Search Bar with Live Quick Filters -->
+<div class="mt-space-sm flex flex-col sm:flex-row items-stretch sm:items-center gap-space-xs bg-surface-container-lowest p-1.5 rounded-lg shadow-md">
+<div class="flex items-center flex-1 px-space-sm gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-outline text-[22px]">search</span>
+<input class="w-full bg-transparent font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none py-1" id="searchInput" placeholder="Cari SOP, nama alat (SEM, GC-MS, LiDAR), atau kode dokumen..." type="text"/>
+</div>
+<div class="flex items-center gap-space-xs pr-1">
+<div class="hidden md:flex items-center gap-1 font-mono-data text-mono-data text-outline-variant px-space-xs">
+<kbd class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px]">Ctrl</kbd>
+<kbd class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px]">K</kbd>
+</div>
+<button class="px-space-md py-2 rounded bg-primary text-on-primary font-title-sm text-title-sm flex items-center justify-center gap-space-xs hover:bg-tertiary transition-colors shadow-sm" type="button">
+<span>Cari Panduan</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Navigation / Category Badges -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">filter_alt</span> Kategori Klaster Panduan
+        </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Menampilkan 5 Klasifikasi</span>
+</div>
+<div class="flex items-center gap-space-sm overflow-x-auto pb-space-xs no-scrollbar">
+<button class="group flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-primary text-on-primary font-title-sm text-title-sm shadow-sm whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-[18px]">apps</span>
+<span>Semua Klaster (28)</span>
+</button>
+<button class="group flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-title-sm text-title-sm shadow-sm whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-error text-[18px]">health_and_safety</span>
+<span>SOP Keselamatan Kerja &amp; K3 Lab</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-on-surface-variant text-[10px]">6</span>
+</button>
+<button class="group flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-title-sm text-title-sm shadow-sm whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-primary text-[18px]">smart_display</span>
+<span>Tutorial Video Pengoperasian Alat Canggih</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-on-surface-variant text-[10px]">9</span>
+</button>
+<button class="group flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-title-sm text-title-sm shadow-sm whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-secondary text-[18px]">science</span>
+<span>Panduan Preparasi Sampel Riset</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-on-surface-variant text-[10px]">5</span>
+</button>
+<button class="group flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-title-sm text-title-sm shadow-sm whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">build</span>
+<span>Troubleshooting &amp; Perawatan Ringan</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-on-surface-variant text-[10px]">4</span>
+</button>
+<button class="group flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-title-sm text-title-sm shadow-sm whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-secondary-container text-[18px]">workspace_premium</span>
+<span>Pedoman Sertifikasi Izin Pakai Alat Level 3</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-on-surface-variant text-[10px]">4</span>
+</button>
+</div>
+</section>
+<!-- Main Content Grid: Asset Guides + Operator Certification Bento -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- Catalog & Guides Column (8 Cols) -->
+<section class="xl:col-span-8 flex flex-col gap-space-md">
+<!-- Header status counts inside guide list -->
+<div class="flex items-center justify-between pb-1">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Daftar Modul &amp; Panduan Terverifikasi</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Dokumen resmi yang diterbitkan Unit Mutu &amp; K3 Laboratorium Terpadu UDINUS</p>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">sort</span> Urutkan: Terbaru
+            </button>
+</div>
+</div>
+<!-- Guide Card 1: SEM Hitachi -->
+<article class="bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col md:flex-row group">
+<div class="relative md:w-64 h-48 md:h-auto overflow-hidden shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="High-resolution laboratory image of a modern Hitachi scanning electron microscope with electron optics column, vacuum chamber, control panel screens in a sterile cleanroom research facility at Universitas Dian Nuswantoro with cool blue ambient laboratory lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoZ5IaozVAKlgHqNJFV1Ov-Sr1OJ5LwcxctQ8xalViA2GvADgsPq9aJbglNUY7U9GlPzFfvskglaQY05Tz9-FUaw4pmG0w5UmmmKEjCdxQwdHbmOdNmnCPry1riIOCTczVg5IqcGoqd2w5IPljVZSGKaRlklNbTpuQxOWxS475Pt_Q1EpLyd-2FVG7M_3iAgPBzRCZEGwjf21X783t_TePs0CWAy-Pm6fvGGZB63kP"/>
+<div class="absolute top-2 left-2 px-space-xs py-0.5 rounded bg-primary-container/90 text-on-primary text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
+              SOP Dokumen
+            </div>
+<div class="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-inverse-surface/80 text-inverse-on-surface font-mono-data text-[11px]">
+              PDF • 18 Hlm
+            </div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between gap-space-xs flex-wrap">
+<span class="font-mono-data text-mono-data text-outline font-semibold tracking-wide">SOP-LPPM-INS-042</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> Level 3: Sertifikasi Wajib
+                </span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors font-bold">
+                SOP Standar Operasional SEM Hitachi TM4000Plus
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+                Tata laksana degas, loading spesimen konduktif dan non-konduktif, pengaturan berkas elektron 5kV - 15kV, penyetelan detektor BSE/EDS, serta protokol penutupan chamber vakum.
+              </p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-space-xs pt-space-xs border-t border-surface-container-high">
+<div class="flex items-center gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<span>Versi 3.2</span>
+<span>•</span>
+<span>Revisi Sept 2024</span>
+<span>•</span>
+<span class="text-primary font-medium">Lab. Nanoteknologi (Gedung I Lt. 3)</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1.5 rounded bg-surface-container-high text-primary hover:bg-primary-fixed transition-colors font-title-sm text-title-sm flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span> Buka Baca Cepat
+                </button>
+<button class="px-space-sm py-1.5 rounded bg-primary text-on-primary hover:bg-tertiary transition-colors font-title-sm text-title-sm flex items-center gap-1 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span> Unduh SOP
+                </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Guide Card 2: GC-MS Calibration Video -->
+<article class="bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col md:flex-row group">
+<div class="relative md:w-64 h-48 md:h-auto overflow-hidden shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A specialized analytical chemist calibrating a Gas Chromatography Mass Spectrometry GC-MS machine with helium carrier gas lines, autosampler syringe system, and analytical computer spectrum software in a well-lit biochemical lab at Universitas Dian Nuswantoro." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCCyr-STviBb3P4D_zIc2FA_9FL6zxlX_GSPnYC6JKL8IIpDFx2Ns_mu6ZxKGfNVhqmxvHtQeRGOvEbtZLfldD4nTuibMUPakq6mDWtDqizFwQ9ZeH3YAwNv5ycXlpsyu0pra7em43kRpA04_F8I0UBuo8ADLd-4NsOauTSBdhik8w6evMVj4rCAWFltOr3AQeemjhCU5KrMrf7M6eGNOvnYIxu5kU9VWlejqePdI5"/>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/60 via-transparent to-transparent flex items-center justify-center">
+<div class="w-12 h-12 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[28px] fill-current" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<div class="absolute top-2 left-2 px-space-xs py-0.5 rounded bg-secondary/90 text-on-secondary text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
+              Video HD
+            </div>
+<div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-inverse-surface/90 text-inverse-on-surface font-mono-data text-[11px]">
+              14:28 Menit
+            </div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between gap-space-xs flex-wrap">
+<span class="font-mono-data text-mono-data text-outline font-semibold tracking-wide">VID-TUT-KIM-018</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Level 2: Pendampingan Ringan
+                </span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors font-bold">
+                Video Tutorial: Kalibrasi Dasar &amp; Setup Parameter GC-MS
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+                Demonstrasi langsung oleh Teknisi Lab Terpadu: pemeriksaan kebocoran septum, setting flow rate kolom kapiler, kalibrasi rasio m/z senyawa referensi, dan validasi kurva standar analit.
+              </p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-space-xs pt-space-xs border-t border-surface-container-high">
+<div class="flex items-center gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<span class="font-medium text-on-surface">Instruktur: M. Faizal, A.Md.</span>
+<span>•</span>
+<span>Audio ID / Subtitle EN</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-1.5 rounded bg-secondary text-on-secondary hover:bg-secondary/90 transition-colors font-title-sm text-title-sm flex items-center gap-1 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">play_circle</span> Tonton Video
+                </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Guide Card 3: GPU Cluster A100 -->
+<article class="bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col md:flex-row group">
+<div class="relative md:w-64 h-48 md:h-auto overflow-hidden shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="High performance computing server rack with glowing indicator LEDs, NVIDIA HGX A100 GPU compute nodes, fiber optic cables, and data center cooling vents at UDINUS Artificial Intelligence and Robotics Research Center." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChW5qGqgYyzLJjGdHLWkkEpm-QlNR2RX-9B2avmgOuBmVmhaWgyrBxvNryDGUiroUkZiml5SaOt0m3boiOBdBv61sStkD6FeAZGhwNV3CCLbzU9ASDaBebYyjRWUURIfCYLQgWuIbdsDef2r7W-zltG0oo7o5Y44-uUyVJHh7Nd7qSGI0WxQtmGzvfmy7i6YqtYlIMapTqz2LLL9yp3CB9W1KcjQw9ggWJZj8rNBBe"/>
+<div class="absolute top-2 left-2 px-space-xs py-0.5 rounded bg-tertiary-container text-on-tertiary-container text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
+              CLI / Terminal
+            </div>
+<div class="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-inverse-surface/80 text-inverse-on-surface font-mono-data text-[11px]">
+              Panduan Praktis
+            </div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between gap-space-xs flex-wrap">
+<span class="font-mono-data text-mono-data text-outline font-semibold tracking-wide">DOC-HPC-GPU-009</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-tertiary font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Level 2: Mahir Terminal
+                </span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors font-bold">
+                Protokol Akses &amp; Manajemen Akun Klaster Komputasi GPU A100 SLURM
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+                Konfigurasi VPN kampus, otentikasi SSH public key, skrip submit job batch (sbatch), alokasi multi-GPU CUDA 12.2, mount dataset NFS, serta aturan kuota jam komputasi riset AI &amp; Vision.
+              </p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-space-xs pt-space-xs border-t border-surface-container-high">
+<div class="flex items-center gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<span>Versi Script 2.4</span>
+<span>•</span>
+<span class="text-primary font-medium">Lab. Komputasi Kinerja Tinggi (Gedung D)</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1.5 rounded bg-surface-container-high text-primary hover:bg-primary-fixed transition-colors font-title-sm text-title-sm flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[18px]">terminal</span> Salin Skrip Template
+                </button>
+<button class="px-space-sm py-1.5 rounded bg-primary text-on-primary hover:bg-tertiary transition-colors font-title-sm text-title-sm flex items-center gap-1 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">menu_book</span> Buka Panduan
+                </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Guide Card 4: K3 Chemical Handling -->
+<article class="bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col md:flex-row group">
+<div class="relative md:w-64 h-48 md:h-auto overflow-hidden shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Laboratory technician wearing certified chemical splash goggles, nitrile gloves, and lab coat safely manipulating reagent bottles under an illuminated chemical fume hood with safety warning placards and fire emergency signs at Dian Nuswantoro University." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKmY2sY1pCHaEhDYPLtE36pQVaLv7itORkNwmhaYRxqIDmktfV0eFrFNHofBPWro6JVd3VyJ9IdWAhJRp2HN5fG3JWQu_67BTADGceqScdfUsuQLGtjPUJ_oYfwB7_JkU-q9hp6uv-EFoOmjYS_2hoKu7ijN3khBf3NZIRnPiajiybqHK5FsA1GzIgzRc8wywOlZ5LarNVg6pz_4dT0aaObzl4ZPEjmbBHacAQ8Wgd"/>
+<div class="absolute top-2 left-2 px-space-xs py-0.5 rounded bg-error text-on-error text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
+              Keselamatan K3
+            </div>
+<div class="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-inverse-surface/80 text-inverse-on-surface font-mono-data text-[11px]">
+              Poster &amp; Checklist
+            </div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between gap-space-xs flex-wrap">
+<span class="font-mono-data text-mono-data text-outline font-semibold tracking-wide">SOP-K3-B3-2024</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Wajib Seluruh Peneliti
+                </span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors font-bold">
+                Pedoman Penanganan Bahaya Bahan Kimia &amp; Reagen Beracun (K3)
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+                Instruksi pembuangan limbah B3 asam-basa, prosedur penggunaan lemari asam (fume hood), penggunaan spill kit netralisir, serta penanganan darurat darurat paparan mata/kulit eyewash shower.
+              </p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-space-xs pt-space-xs border-t border-surface-container-high">
+<div class="flex items-center gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<span>Checklist Interaktif</span>
+<span>•</span>
+<span>Standar Kemenaker &amp; GHS</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1.5 rounded bg-surface-container-high text-primary hover:bg-primary-fixed transition-colors font-title-sm text-title-sm flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[18px]">fact_check</span> Unduh Checklist K3
+                </button>
+<button class="px-space-sm py-1.5 rounded bg-primary text-on-primary hover:bg-tertiary transition-colors font-title-sm text-title-sm flex items-center gap-1 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">interactive_space</span> Buka Poster Interaktif
+                </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Guide Card 5: 3D LiDAR Scanner -->
+<article class="bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col md:flex-row group">
+<div class="relative md:w-64 h-48 md:h-auto overflow-hidden shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="High precision terrestrial 3D LiDAR scanner mounted on a heavy carbon fiber tripod capturing architectural survey data inside an engineering heritage hall, laser telemetry visualization points and digital twin point cloud on an attached field rugged tablet." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClKkCsLI8MB5KKvq_PNJeDmR6MnlQeeiFUft9U2bn1vOAcPl2Q9y-7pwpiuivl-z4VxuTwY8d7fQvC8jXrJ36ry1qn0QCQKali60Id3x5ctaC1gEPnWw3I5zfpdGDNoM8C1r8m47B8JXzqgARhWAUJnhWnZ-VnUDaKDsy2iYPVfv3wrSQboFkZQXL3YN9FcrwspLQ-p_Pf48nvloa9lQr6zWNEr3rlrxZcok_aIYPc"/>
+<div class="absolute top-2 left-2 px-space-xs py-0.5 rounded bg-primary-container text-on-primary text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
+              Modul Praktik
+            </div>
+<div class="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-inverse-surface/80 text-inverse-on-surface font-mono-data text-[11px]">
+              Modul • 25 Hlm
+            </div>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between gap-space-xs flex-wrap">
+<span class="font-mono-data text-mono-data text-outline font-semibold tracking-wide">MOD-GEO-LIDAR-03</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Level 2: Sertifikasi Alat Lapangan
+                </span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors font-bold">
+                Tutorial 3D LiDAR Scanner: Dari Pemindaian Lapangan ke Point Cloud
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+                Penentuan titik target retro-reflektor, pengaturan multi-station scanning, ekspor raw laser point, penyelarasan registrasi ICP di Leica Cyclone / CloudCompare, dan optimasi mesh 3D.
+              </p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-space-xs pt-space-xs border-t border-surface-container-high">
+<div class="flex items-center gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<span>Versi 1.4 (Edisi 2024)</span>
+<span>•</span>
+<span class="text-primary font-medium">Lab. Geodesi &amp; Penginderaan Jauh</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1.5 rounded bg-surface-container-high text-primary hover:bg-primary-fixed transition-colors font-title-sm text-title-sm flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[18px]">dataset</span> Unduh Dataset Latihan
+                </button>
+<button class="px-space-sm py-1.5 rounded bg-primary text-on-primary hover:bg-tertiary transition-colors font-title-sm text-title-sm flex items-center gap-1 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span> Unduh Modul PDF
+                </button>
+</div>
+</div>
+</div>
+</article>
+</section>
+<!-- Sidebar Bento: Operator Certification Test & Lab Rules (4 Cols) -->
+<aside class="xl:col-span-4 flex flex-col gap-space-lg">
+<!-- Online Certification Test Card (Interactive Feature) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md p-space-lg flex flex-col gap-space-md border-t-4 border-secondary-container">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-10 h-10 rounded-lg bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">verified</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase font-bold tracking-wider">Otorisasi Mandiri</span>
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Kuis Sertifikasi Operator Level 3</h3>
+</div>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Sesuai regulasi LPPM UDINUS No. 14/SK/2023, peneliti dan mahasiswa tingkat akhir wajib lulus tes pemahaman sebelum diperbolehkan memesan alat riset berisiko tinggi tanpa teknisi pendamping.
+          </p>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-on-surface-variant">Passing Grade:</span>
+<span class="font-bold text-on-surface">Minimal 80/100</span>
+</div>
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-on-surface-variant">Durasi Ujian:</span>
+<span class="font-mono-data font-semibold text-primary">25 Menit (20 Soal Acak)</span>
+</div>
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-on-surface-variant">Masa Berlaku Lisensi:</span>
+<span class="font-bold text-secondary">12 Bulan Kalender</span>
+</div>
+</div>
+<!-- Interactive Test Module Selection -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold" for="moduleSelect">Pilih Instrumen yang Diuji:</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest text-on-surface font-body-md text-body-md px-space-sm py-2 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-primary shadow-sm pr-8" id="moduleSelect">
+<option value="sem">SEM Hitachi TM4000Plus (Mikroskopi Elektron)</option>
+<option value="gcms">GC-MS Agilent 7890B (Spektrometri Gas)</option>
+<option value="gpu">Klaster Komputasi AI Supermicro A100</option>
+<option value="xrd">XRD Rigaku SmartLab (Difraksi Sinar-X)</option>
+<option value="lidar">3D Terrestrial LiDAR Faro Focus Core</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 pointer-events-none text-outline text-[20px]">expand_more</span>
+</div>
+</div>
+<!-- Quick Preview of Sample Question -->
+<div class="bg-surface-container rounded-lg p-space-sm flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-primary font-bold">Simulasi Soal K3:</span>
+<span class="text-[11px] text-on-surface-variant">Contoh 1 dari 20</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium">
+              "Apa tindakan pertama jika tekanan vakum pada SEM tidak tercapai setelah 10 menit proses degassing spesimen biologi?"
+            </p>
+<div class="flex flex-col gap-1 mt-1 text-[12px] text-on-surface-variant">
+<label class="flex items-center gap-2 p-1.5 rounded bg-surface-container-lowest hover:bg-primary-fixed/20 cursor-pointer">
+<input class="accent-primary" name="simulasi" type="radio"/>
+<span>Periksa seal O-ring pintu chamber &amp; pastikan sampel telah di-dryer sempurna</span>
+</label>
+<label class="flex items-center gap-2 p-1.5 rounded bg-surface-container-lowest hover:bg-primary-fixed/20 cursor-pointer">
+<input class="accent-primary" name="simulasi" type="radio"/>
+<span>Nyalakan paksa tegangan filamen pada 15kV tanpa menunggu vakum</span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<button class="w-full py-2.5 rounded-lg bg-secondary text-on-secondary font-title-sm text-title-sm font-semibold flex items-center justify-center gap-space-xs hover:bg-secondary/90 shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">assignment_turned_in</span>
+<span>Mulai Ujian Sertifikasi Sekarang</span>
+</button>
+<span class="text-center font-body-sm text-body-sm text-on-surface-variant">
+              Hasil langsung diverifikasi ke akun SIM-Aset Anda.
+            </span>
+</div>
+</div>
+<!-- Quick Access to Download Center & Technical Bulletins -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[22px]">quick_reference</span>
+<h4 class="font-title-sm text-title-sm font-bold text-on-surface">Buletin Kalibrasi &amp; Form Unduhan</h4>
+</div>
+<ul class="flex flex-col gap-space-xs">
+<li>
+<a class="flex items-center justify-between p-space-xs rounded hover:bg-surface-container transition-colors group" href="#">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[18px]">description</span>
+<span class="font-body-sm text-body-sm text-on-surface group-hover:text-primary">Form Laporan Kerusakan Insidental</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline-variant">DOCX</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-between p-space-xs rounded hover:bg-surface-container transition-colors group" href="#">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[18px]">description</span>
+<span class="font-body-sm text-body-sm text-on-surface group-hover:text-primary">Logbook Harian Penggunaan SEM &amp; TEM</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline-variant">XLSX</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-between p-space-xs rounded hover:bg-surface-container transition-colors group" href="#">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[18px]">description</span>
+<span class="font-body-sm text-body-sm text-on-surface group-hover:text-primary">Lembar Persetujuan Etik &amp; K3 Riset</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline-variant">PDF</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-between p-space-xs rounded hover:bg-surface-container transition-colors group" href="#">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[18px]">history_edu</span>
+<span class="font-body-sm text-body-sm text-on-surface group-hover:text-primary">Jadwal Kalibrasi Tahunan 2025</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-bold">Terjadwal</span>
+</a>
+</li>
+</ul>
+</div>
+<!-- Quick Emergency Contacts / Lab Technician Helpdesk -->
+<div class="bg-primary text-on-primary rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm relative overflow-hidden">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary-fixed text-[24px]">contact_support</span>
+<h4 class="font-title-md text-title-md font-bold">Bantuan Teknis Lapangan</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-primary/90">
+            Mengalami anomali instrumen atau keraguan saat setup sampel penelitian? Hubungi teknisi jaga:
+          </p>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between bg-on-primary/10 rounded px-space-sm py-1.5">
+<div>
+<div class="font-title-sm text-title-sm text-on-primary">Lab Instrumentasi Terpadu</div>
+<div class="font-body-sm text-body-sm text-on-primary/80">Irawan Prasetyo, S.T. (Ext. 219)</div>
+</div>
+<a class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center hover:scale-105 transition-transform" href="tel:+62243517261">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</a>
+</div>
+<div class="flex items-center justify-between bg-on-primary/10 rounded px-space-sm py-1.5">
+<div>
+<div class="font-title-sm text-title-sm text-on-primary">Lab Komputasi AI &amp; HPC</div>
+<div class="font-body-sm text-body-sm text-on-primary/80">Bayu Wicaksono, M.Kom. (Ext. 154)</div>
+</div>
+<a class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center hover:scale-105 transition-transform" href="tel:+62243517261">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Interactive FAQ Section -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg md:p-space-xl flex flex-col gap-space-md mt-space-md">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm pb-space-xs border-b border-surface-container-high">
+<div>
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Tanya Jawab Teknis</span>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Frequently Asked Questions (FAQ)</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-md">
+          Pertanyaan mendasar terkait tata kelola perawatan mandiri, penanganan insiden, dan sertifikasi alat laboratorium LPPM UDINUS.
+        </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- FAQ 1 -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-xs">
+<div class="flex items-start gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-primary text-[22px] shrink-0 mt-0.5">help</span>
+<h4 class="font-title-sm text-title-sm font-bold">Bagaimana jika terjadi mati listrik mendadak saat SEM beroperasi?</h4>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant pl-7">
+            Segera matikan saklar High Voltage (HV) manual, jangan membuka chamber spesimen. Sistem UPS online lab akan menopang pendingin turbomolekuler selama 25 menit. Laporkan segera ke teknisi jaga gedung.
+          </p>
+</div>
+<!-- FAQ 2 -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-xs">
+<div class="flex items-start gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-primary text-[22px] shrink-0 mt-0.5">help</span>
+<h4 class="font-title-sm text-title-sm font-bold">Apakah mahasiswa S1 diperbolehkan mengoperasikan alat Level 3 mandiri?</h4>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant pl-7">
+            Hanya mahasiswa skripsi/tugas akhir yang telah memiliki surat pengantar dosen pembimbing serta telah lulus Kuis Sertifikasi Operator Level 3 dengan nilai minimum 80.
+          </p>
+</div>
+<!-- FAQ 3 -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-xs">
+<div class="flex items-start gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-primary text-[22px] shrink-0 mt-0.5">help</span>
+<h4 class="font-title-sm text-title-sm font-bold">Kapan instrumen laboratorium dikalibrasi ulang secara eksternal?</h4>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant pl-7">
+            Kalibrasi eksternal berstandar KAN ISO 17025 dilakukan setiap 12 bulan sekali oleh Badan Standardisasi Nasional (BSN) atau laboratorium kalibrasi mitra terakreditasi pada triwulan ke-4 tiap tahun.
+          </p>
+</div>
+<!-- FAQ 4 -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-xs">
+<div class="flex items-start gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-primary text-[22px] shrink-0 mt-0.5">help</span>
+<h4 class="font-title-sm text-title-sm font-bold">Bagaimana prosedur peminjaman alat lapangan seperti LiDAR Scanner?</h4>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant pl-7">
+            Pengajuan dilakukan H-3 survei lapangan via menu Peminjaman Aset, wajib melampirkan proposal riset, surat izin lokasi, dan sertifikat operator surveyor aktif dari LPPM UDINUS.
+          </p>
+</div>
+</div>
+</section>
+<!-- Interactive Micro Script for Tab/Filter and Search Behavior -->
+<script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('searchInput');
+        const articles = document.querySelectorAll('article');
+
+        if (searchInput) {
+          searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            articles.forEach(article => {
+              const text = article.innerText.toLowerCase();
+              if (text.includes(query)) {
+                article.style.display = 'flex';
+              } else {
+                article.style.display = 'none';
+              }
+            });
+          });
+
+          // Keyboard shortcut Ctrl+K
+          window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+              e.preventDefault();
+              searchInput.focus();
+            }
+          });
+        }
+      });
+    </script>
+</div>
+</div></main><footer class="w-full bg-surface-container-lowest mt-space-xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="w-full max-w-[1440px] mx-auto px-gutter py-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex flex-col sm:flex-row items-center gap-space-md text-center sm:text-left"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-primary text-[28px]">verified</span><div><div class="font-title-sm text-title-sm text-on-surface font-semibold">Laboratorium Riset Terakreditasi KAN / ISO 17025</div><div class="font-body-sm text-body-sm text-on-surface-variant">Standar Tata Kelola &amp; Kalibrasi Instrumen LPPM UDINUS</div></div></div></div><div class="flex flex-wrap items-center justify-center gap-space-lg font-body-sm text-body-sm text-on-surface-variant"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-outline text-[18px]">mail</span><span>lppm@dinus.ac.id</span></div><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-outline text-[18px]">call</span><span>+62 24 3517261 ext. 142</span></div><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-outline text-[18px]">location_on</span><span>Gedung H Lt. 2, Kampus UDINUS Semarang</span></div></div></div><div class="w-full bg-surface-container-low py-space-sm px-gutter text-center font-label-sm text-label-sm text-on-surface-variant">© 2025 Universitas Dian Nuswantoro. Sistem Informasi Manajemen Aset Penelitian LPPM. Hak Cipta Dilindungi.</div></footer></body></html>

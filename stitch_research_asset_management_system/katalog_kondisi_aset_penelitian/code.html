@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary-container":"#254b7f","background":"#faf8ff","on-primary-fixed-variant":"#03468a","on-secondary":"#ffffff","inverse-surface":"#283044","primary-fixed":"#d6e3ff","error-container":"#ffdad6","primary-container":"#0d4a8e","on-primary-fixed":"#001b3d","secondary-fixed-dim":"#ffb955","surface-dim":"#d2d9f4","on-tertiary-fixed":"#001b3c","tertiary-fixed-dim":"#a8c8ff","on-secondary-container":"#6b4500","surface-container-low":"#f2f3ff","on-primary-container":"#94bcff","tertiary-fixed":"#d5e3ff","surface-variant":"#dae2fd","on-background":"#131b2e","on-surface-variant":"#424751","primary-fixed-dim":"#a9c7ff","surface-container-lowest":"#ffffff","surface":"#faf8ff","primary":"#003369","outline-variant":"#c2c6d2","on-tertiary-fixed-variant":"#20477b","surface-tint":"#2c5ea3","error":"#ba1a1a","surface-container":"#eaedff","on-tertiary-container":"#99bcf7","on-primary":"#ffffff","inverse-primary":"#a9c7ff","on-error-container":"#93000a","on-surface":"#131b2e","surface-container-high":"#e2e7ff","outline":"#737782","tertiary":"#033467","on-tertiary":"#ffffff","on-secondary-fixed":"#291800","surface-container-highest":"#dae2fd","secondary-fixed":"#ffddb4","on-error":"#ffffff","surface-bright":"#faf8ff","on-secondary-fixed-variant":"#633f00","secondary":"#835500","inverse-on-surface":"#eef0ff","secondary-container":"#feae2c"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"gutter":"1.25rem","space-xl":"2rem","space-sm":"0.5rem","space-xs":"0.25rem","space-lg":"1.5rem","gutter-mobile":"0.75rem","margin":"2rem","margin-mobile":"1rem","space-md":"1rem"},fontFamily:{"title-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-xl-mobile":["Plus Jakarta Sans"],"mono-data":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"]},fontSize:{"title-sm":["14px",{"lineHeight":"20px","fontWeight":"600"}],"headline-md":["22px",{"lineHeight":"30px","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","fontWeight":"600"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","fontWeight":"700"}],"mono-data":["13px",{"lineHeight":"18px","fontWeight":"500"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"headline-xl":["36px",{"lineHeight":"44px","fontWeight":"700"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"headline-lg":["28px",{"lineHeight":"36px","fontWeight":"700"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","fontWeight":"700"}],"label-sm":["11px",{"lineHeight":"16px","fontWeight":"700"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 w-full px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md min-w-max"><img alt="logo_dinus_new.png" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrCQl_e96mOG6BvHhuDZJxl8D9Kz5MQUlhpS_ikv-QOCpuY3Qgms_Svw3Kvr-aOXY1lY94WIa3NMOrn1MdJmYoygB71KOwTInrgyDIlporlaFb8NVSR-2ZrR4oMNLfRNFIlZSqT7MWSUpJqoKls9GcG5wbsFGkFBkDB6WjpfVybw-rerzzd2y1RcSDzE8FaCQwSvON9nIBWkQt3-qEX7QP4GTtIHH_rG60Xn8ypecJa2xnllc-o7EiiOtX3x"/><div class="flex flex-col justify-center"><div class="flex items-center gap-space-xs"><span class="font-title-md text-title-md text-primary font-bold tracking-tight">SIM-Aset Penelitian</span><span class="px-space-xs py-0.5 rounded-full bg-secondary/10 text-secondary font-label-sm text-label-sm uppercase font-semibold">LPPM</span></div><span class="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline-block leading-tight">Lembaga Penelitian &amp; Pengabdian Masyarakat (LPPM) UDINUS</span></div></div><div class="hidden xl:flex items-center flex-1 max-w-md mx-space-lg"><div class="w-full flex items-center bg-surface-container-low rounded-lg px-space-md py-space-xs focus-within:bg-surface-container-lowest transition-colors"><span class="material-symbols-outlined text-outline text-[20px] mr-space-xs">search</span><input class="w-full bg-transparent font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none" placeholder="Cari alat, instrumen, kode inventaris..." type="text"/></div></div><div class="flex items-center gap-space-md min-w-max"><button class="relative p-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-1 right-1 w-2.5 h-2.5 bg-secondary-container rounded-full"></span></button><div class="flex items-center gap-space-sm pl-space-xs border-l border-outline-variant/30"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-title-sm text-title-sm text-on-surface leading-tight font-semibold">Dr. Hendra Gunawan, S.Kom., M.T.</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Lab Admin / Peneliti</span></div></div></div></div><nav class="w-full bg-surface-container-low px-gutter py-space-xs flex items-center gap-space-xs overflow-x-auto shadow-[0_1px_4px_rgba(0,0,0,0.02)]" data-active-classes="bg-primary-container text-on-primary font-title-sm rounded-lg"><a aria-current="page" class="px-space-md py-space-xs transition-colors whitespace-nowrap bg-primary-container text-on-primary font-title-sm rounded-lg" data-path="katalog-dan-kondisi-aset" href="#">Katalog &amp; Kondisi Aset</a><a class="px-space-md py-space-xs font-title-sm text-title-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors whitespace-nowrap" data-path="penempatan-dan-denah-lab" href="#">Penempatan &amp; Denah Lab</a><a class="px-space-md py-space-xs font-title-sm text-title-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors whitespace-nowrap" data-path="peminjaman-aset" href="#">Peminjaman Aset</a><a class="px-space-md py-space-xs font-title-sm text-title-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors whitespace-nowrap" data-path="tutorial-dan-sop" href="#">Tutorial &amp; SOP</a><a class="px-space-md py-space-xs font-title-sm text-title-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors whitespace-nowrap" data-path="narahubung-dan-bantuan" href="#">Narahubung &amp; Bantuan</a></nav></header><main class="w-full pt-32 bg-surface min-h-[calc(100vh-140px)]"><div class="flex flex-col w-full">
+<div class="w-full max-w-[1440px] mx-auto px-gutter py-space-md flex flex-col gap-space-lg">
+<!-- Sub-Header Status Bar & Quick Actions -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs text-secondary font-label-sm uppercase tracking-wider mb-1">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+          Audit Siklus Q4 2024 / ISO 17025 Compliant
+        </div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Katalog &amp; Kondisi Aset Penelitian</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-0.5">
+          Inventarisasi instrumen laboratorium sains, komputasi cerdas, dan rekayasa teknologi LPPM Universitas Dian Nuswantoro.
+        </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm self-start lg:self-center">
+<button class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm transition-colors text-title-sm shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">download</span>
+<span>Unduh Rekap (XLSX)</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm transition-colors text-title-sm shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">qr_code_scanner</span>
+<span>Pindai Barcode Lab</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-lg py-2.5 rounded-lg bg-primary hover:bg-tertiary text-on-primary font-title-sm transition-all text-title-sm shadow-sm active:translate-y-0.5" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Registrasi Aset Baru</span>
+</button>
+</div>
+</div>
+<!-- 1. Hero KPI Bar & Ringkasan Metrik -->
+<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-space-md">
+<!-- Total Aset -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">Total Aset Riset</span>
+<div class="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">science</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-xl text-headline-xl text-primary font-bold">412</div>
+<div class="flex items-center gap-1.5 mt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-primary">domain</span>
+<span>Tersebar di 18 Lab</span>
+</div>
+</div>
+</div>
+<!-- Kondisi Prima -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">Kondisi Prima</span>
+<div class="w-9 h-9 rounded-lg bg-surface-container-low flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px] text-[#059669]">check_circle</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl text-[#059669] font-bold">348</span>
+<span class="px-2 py-0.5 rounded-full bg-[#ecfdf5] text-[#065f46] font-label-sm text-label-sm font-bold">84.4%</span>
+</div>
+<div class="flex items-center gap-1.5 mt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
+<span>Siap Pakai untuk Riset</span>
+</div>
+</div>
+</div>
+<!-- Dalam Pemeliharaan / Kalibrasi -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">Kalibrasi / Maint.</span>
+<div class="w-9 h-9 rounded-lg bg-secondary-fixed/50 flex items-center justify-center text-secondary group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">build_circle</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-xl text-headline-xl text-secondary font-bold">38</div>
+<div class="flex items-center gap-1.5 mt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span>7 dijadwal pekan ini</span>
+</div>
+</div>
+</div>
+<!-- Perlu Perbaikan -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">Perlu Perbaikan</span>
+<div class="w-9 h-9 rounded-lg bg-error-container flex items-center justify-center text-error group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-xl text-headline-xl text-error font-bold">26</div>
+<div class="flex items-center gap-1.5 mt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-error">assignment_late</span>
+<span>12 tiket penanganan aktif</span>
+</div>
+</div>
+</div>
+<!-- Sedang Dipinjam -->
+<div class="col-span-2 md:col-span-1 bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">Sedang Dipinjam</span>
+<div class="w-9 h-9 rounded-lg bg-primary-fixed flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">assignment_ind</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-xl text-headline-xl text-tertiary-container font-bold">54</div>
+<div class="flex items-center gap-1.5 mt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-primary">groups</span>
+<span>Oleh 32 Tim Peneliti</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 2. Filter & Toolbar Pencarian Komprehensif -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col gap-space-md">
+<!-- Top Row: Search & Layout Mode -->
+<div class="flex flex-col md:flex-row gap-space-sm items-center justify-between">
+<div class="w-full md:max-w-lg flex items-center bg-surface-container-low rounded-lg px-space-md py-2.5 focus-within:bg-surface-container-lowest focus-within:shadow-sm transition-all">
+<span class="material-symbols-outlined text-outline text-[20px] mr-2">search</span>
+<input class="w-full bg-transparent font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none" placeholder="Cari nama alat, no seri, merk (contoh: Hitachi, A100, FTIR)..." type="text"/>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded" type="button">
+<span class="material-symbols-outlined text-[18px]">mic</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs self-stretch md:self-auto justify-end">
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline mr-1">Tampilan:</span>
+<div class="flex items-center bg-surface-container-low p-1 rounded-lg">
+<button class="px-space-sm py-1 rounded bg-surface-container-lowest text-primary font-title-sm text-title-sm flex items-center gap-1 shadow-sm" id="viewGridBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+<span class="hidden sm:inline">Grid</span>
+</button>
+<button class="px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-title-sm text-title-sm flex items-center gap-1 transition-colors" id="viewTableBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">table_rows</span>
+<span class="hidden sm:inline">Tabel</span>
+</button>
+</div>
+<button class="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-surface-container-low hover:bg-surface-container font-title-sm text-title-sm text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline">tune</span>
+<span>Filter Lanjutan</span>
+</button>
+</div>
+</div>
+<!-- Bottom Row: Multi-faceted Dropdowns -->
+<div class="flex flex-wrap items-center gap-space-xs pt-space-xs">
+<!-- Kategori Alat -->
+<div class="relative">
+<select class="appearance-none bg-surface-container-low text-on-surface font-body-md text-body-md pl-3 pr-8 py-2 rounded-lg focus:outline-none hover:bg-surface-container cursor-pointer transition-colors">
+<option value="">Semua Kategori Alat</option>
+<option>Spektroskopi &amp; Analisis</option>
+<option>Mikroskop Elektron &amp; Optik</option>
+<option>Server &amp; Komputasi AI</option>
+<option>Sensor IoT &amp; Robotika</option>
+<option>Kimia Analitik &amp; Biokimia</option>
+<option>Pengujian Mekanik &amp; Material</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-2.5 text-outline text-[18px]">expand_more</span>
+</div>
+<!-- Lokasi Gedung / Lab -->
+<div class="relative">
+<select class="appearance-none bg-surface-container-low text-on-surface font-body-md text-body-md pl-3 pr-8 py-2 rounded-lg focus:outline-none hover:bg-surface-container cursor-pointer transition-colors">
+<option value="">Semua Laboratorium</option>
+<option>Lab AI &amp; Visi Komputer (Gedung H Lt. 3)</option>
+<option>Lab Biosains &amp; Biotek (Gedung D Lt. 2)</option>
+<option>Lab Fabrikasi &amp; Mekatronika (Gedung E Lt. 1)</option>
+<option>Lab Kimia Terpadu (Gedung I Lt. 4)</option>
+<option>Pusat Data Riset (Gedung H Lt. 2)</option>
+<option>Lab Geomatika &amp; Drone (Gedung G Lt. 1)</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-2.5 text-outline text-[18px]">expand_more</span>
+</div>
+<!-- Status Kondisi -->
+<div class="relative">
+<select class="appearance-none bg-surface-container-low text-on-surface font-body-md text-body-md pl-3 pr-8 py-2 rounded-lg focus:outline-none hover:bg-surface-container cursor-pointer transition-colors">
+<option value="">Status Kondisi Aset</option>
+<option>Normal / Prima (Siap Pakai)</option>
+<option>Sedang Beroperasi / Dipinjam</option>
+<option>Jadwal Kalibrasi Terdekat</option>
+<option>Perlu Perbaikan / Servis</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-2.5 text-outline text-[18px]">expand_more</span>
+</div>
+<!-- Urutkan Berdasarkan -->
+<div class="relative">
+<select class="appearance-none bg-surface-container-low text-on-surface font-body-md text-body-md pl-3 pr-8 py-2 rounded-lg focus:outline-none hover:bg-surface-container cursor-pointer transition-colors">
+<option>Urutan: Paling Sering Digunakan</option>
+<option>Urutan: Baru Ditambahkan</option>
+<option>Urutan: Kode Aset (A-Z)</option>
+<option>Urutan: Jadwal Kalibrasi Terdekat</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-2.5 text-outline text-[18px]">expand_more</span>
+</div>
+<div class="h-6 w-[1px] bg-surface-container hidden xl:block mx-1"></div>
+<!-- Filter Chips Aktif -->
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">
+<span>Gedung H &amp; E</span>
+<button class="hover:text-primary" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm">
+<span>Instrumen Prioritas Tinggi</span>
+<button class="hover:text-secondary" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<button class="font-body-sm text-body-sm text-primary hover:underline ml-1" type="button">Reset Filter</button>
+</div>
+</div>
+</div>
+<!-- Main Content Area: Split with Action Panel -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Catalog Grid (9 Columns on Large Screen) -->
+<div class="lg:col-span-9 flex flex-col gap-space-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Koleksi Instrumen Terverifikasi</h2>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-semibold">Menampilkan 6 dari 412 Unit</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm">
+<span>Sinkronisasi terakhir:</span>
+<span class="font-mono-data text-mono-data font-medium text-on-surface">Hari ini, 10:45 WIB</span>
+</div>
+</div>
+<!-- Grid of Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-space-md">
+<!-- Kartu 1: SEM Hitachi -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group">
+<div class="relative w-full aspect-[16/10] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="High precision scanning electron microscope Hitachi TM4000Plus seated on a clean granite scientific vibration dampening workstation in a bright modern university laboratory. High tech digital display screens showing microstructures, subtle cool blue institutional ambient lighting, extremely crisp focus on the specimen chamber and vacuum column." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBblI_ba68LCvzo9mzJ3e5_-qHfnilVCCZ-G56jtcgL5hOZoyYzQryk7aakPY-VBZm1Cni-1P4SYNBEHXvTHf8_juhfjuizUQlsGGto5_7cw2AV8vyj2_0NfubHLfOzoZ6m_jQQVo7B09R8QIqX7sVVna3h3zAAyD7bO3gZXA8Ye-pDJWdLDR79AcWwdejGEbtgL-j011apRHW3hkLNl6Km9VWQUfi_4WhdnaUGRGx_"/>
+<div class="absolute top-2.5 left-2.5">
+<span class="px-2.5 py-1 rounded-md bg-surface-container-lowest/90 backdrop-blur font-mono-data text-mono-data text-primary font-bold shadow-sm">AST-LAB-019</span>
+</div>
+<div class="absolute top-2.5 right-2.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#ecfdf5] text-[#065f46] font-label-sm text-label-sm font-semibold shadow-sm">
+<span class="w-2 h-2 rounded-full bg-[#10b981] animate-ping"></span>
+                  Tersedia / Prima
+                </span>
+</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mb-1">
+<span class="material-symbols-outlined text-[16px] text-primary">apartment</span>
+<span>Gedung H Lt. 3 • Lab AI &amp; Biosains</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold line-clamp-1 group-hover:text-primary transition-colors">
+                  Scanning Electron Microscope (SEM) Hitachi TM4000Plus
+                </h3>
+<div class="mt-2.5 p-2 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface-variant flex flex-col gap-1">
+<div class="flex justify-between">
+<span class="text-outline">Perbesaran:</span>
+<span class="font-medium text-on-surface">Hingga 100.000x</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline">Sensor / Analisis:</span>
+<span class="font-medium text-on-surface">EDS Elemental Detector</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-2">
+<button class="flex-1 py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm text-center transition-colors" type="button">
+                  Riwayat &amp; SOP
+                </button>
+<button class="flex-1 py-2 px-3 rounded-lg bg-secondary-container hover:bg-secondary-fixed-dim text-on-secondary-container font-title-sm text-title-sm font-bold text-center transition-colors shadow-sm flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">touch_app</span>
+<span>Ajukan Pinjam</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Kartu 2: AI Server Cluster -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group">
+<div class="relative w-full aspect-[16/10] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="High performance computing server rack mounted unit with glowing LED indicators in deep blue and amber inside a modern server room, showcasing dual Xeon platinum architecture with 4x NVIDIA A100 liquid cooling systems, sleek brushed metal industrial finish, sharp studio scientific photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDgEVncpgI7sfpT0SWz3hrNSbqCAQ2HjAo0XlKVT0e4_ZvJYwVgtl8rhQe4U9Tl9T4DdiYRuSxrmghueIkmorgObj5b1gbjr_E_BglCEkLBoexGalT0447DnC9i5n9hNXPVGBwCwP3BHy2azz2qLq6KY73jwpU_X3drcl2X22-O1Cq6Uydi8o_XSgJ_F7pLoAcWMaPFBCEg-KGwPFpEmKtdnkTdqIc-QQTQJ_oTZVJ"/>
+<div class="absolute top-2.5 left-2.5">
+<span class="px-2.5 py-1 rounded-md bg-surface-container-lowest/90 backdrop-blur font-mono-data text-mono-data text-primary font-bold shadow-sm">AST-SRV-004</span>
+</div>
+<div class="absolute top-2.5 right-2.5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-semibold shadow-sm">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                  Terpakai 78% (Online)
+                </span>
+</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mb-1">
+<span class="material-symbols-outlined text-[16px] text-primary">dns</span>
+<span>Pusat Data Riset • Lt. 2</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold line-clamp-1 group-hover:text-primary transition-colors">
+                  AI Server Cluster 4x NVIDIA A100 (320GB VRAM)
+                </h3>
+<div class="mt-2.5 p-2 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface-variant flex flex-col gap-1">
+<div class="flex justify-between">
+<span class="text-outline">Spesifikasi:</span>
+<span class="font-medium text-on-surface">Dual Intel Xeon 64-Core</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-outline">Beban Komputasi:</span>
+<div class="w-24 bg-surface-container-high rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-full w-[78%]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-2">
+<button class="flex-1 py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm text-center transition-colors" type="button">
+                  Monitor Metrik
+                </button>
+<button class="flex-1 py-2 px-3 rounded-lg bg-primary hover:bg-tertiary text-on-primary font-title-sm text-title-sm font-semibold text-center transition-colors shadow-sm flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+<span>Booking Slot</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Kartu 3: UTM Tensile Tester 50kN -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group">
+<div class="relative w-full aspect-[16/10] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Universal testing machine UTM 50kN material tensile strength testing equipment with digital strain gauge and precision load cell clamped onto specimen in mechanical engineering research laboratory, industrial frame, clean lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAciAu_fXonwFW6jtYbyfnf-1FfiE8lo32ITz1ADbwEscpbL43BsUcd2xKjHKbZ6LlfkccxzBid_ksJHmU4_at-f3TiGkSnKbsI5iAu_S4xKOWZUdw5TYv6_RfINbIHcYTuw52DBYAzXStqwJrSVRKzIP6rtyjuTqO8__fpDlGrunS_EZPUSZsfW0K2NgRjSvFtA-TwJqs1R3XlVGw81_zjcnTFArVi2SRimvtZY6F7"/>
+<div class="absolute top-2.5 left-2.5">
+<span class="px-2.5 py-1 rounded-md bg-surface-container-lowest/90 backdrop-blur font-mono-data text-mono-data text-primary font-bold shadow-sm">AST-MEK-082</span>
+</div>
+<div class="absolute top-2.5 right-2.5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-semibold shadow-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                  Jadwal Kalibrasi
+                </span>
+</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mb-1">
+<span class="material-symbols-outlined text-[16px] text-primary">precision_manufacturing</span>
+<span>Gedung E Lt. 1 • Lab Bahan &amp; Mekatronika</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold line-clamp-1 group-hover:text-primary transition-colors">
+                  Universal Testing Machine (UTM) Tensile 50kN
+                </h3>
+<div class="mt-2.5 p-2 rounded-lg bg-secondary-fixed/20 font-body-sm text-body-sm text-on-surface flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="text-secondary font-medium">Batas Kalibrasi KAN:</span>
+<span class="font-mono-data text-mono-data font-bold text-secondary">28 Okt 2024</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline">Vendor Kalibrator:</span>
+<span class="font-medium text-on-surface">Balai Besar Kalibrasi Jateng</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-2">
+<button class="w-full py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm text-center transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">history_edu</span>
+<span>Log Kalibrasi &amp; SOP</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Kartu 4: GC-MS Gas Chromatography -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group">
+<div class="relative w-full aspect-[16/10] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Advanced GC-MS Gas Chromatography Mass Spectrometer equipment with analytical capillary columns and autosampler carousel, pristine chemical analysis research center, scientific lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKl9422IEWYCiuWTHbXODeW5MAczBYizdhH5USfh9WMFC8WW0IdNvfC4HosMz4XdcdzmZGrRJhppt4_kCXeMDt5QrMJjdIxYlq75X6VrqpFIBztLeWwvymT5JKvMUWF7mM7AWCo4twypVSb20R4amIcu5eHi-RIBDdbJl21nnPBsuSQqxx3fdiOgh6tq30m0_2-ehalDwEOu0hHMR8FPrXL05NSCrTSedFAwl6VLTe"/>
+<div class="absolute top-2.5 left-2.5">
+<span class="px-2.5 py-1 rounded-md bg-surface-container-lowest/90 backdrop-blur font-mono-data text-mono-data text-primary font-bold shadow-sm">AST-KIM-015</span>
+</div>
+<div class="absolute top-2.5 right-2.5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold shadow-sm">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                  Perbaikan Sensor
+                </span>
+</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mb-1">
+<span class="material-symbols-outlined text-[16px] text-primary">biotech</span>
+<span>Gedung I Lt. 4 • Lab Kimia Terpadu</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold line-clamp-1 group-hover:text-primary transition-colors">
+                  GC-MS Gas Chromatography Mass Spectrometer
+                </h3>
+<div class="mt-2.5 p-2 rounded-lg bg-error-container/30 font-body-sm text-body-sm text-on-surface flex flex-col gap-1">
+<div class="flex justify-between">
+<span class="text-error font-medium">Kendala Teknis:</span>
+<span class="font-medium text-error">Ion Source Detektor Rusak</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline">Teknisi PIC:</span>
+<span class="font-medium text-on-surface">Ir. Bambang Setyadi</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-2">
+<button class="w-full py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm text-center transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px] text-error">receipt_long</span>
+<span>Lihat Tiket Servis #SR-882</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Kartu 5: 3D LiDAR Scanner & Drone Payload -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group">
+<div class="relative w-full aspect-[16/10] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="High precision handheld 3D LiDAR scanner with ruggedized carbon fiber surveying drone payload on a clean technician table, geospatial laser mapping equipment with illuminated lenses, academic laboratory backdrop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0zy8Eorn4fGYJ5meOEU7rQTde9tl2wahEppwMoOf6jJG60k0Jh4XXS4M6RejdW3MudpPOBRaEC3jab9rHs61c9SqWql3tgLObhMObGQeVw_72mSLTuFmAPzXIyZUNzNmBes_eiTRn1pXhgLwJTJquyj8VES-lxb9o2adxNGt5XOmoFMw3fA3IrGNCOznvCyS-Dc_c36iihjwwDbDMoGw-pNsEMDs9IznKYv7nETIH"/>
+<div class="absolute top-2.5 left-2.5">
+<span class="px-2.5 py-1 rounded-md bg-surface-container-lowest/90 backdrop-blur font-mono-data text-mono-data text-primary font-bold shadow-sm">AST-GEO-031</span>
+</div>
+<div class="absolute top-2.5 right-2.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#ecfdf5] text-[#065f46] font-label-sm text-label-sm font-semibold shadow-sm">
+<span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+                  Tersedia / Prima
+                </span>
+</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mb-1">
+<span class="material-symbols-outlined text-[16px] text-primary">satellite_alt</span>
+<span>Gedung G Lt. 1 • Lab Geomatika</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold line-clamp-1 group-hover:text-primary transition-colors">
+                  3D Laser Scanner LiDAR &amp; Drone Payload Set
+                </h3>
+<div class="mt-2.5 p-2 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface-variant flex flex-col gap-1">
+<div class="flex justify-between">
+<span class="text-outline">Akurasi Jarak:</span>
+<span class="font-medium text-on-surface">±2mm @ 100 Meter</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline">Inklusi:</span>
+<span class="font-medium text-on-surface">RTK Base &amp; 3 Battery Pack</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-2">
+<button class="flex-1 py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm text-center transition-colors" type="button">
+                  Detail Spek
+                </button>
+<button class="flex-1 py-2 px-3 rounded-lg bg-secondary-container hover:bg-secondary-fixed-dim text-on-secondary-container font-title-sm text-title-sm font-bold text-center transition-colors shadow-sm flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">touch_app</span>
+<span>Pinjam Cepat</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Kartu 6: Autoclave Digital 75L -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group">
+<div class="relative w-full aspect-[16/10] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Vertical heavy stainless steel digital research autoclave 75 liter capacity with digital microprocessor control panel, pressure valve gauge, safety lid locking mechanism in a pharmaceutical biotechnology laboratory." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDD35jn_ESs4EDXDcgM-GFB5WOgbG8dz3dNu-WuZXSpti5r7m3p2IoYXdb4UzF1TAMbU1DSurFP6GA-NfVWNMrjerpBkPRhws-rDPN-6EM7peE2INef7E7Xa8f1W2XgWbYZP9tjMnHcNnS7_z1Uw8vcII43pFS_uH3s7WFzrf5Weflu4To4LSSLKXuccg6aJ6_bYv0L7YVSXUsCAagJuVqXV7aoIba-8K5nJ8xfX3v"/>
+<div class="absolute top-2.5 left-2.5">
+<span class="px-2.5 py-1 rounded-md bg-surface-container-lowest/90 backdrop-blur font-mono-data text-mono-data text-primary font-bold shadow-sm">AST-BIO-067</span>
+</div>
+<div class="absolute top-2.5 right-2.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#ecfdf5] text-[#065f46] font-label-sm text-label-sm font-semibold shadow-sm">
+<span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+                  Tersedia / Prima
+                </span>
+</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mb-1">
+<span class="material-symbols-outlined text-[16px] text-primary">sanitizer</span>
+<span>Gedung D Lt. 2 • Lab Bioteknologi Terpadu</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold line-clamp-1 group-hover:text-primary transition-colors">
+                  Autoclave Sterilizer Digital Otomatis 75L
+                </h3>
+<div class="mt-2.5 p-2 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface-variant flex flex-col gap-1">
+<div class="flex justify-between">
+<span class="text-outline">Rentang Suhu:</span>
+<span class="font-medium text-on-surface">105°C - 134°C Otomatis</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline">Kapasitas Tabung:</span>
+<span class="font-medium text-on-surface">75 Liter Stainless 316</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-2">
+<button class="flex-1 py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm text-center transition-colors" type="button">
+                  Detail Spek
+                </button>
+<button class="flex-1 py-2 px-3 rounded-lg bg-secondary-container hover:bg-secondary-fixed-dim text-on-secondary-container font-title-sm text-title-sm font-bold text-center transition-colors shadow-sm flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">touch_app</span>
+<span>Pinjam</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination Bar -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-md bg-surface-container-lowest p-space-md rounded-xl shadow-sm mt-space-xs">
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+            Menampilkan <span class="font-bold text-on-surface">1 - 6</span> dari <span class="font-bold text-on-surface">412</span> instrumen
+          </div>
+<div class="flex items-center gap-1">
+<button class="p-2 rounded-lg text-outline hover:bg-surface-container hover:text-on-surface disabled:opacity-40" disabled="" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-primary text-on-primary font-title-sm text-title-sm flex items-center justify-center shadow-sm" type="button">1</button>
+<button class="w-8 h-8 rounded-lg text-on-surface hover:bg-surface-container font-title-sm text-title-sm flex items-center justify-center" type="button">2</button>
+<button class="w-8 h-8 rounded-lg text-on-surface hover:bg-surface-container font-title-sm text-title-sm flex items-center justify-center" type="button">3</button>
+<span class="px-1 text-outline">...</span>
+<button class="w-8 h-8 rounded-lg text-on-surface hover:bg-surface-container font-title-sm text-title-sm flex items-center justify-center" type="button">69</button>
+<button class="p-2 rounded-lg text-on-surface hover:bg-surface-container" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Column: Sidebar Panels (3 Columns on Large Screen) -->
+<div class="lg:col-span-3 flex flex-col gap-space-lg">
+<!-- Panel Cepat: Aset Perlu Tindakan Segera -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-error animate-ping"></div>
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold uppercase tracking-wider">Perlu Tindakan (7)</h3>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold">Mendesak</span>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- Alert Item 1 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col gap-1">
+<div class="flex items-center justify-between text-secondary">
+<div class="flex items-center gap-1 font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[16px]">alarm</span>
+<span>Kedaluwarsa 4 Hari</span>
+</div>
+<span class="font-mono-data text-mono-data font-bold">AST-MEK-082</span>
+</div>
+<div class="font-title-sm text-title-sm text-on-surface font-semibold line-clamp-1">Universal Testing Machine 50kN</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center justify-between">
+<span>Kalibrasi Ulang KAN</span>
+<a class="text-primary hover:underline font-medium" href="#">Buat Tiket</a>
+</div>
+</div>
+<!-- Alert Item 2 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col gap-1">
+<div class="flex items-center justify-between text-error">
+<div class="flex items-center gap-1 font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[16px]">hardware</span>
+<span>Menunggu Sparepart</span>
+</div>
+<span class="font-mono-data text-mono-data font-bold">AST-KIM-015</span>
+</div>
+<div class="font-title-sm text-title-sm text-on-surface font-semibold line-clamp-1">GC-MS Gas Chromatography</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center justify-between">
+<span>PO: SP-2024-099 (Agilent)</span>
+<span class="text-outline">Rp 14.5jt</span>
+</div>
+</div>
+<!-- Alert Item 3 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col gap-1">
+<div class="flex items-center justify-between text-secondary">
+<div class="flex items-center gap-1 font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Kedaluwarsa 7 Hari</span>
+</div>
+<span class="font-mono-data text-mono-data font-bold">AST-OPT-009</span>
+</div>
+<div class="font-title-sm text-title-sm text-on-surface font-semibold line-clamp-1">Spektrofotometer UV-Vis Double Beam</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center justify-between">
+<span>Verifikasi Lampu Deuterium</span>
+<a class="text-primary hover:underline font-medium" href="#">Jadwalkan</a>
+</div>
+</div>
+</div>
+<button class="w-full py-2 rounded-lg bg-surface-container text-primary hover:bg-surface-container-high font-title-sm text-title-sm text-center transition-colors" type="button">
+            Lihat Semua Antrean Audit (7)
+          </button>
+</div>
+<!-- Distribusi Kondisi Aset Visual SVG Chart -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold">Distribusi Kesehatan Aset</h3>
+<span class="material-symbols-outlined text-outline text-[18px]">pie_chart</span>
+</div>
+<div class="flex items-center justify-center py-2">
+<!-- Inline SVG Donut Chart -->
+<div class="relative w-36 h-36 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<!-- Background track -->
+<circle class="stroke-surface-container" cx="18" cy="18" fill="none" r="14" stroke-width="4"></circle>
+<!-- Prima 84.4% -> stroke-dasharray="74.2 100" stroke-dashoffset="0" -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#059669" stroke-dasharray="74.2 100" stroke-dashoffset="0" stroke-linecap="round" stroke-width="4"></circle>
+<!-- Kalibrasi 9.2% -> stroke-dasharray="8 100" offset -75 -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#feae2c" stroke-dasharray="8 100" stroke-dashoffset="-75" stroke-linecap="round" stroke-width="4"></circle>
+<!-- Rusak 6.4% -> stroke-dasharray="5.5 100" offset -84 -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#ba1a1a" stroke-dasharray="5.5 100" stroke-dashoffset="-84" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">84.4%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Rasio Prima</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2 font-body-sm text-body-sm text-on-surface">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-[#059669]"></span>
+<span>Normal / Siap Pakai</span>
+</div>
+<span class="font-bold">348 unit</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary-container"></span>
+<span>Jadwal Pemeliharaan</span>
+</div>
+<span class="font-bold">38 unit</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-error"></span>
+<span>Perbaikan / Rusak</span>
+</div>
+<span class="font-bold">26 unit</span>
+</div>
+</div>
+</div>
+<!-- Alur Peminjaman Ringkas LPPM Card -->
+<div class="bg-primary p-space-md rounded-xl text-on-primary shadow-sm flex flex-col justify-between gap-space-md relative overflow-hidden">
+<div class="relative z-10 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-primary-container">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+<span class="font-label-sm text-label-sm uppercase font-bold tracking-wider">Standar ISO 17025</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-primary font-bold">Protokol Peminjaman Alat Riset</h4>
+<p class="font-body-sm text-body-sm text-on-primary-container">
+              Setiap pengajuan wajib menyertakan proposal penelitian atau SK Hibah LPPM, serta surat bebas sanksi pemakaian lab.
+            </p>
+</div>
+<div class="relative z-10 flex items-center justify-between pt-2 border-t border-on-primary/10">
+<a class="font-title-sm text-title-sm text-secondary-fixed hover:text-white flex items-center gap-1 transition-colors" href="#">
+<span>Buka Panduan SOP</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+<span class="font-label-sm text-label-sm text-on-primary-container">Rev. 2024</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple interactive toggle for grid and table mode buttons
+  const viewGridBtn = document.getElementById('viewGridBtn');
+  const viewTableBtn = document.getElementById('viewTableBtn');
+
+  if (viewGridBtn && viewTableBtn) {
+    viewTableBtn.addEventListener('click', () => {
+      viewTableBtn.className = 'px-space-sm py-1 rounded bg-surface-container-lowest text-primary font-title-sm text-title-sm flex items-center gap-1 shadow-sm';
+      viewGridBtn.className = 'px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-title-sm text-title-sm flex items-center gap-1 transition-colors';
+    });
+
+    viewGridBtn.addEventListener('click', () => {
+      viewGridBtn.className = 'px-space-sm py-1 rounded bg-surface-container-lowest text-primary font-title-sm text-title-sm flex items-center gap-1 shadow-sm';
+      viewTableBtn.className = 'px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-title-sm text-title-sm flex items-center gap-1 transition-colors';
+    });
+  }
+</script></main><footer class="w-full bg-surface-container-lowest mt-space-xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="w-full max-w-[1440px] mx-auto px-gutter py-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex flex-col sm:flex-row items-center gap-space-md text-center sm:text-left"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-primary text-[28px]">verified</span><div><div class="font-title-sm text-title-sm text-on-surface font-semibold">Laboratorium Riset Terakreditasi KAN / ISO 17025</div><div class="font-body-sm text-body-sm text-on-surface-variant">Standar Tata Kelola &amp; Kalibrasi Instrumen LPPM UDINUS</div></div></div></div><div class="flex flex-wrap items-center justify-center gap-space-lg font-body-sm text-body-sm text-on-surface-variant"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-outline text-[18px]">mail</span><span>lppm@dinus.ac.id</span></div><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-outline text-[18px]">call</span><span>+62 24 3517261 ext. 142</span></div><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-outline text-[18px]">location_on</span><span>Gedung H Lt. 2, Kampus UDINUS Semarang</span></div></div></div><div class="w-full bg-surface-container-low py-space-sm px-gutter text-center font-label-sm text-label-sm text-on-surface-variant">© 2025 Universitas Dian Nuswantoro. Sistem Informasi Manajemen Aset Penelitian LPPM. Hak Cipta Dilindungi.</div></footer></body></html>
