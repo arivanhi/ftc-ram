@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.env
+.env.*
+.superpowers
+stitch_research_asset_management_system
+docs
+tests
+uploads
+coverage
+*.log
