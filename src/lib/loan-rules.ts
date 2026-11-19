@@ -35,6 +35,27 @@ export function checkAssetLoanEligibility(
   return { ok: true };
 }
 
+export function validateReturnItemsMembership(
+  loanAssetIds: string[],
+  submittedItems: Array<{ assetId: string; returnCondition: AssetCondition; returnNotes?: string | null }>,
+): { ok: true } | { ok: false; reason: string } {
+  const expectedSet = new Set(loanAssetIds);
+  const seen = new Set<string>();
+  for (const item of submittedItems) {
+    if (!expectedSet.has(item.assetId)) {
+      return { ok: false, reason: 'Terdapat aset yang bukan bagian dari tiket peminjaman ini.' };
+    }
+    if (seen.has(item.assetId)) {
+      return { ok: false, reason: 'Daftar pengembalian mengandung aset duplikat.' };
+    }
+    seen.add(item.assetId);
+  }
+  if (seen.size !== expectedSet.size) {
+    return { ok: false, reason: 'Kondisi pengembalian wajib diisi untuk setiap aset dalam tiket.' };
+  }
+  return { ok: true };
+}
+
 export function resolveReturnAssetUpdates(
   items: Array<{
     assetId: string;

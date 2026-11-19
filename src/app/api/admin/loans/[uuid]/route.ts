@@ -1,11 +1,15 @@
 import { NextResponse } from 'next/server';
-import { and, eq, inArray, ne } from 'drizzle-orm';
+import { and, asc, eq, inArray, ne } from 'drizzle-orm';
 import { db } from '@/db';
 import { assets, loanItems, loans } from '@/db/schema';
 import { requireAdminApi } from '@/lib/auth';
 import { isValidUuid } from '@/lib/uuid';
 import { adminLoanTransitionSchema } from '@/lib/validators';
-import { checkAssetLoanEligibility, resolveReturnAssetUpdates } from '@/lib/loan-rules';
+import {
+  checkAssetLoanEligibility,
+  resolveReturnAssetUpdates,
+  validateReturnItemsMembership,
+} from '@/lib/loan-rules';
 
 export async function PATCH(
   req: Request,
@@ -41,6 +45,17 @@ export async function PATCH(
         .where(eq(loanItems.loanId, uuid));
 
       const assetIds = items.map((i) => i.asset.id);
+      // Lock target asset rows in deterministic UUID order to prevent concurrent double-approval/handover races.
+      const lockedAssets =
+        assetIds.length > 0
+          ? await tx
+              .select()
+              .from(assets)
+              .where(inArray(assets.id, assetIds))
+              .orderBy(asc(assets.id))
+              .for('update')
+          : [];
+      const lockedById = new Map(lockedAssets.map((a) => [a.id, a]));
       const now = new Date();
 
       if (input.status === 'approved') {
@@ -64,7 +79,8 @@ export async function PATCH(
             ),
           );
 
-        for (const { asset } of items) {
+        for (const id of assetIds) {
+          const asset = lockedById.get(id)!;
           const check = checkAssetLoanEligibility(
             asset,
             otherBookings.filter((b) => b.assetId === asset.id),
@@ -112,7 +128,8 @@ export async function PATCH(
         if (loan.status !== 'approved') {
           return { error: 'Peminjaman harus berstatus Disetujui sebelum diserahkan.', status: 409 as const };
         }
-        for (const { asset } of items) {
+        for (const id of assetIds) {
+          const asset = lockedById.get(id)!;
           if (asset.availability === 'dipinjam') {
             return {
               error: `Aset ${asset.inventoryCode} saat ini masih berstatus Sedang Dipinjam pada transaksi lain.`,
@@ -143,12 +160,11 @@ export async function PATCH(
         return { error: 'Hanya pinjaman berstatus Sedang Dipinjam yang dapat dikembalikan.', status: 409 as const };
       }
 
-      const byAsset = new Map(input.items.map((i) => [i.assetId, i]));
-      for (const id of assetIds) {
-        if (!byAsset.has(id)) {
-          return { error: 'Kondisi pengembalian wajib diisi untuk setiap aset dalam tiket.', status: 400 as const };
-        }
+      const membership = validateReturnItemsMembership(assetIds, input.items);
+      if (!membership.ok) {
+        return { error: membership.reason, status: 400 as const };
       }
+      const byAsset = new Map(input.items.map((i) => [i.assetId, i]));
 
       const updates = resolveReturnAssetUpdates(input.items);
       for (const u of updates) {

@@ -90,7 +90,10 @@ export function TutorialsManager() {
 
   async function deleteTutorial(id: string) {
     if (!confirm('Hapus panduan ini?')) return;
-    if ((await fetch(`/api/admin/tutorials/${id}`, { method: 'DELETE' })).ok) load();
+    const res = await fetch(`/api/admin/tutorials/${id}`, { method: 'DELETE' });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok) return setMsg(d.error || 'Gagal menghapus panduan.');
+    load();
   }
 
   async function saveFaq(e: React.FormEvent) {
@@ -100,17 +103,20 @@ export function TutorialsManager() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question: faqQ, answer: faqA, sortOrder: faqs.length + 1 }),
     });
-    if (res.ok) {
-      setFaqQ('');
-      setFaqA('');
-      setMsg('FAQ baru ditambahkan.');
-      load();
-    }
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok) return setMsg(d.error || 'Gagal menyimpan FAQ.');
+    setFaqQ('');
+    setFaqA('');
+    setMsg('FAQ baru ditambahkan.');
+    load();
   }
 
   async function deleteFaq(id: string) {
     if (!confirm('Hapus FAQ ini?')) return;
-    if ((await fetch(`/api/admin/faqs/${id}`, { method: 'DELETE' })).ok) load();
+    const res = await fetch(`/api/admin/faqs/${id}`, { method: 'DELETE' });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok) return setMsg(d.error || 'Gagal menghapus FAQ.');
+    load();
   }
 
   return (

@@ -11,7 +11,20 @@ export type CatalogQueryParams = {
   sort?: string;
   page?: number;
   limit?: number;
+  maxLimit?: number;
 };
+
+export function normalizePagination(
+  rawPage: number | undefined,
+  rawLimit: number | undefined,
+  maxLimit = 100,
+): { page: number; limit: number; offset: number } {
+  const safePage = typeof rawPage === 'number' && Number.isFinite(rawPage) ? Math.trunc(rawPage) : 1;
+  const safeLimit = typeof rawLimit === 'number' && Number.isFinite(rawLimit) ? Math.trunc(rawLimit) : 12;
+  const page = Math.max(1, safePage);
+  const limit = Math.min(maxLimit, Math.max(1, safeLimit));
+  return { page, limit, offset: (page - 1) * limit };
+}
 
 export async function queryPublicAssets(params: CatalogQueryParams) {
   const conditions = [isNull(assets.archivedAt)];
@@ -41,9 +54,11 @@ export async function queryPublicAssets(params: CatalogQueryParams) {
           ? desc(assets.isPriority)
           : desc(assets.createdAt);
 
-  const page = Math.max(1, params.page ?? 1);
-  const limit = Math.min(100, Math.max(1, params.limit ?? 12));
-  const offset = (page - 1) * limit;
+  const { page, limit, offset } = normalizePagination(
+    params.page,
+    params.limit,
+    params.maxLimit ?? 100,
+  );
 
   const whereClause = and(...conditions);
 

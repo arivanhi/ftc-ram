@@ -75,7 +75,11 @@ export function ContactsManager() {
 
   async function del(id: string) {
     if (!confirm('Hapus narahubung ini?')) return;
-    if ((await fetch(`/api/admin/contacts/${id}`, { method: 'DELETE' })).ok) load();
+    const res = await fetch(`/api/admin/contacts/${id}`, { method: 'DELETE' });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok) return setMsg(d.error || 'Gagal menghapus narahubung.');
+    setMsg('Narahubung dihapus.');
+    load();
   }
 
   return (

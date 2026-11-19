@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { ilike } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { issueTickets } from '@/db/schema';
 import { sanitizePublicIssue } from '@/lib/loan-rules';
@@ -14,7 +14,7 @@ export async function GET(req: Request) {
   const rows = await db
     .select()
     .from(issueTickets)
-    .where(ilike(issueTickets.ticketCode, code))
+    .where(eq(sql`lower(${issueTickets.ticketCode})`, code.toLowerCase()))
     .limit(1);
 
   return NextResponse.json({ ticket: rows[0] ? sanitizePublicIssue(rows[0]) : null });

@@ -407,7 +407,7 @@ async function seedSampleData(client) {
        ('VID-FTC-ROB-002', $2, 'Video Demo & Kalibrasi Singkat Autonomous Delivery Robot DINUS-Bot R3', 'video_demo', 'video',
         'Demonstrasi menyalakan ROS 2, memilih mode rute pameran aman, pengisian daya dok, serta penanganan darurat tombol E-Stop.',
         E'## Poin Kunci Video\n- Cek level baterai minimal 50% sebelum dipindahkan ke area pameran.\n- Pastikan tombol E-Stop terlepas (putar searah jarum jam).\n- Gunakan selalu preset **Mode Demo 3 Meter** agar robot tidak keluar area booth.',
-        'https://www.youtube.com/watch?v=dQw4w9WgXcQ', '1.3', 'Ahmad Fauzi, A.Md.'),
+        null, '1.3', 'Ahmad Fauzi, A.Md.'),
        ('SOP-FTC-AI-003', $3, 'Setup Cepat Edge Vision Analytics Box & Kiosk BISINDO di Booth Expo', 'persiapan_pameran', 'panduan_teks',
         'Prosedur sambungan HDMI, kamera USB/RealSense, pencahayaan minimum, dan restart aman ketika listrik booth tidak stabil.',
         E'## Kelengkapan Wajib\n1. Unit Jetson/Kiosk + adaptor resmi.\n2. Kabel HDMI 3 meter dan stopkontak terminal berpelindung lonjakan (surge protector).\n\n## Langkah Setup\n1. Sambungkan monitor HDMI dan kamera sebelum menyalakan daya.\n2. Tunggu 40 detik hingga antarmuka demo tampil otomatis layar penuh.\n3. Untuk mematikan, klik ikon Power di pojok kanan atas layar—jangan langsung mencabut kabel listrik.',

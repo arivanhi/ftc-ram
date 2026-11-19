@@ -61,11 +61,14 @@ export function IssuesManager() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
-    if (res.ok) {
-      setMsg(`Tiket ${ticket.ticketCode} berhasil diperbarui.`);
-      setCondMap((prev) => ({ ...prev, [ticket.id]: '' }));
-      load();
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      setMsg(`Gagal memperbarui tiket: ${d.error || 'Terjadi kesalahan.'}`);
+      return;
     }
+    setMsg(`Tiket ${ticket.ticketCode} berhasil diperbarui.`);
+    setCondMap((prev) => ({ ...prev, [ticket.id]: '' }));
+    load();
   }
 
   return (

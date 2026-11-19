@@ -66,6 +66,7 @@ export function AssetsManager() {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'ok' | 'err' | 'warn'; msg: string } | null>(null);
+  const [modalError, setModalError] = useState<string | null>(null);
   const [qrTarget, setQrTarget] = useState<AdminAsset | null>(null);
 
   const loadAll = useCallback(async () => {
@@ -86,11 +87,13 @@ export function AssetsManager() {
   function openCreate() {
     setEditing(null);
     setForm(EMPTY_FORM);
+    setModalError(null);
     setModalOpen(true);
   }
 
   function openEdit(a: AdminAsset) {
     setEditing(a);
+    setModalError(null);
     setForm({
       inventoryCode: a.inventoryCode,
       name: a.name,
@@ -121,9 +124,10 @@ export function AssetsManager() {
       const res = await fetch('/api/admin/uploads', { method: 'POST', body: fd });
       const body = await res.json();
       if (!res.ok) {
-        setFeedback({ type: 'err', msg: body.error || 'Gagal mengunggah foto.' });
+        setModalError(body.error || 'Gagal mengunggah foto.');
         return;
       }
+      setModalError(null);
       setForm((f) => ({ ...f, photoUrl: body.url }));
     } finally {
       setUploading(false);
@@ -134,6 +138,7 @@ export function AssetsManager() {
     e.preventDefault();
     setSaving(true);
     setFeedback(null);
+    setModalError(null);
     try {
       const payload = {
         ...form,
@@ -151,7 +156,7 @@ export function AssetsManager() {
       });
       const body = await res.json();
       if (!res.ok) {
-        setFeedback({ type: 'err', msg: body.error || 'Gagal menyimpan aset.' });
+        setModalError(body.error || 'Gagal menyimpan aset.');
         return;
       }
       setModalOpen(false);
@@ -376,6 +381,11 @@ export function AssetsManager() {
             </div>
 
             <div className="p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+              {modalError && (
+                <div className="md:col-span-2 p-3 rounded-lg bg-error-container text-on-error-container text-body-sm font-medium">
+                  {modalError}
+                </div>
+              )}
               <div>
                 <label className="text-label-md block mb-1">Kode Inventaris *</label>
                 <input

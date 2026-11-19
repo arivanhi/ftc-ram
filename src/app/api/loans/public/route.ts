@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { desc, eq, ilike, inArray, or } from 'drizzle-orm';
+import { desc, eq, inArray, or, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { assets, loanItems, loans, rooms } from '@/db/schema';
 import { sanitizePublicLoan, type RawLoanItemSummary } from '@/lib/loan-rules';
@@ -14,10 +14,16 @@ export async function GET(req: Request) {
 
   if (q) {
     exactLookup = true;
+    const lowerQ = q.toLowerCase();
     loanRows = await db
       .select()
       .from(loans)
-      .where(or(ilike(loans.ticketCode, q), ilike(loans.borrowerIdValue, q)))
+      .where(
+        or(
+          eq(sql`lower(${loans.ticketCode})`, lowerQ),
+          eq(sql`lower(${loans.borrowerIdValue})`, lowerQ),
+        ),
+      )
       .orderBy(desc(loans.createdAt))
       .limit(20);
   } else {

@@ -112,10 +112,9 @@ export function LocationsManager() {
   async function deleteRoom(id: string, code: string) {
     if (!confirm(`Hapus ruangan ${code}?`)) return;
     const res = await fetch(`/api/admin/rooms/${id}`, { method: 'DELETE' });
-    if (res.ok) {
-      setMsg(`Ruangan ${code} dihapus.`);
-      load();
-    }
+    const d = await res.json().catch(() => ({}));
+    setMsg(res.ok ? `Ruangan ${code} dihapus.` : d.error || 'Gagal menghapus ruangan.');
+    if (res.ok) load();
   }
 
   async function updateRoomGrid(room: Room, gridZone: 'top' | 'bottom', gridColSpan: number) {
@@ -124,10 +123,9 @@ export function LocationsManager() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ gridZone, gridColSpan }),
     });
-    if (res.ok) {
-      setMsg(`Tata letak blok ${room.code} diperbarui.`);
-      load();
-    }
+    const d = await res.json().catch(() => ({}));
+    setMsg(res.ok ? `Tata letak blok ${room.code} diperbarui.` : d.error || 'Gagal memperbarui tata letak.');
+    if (res.ok) load();
   }
 
   const allFloors = buildings.flatMap((b) => b.floors.map((f) => ({ id: f.id, label: `${b.name} — ${f.label}` })));

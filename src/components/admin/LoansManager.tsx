@@ -41,6 +41,7 @@ export function LoansManager() {
   const [returningLoan, setReturningLoan] = useState<AdminLoan | null>(null);
   const [returnState, setReturnState] = useState<Record<string, { returnCondition: AssetCondition; returnNotes: string }>>({});
   const [returnAdminNotes, setReturnAdminNotes] = useState('');
+  const [modalError, setModalError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const sp = statusFilter ? `?status=${statusFilter}` : '';
@@ -83,12 +84,14 @@ export function LoansManager() {
     }
     setReturnState(init);
     setReturnAdminNotes(loan.adminNotes ?? '');
+    setModalError(null);
     setReturningLoan(loan);
   }
 
   async function submitReturn(e: React.FormEvent) {
     e.preventDefault();
     if (!returningLoan) return;
+    setModalError(null);
     const items = returningLoan.items.map((item) => ({
       assetId: item.assetId,
       returnCondition: returnState[item.assetId]?.returnCondition ?? 'prima',
@@ -102,7 +105,7 @@ export function LoansManager() {
     });
     const d = await res.json();
     if (!res.ok) {
-      setMsg({ type: 'err', text: d.error || 'Gagal mencatat pengembalian.' });
+      setModalError(d.error || 'Gagal mencatat pengembalian.');
       return;
     }
     setMsg({ type: 'ok', text: `Pengembalian tiket ${returningLoan.ticketCode} tercatat dan status aset disinkronkan.` });
@@ -252,6 +255,11 @@ export function LoansManager() {
             <h2 className="text-headline-sm text-primary font-bold">
               Pengembalian Aset — {returningLoan.ticketCode}
             </h2>
+            {modalError && (
+              <div className="p-3 rounded-lg bg-error-container text-on-error-container text-body-sm font-medium">
+                {modalError}
+              </div>
+            )}
             <p className="text-body-sm text-on-surface-variant">
               Catat kondisi masing-masing produk yang dikembalikan. Aset dengan kondisi Prima otomatis kembali Tersedia; Rusak/Perawatan otomatis menjadi Tidak Tersedia.
             </p>

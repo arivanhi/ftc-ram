@@ -19,6 +19,7 @@ export async function GET(req: Request) {
     sort: searchParams.get('sort') || 'code',
     page: 1,
     limit: 5000,
+    maxLimit: 5000,
   });
 
   const rows = data.items.map((item) => ({
