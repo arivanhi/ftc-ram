@@ -1,0 +1,67 @@
+services:
+  ftc_asset_db:
+    image: postgres:16-alpine
+    container_name: ftc_asset_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ftc_asset}
+      POSTGRES_USER: ${POSTGRES_USER:-ftc_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    ports:
+      - "127.0.0.1:4032:5432"
+    volumes:
+      - ftc_asset_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ftc_admin} -d ${POSTGRES_DB:-ftc_asset}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ftc_asset_net
+
+  ftc_asset_web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ftc_asset_web
+    restart: unless-stopped
+    depends_on:
+      ftc_asset_db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-ftc_admin}:${POSTGRES_PASSWORD}@ftc_asset_db:5432/${POSTGRES_DB:-ftc_asset}
+      SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET is required}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@ftc.dinus.ac.id}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD is required}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      UPLOAD_DIR: /app/uploads
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://ssh.haweb.my.id:4031}
+    ports:
+      - "4031:3000"
+    volumes:
+      - ftc_asset_uploads:/app/uploads
+    networks:
+      - ftc_asset_net
+
+  ftc_asset_adminer:
+    image: adminer:latest
+    container_name: ftc_asset_adminer
+    restart: unless-stopped
+    depends_on:
+      ftc_asset_db:
+        condition: service_healthy
+    environment:
+      ADMINER_DEFAULT_SERVER: ftc_asset_db
+      ADMINER_DESIGN: nette
+    ports:
+      - "4033:8080"
+    networks:
+      - ftc_asset_net
+
+volumes:
+  ftc_asset_pgdata:
+  ftc_asset_uploads:
+
+networks:
+  ftc_asset_net:
+    driver: bridge
