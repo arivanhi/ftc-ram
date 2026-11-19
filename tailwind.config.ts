@@ -65,7 +65,7 @@ const config: Config = {
         'space-xl': '2rem',
       },
       fontFamily: {
-        sans: ['var(--font-plus-jakarta)', 'Plus Jakarta Sans', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'headline-xl': ['36px', { lineHeight: '44px', fontWeight: '700' }],
