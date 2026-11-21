@@ -70,8 +70,8 @@ export function PublicHeader() {
           </div>
         </form>
 
-        <div className="flex items-center gap-space-sm min-w-max">
-          {adminUser ? (
+        {adminUser && (
+          <div className="flex items-center gap-space-sm min-w-max">
             <Link
               href="/admin"
               className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-primary text-on-primary text-title-sm hover:bg-primary-container transition-colors shadow-sm"
@@ -79,16 +79,8 @@ export function PublicHeader() {
               <span className="material-symbols-outlined text-[18px]">admin_panel_settings</span>
               <span className="hidden sm:inline">Panel CMS Admin</span>
             </Link>
-          ) : (
-            <Link
-              href="/admin/login"
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-title-sm transition-colors"
-            >
-              <span className="material-symbols-outlined text-[18px]">login</span>
-              <span>Login Admin</span>
-            </Link>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <nav className="w-full bg-surface-container-low border-t border-outline-variant/20">

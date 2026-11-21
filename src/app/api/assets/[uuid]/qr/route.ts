@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { and, eq, isNull } from 'drizzle-orm';
 import { db } from '@/db';
 import { assets } from '@/db/schema';
+import { requireAdminApi } from '@/lib/auth';
 import { isValidUuid } from '@/lib/uuid';
 import { buildAssetPublicUrl, generateAssetQrPngBuffer, resolveRequestOrigin } from '@/lib/qr';
 
@@ -9,6 +10,9 @@ export async function GET(
   req: Request,
   context: { params: Promise<{ uuid: string }> },
 ) {
+  const auth = await requireAdminApi();
+  if ('response' in auth) return auth.response;
+
   const { uuid } = await context.params;
   if (!isValidUuid(uuid)) {
     return NextResponse.json({ error: 'ID aset harus berupa UUID yang valid.' }, { status: 400 });
@@ -32,7 +36,7 @@ export async function GET(
     headers: {
       'Content-Type': 'image/png',
       'Content-Disposition': `inline; filename="qr-${found[0].inventoryCode}.png"`,
-      'Cache-Control': 'public, max-age=3600',
+      'Cache-Control': 'private, no-store',
     },
   });
 }

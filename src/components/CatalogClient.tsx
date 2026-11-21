@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { AvailabilityBadge, ConditionBadge } from '@/components/StatusBadge';
-import { QrLabelModal } from '@/components/QrLabelModal';
 import { formatIndonesianDate } from '@/lib/format';
 
 type AssetItem = {
@@ -54,7 +53,6 @@ export function CatalogClient() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [data, setData] = useState<CatalogResponse | null>(null);
   const [loading, setLoading] = useState(true);
-  const [qrOpen, setQrOpen] = useState(false);
 
   useEffect(() => {
     setQ(initialQ);
@@ -133,14 +131,6 @@ export function CatalogClient() {
             <span className="material-symbols-outlined text-[18px] text-primary">download</span>
             <span>Unduh Rekap (XLSX)</span>
           </a>
-          <button
-            type="button"
-            onClick={() => setQrOpen(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-title-sm transition-colors shadow-sm"
-          >
-            <span className="material-symbols-outlined text-[18px] text-primary">qr_code_2</span>
-            <span>Cetak Label QR</span>
-          </button>
           <Link
             href="/peminjaman"
             className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-primary hover:bg-tertiary text-on-primary text-title-sm transition-all shadow-sm"
@@ -630,17 +620,6 @@ export function CatalogClient() {
           </div>
         </aside>
       </div>
-
-      <QrLabelModal
-        open={qrOpen}
-        onClose={() => setQrOpen(false)}
-        items={(data?.items ?? []).map((i) => ({
-          id: i.id,
-          inventoryCode: i.inventoryCode,
-          name: i.name,
-          roomLabel: i.roomCode ? `${i.roomCode} • ${i.placementDetail ?? ''}` : i.placementDetail,
-        }))}
-      />
     </div>
   );
 }

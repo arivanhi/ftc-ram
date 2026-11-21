@@ -54,4 +54,16 @@ describe('Final review Important fixes', () => {
     const seedSrc = readFileSync('scripts/init-db.mjs', 'utf8');
     expect(seedSrc).not.toContain('dQw4w9WgXcQ');
   });
+
+  it('hides Login Admin button and QR printing from public UI', () => {
+    const headerSrc = readFileSync('src/components/PublicHeader.tsx', 'utf8');
+    const catalogSrc = readFileSync('src/components/CatalogClient.tsx', 'utf8');
+    const detailSrc = readFileSync('src/app/aset/[uuid]/page.tsx', 'utf8');
+    expect(headerSrc).not.toContain('/admin/login');
+    expect(headerSrc).not.toContain('Login Admin');
+    expect(catalogSrc).not.toContain('QrLabelModal');
+    expect(catalogSrc).not.toContain('Cetak Label QR');
+    expect(detailSrc).not.toContain('/qr');
+    expect(detailSrc).not.toContain('AssetDetailActions');
+  });
 });

@@ -10,7 +10,6 @@ import { PublicHeader } from '@/components/PublicHeader';
 import { PublicFooter } from '@/components/PublicFooter';
 import { AvailabilityBadge, ConditionBadge } from '@/components/StatusBadge';
 import { SafeStepsRenderer } from '@/components/SafeStepsRenderer';
-import { AssetDetailActions } from '@/components/AssetDetailActions';
 
 export const dynamic = 'force-dynamic';
 
@@ -297,25 +296,6 @@ export default async function AssetDetailPage({
                 ) : (
                   <p className="text-body-sm text-on-surface-variant">Narahubung belum ditetapkan untuk aset ini.</p>
                 )}
-              </div>
-
-              {/* QR Code Card */}
-              <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/25 shadow-sm p-space-lg flex flex-col items-center text-center gap-3">
-                <span className="text-label-sm text-primary uppercase font-bold">Identitas QR Aset (UUID)</span>
-                <img
-                  src={`/api/assets/${asset.id}/qr`}
-                  alt={`QR ${asset.inventoryCode}`}
-                  className="w-44 h-44 object-contain border border-outline-variant/30 rounded-xl p-2 bg-white"
-                />
-                <span className="text-body-sm text-on-surface-variant break-all font-mono text-[11px]">
-                  ID: {asset.id}
-                </span>
-                <AssetDetailActions
-                  assetId={asset.id}
-                  inventoryCode={asset.inventoryCode}
-                  name={asset.name}
-                  roomLabel={room ? `${room.code} • ${asset.placementDetail ?? ''}` : asset.placementDetail}
-                />
               </div>
 
               {/* Active Bookings */}

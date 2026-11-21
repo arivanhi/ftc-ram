@@ -67,7 +67,7 @@ export function AssetsManager() {
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'ok' | 'err' | 'warn'; msg: string } | null>(null);
   const [modalError, setModalError] = useState<string | null>(null);
-  const [qrTarget, setQrTarget] = useState<AdminAsset | null>(null);
+  const [qrItems, setQrItems] = useState<AdminAsset[]>([]);
 
   const loadAll = useCallback(async () => {
     const [aRes, rRes, cRes] = await Promise.all([
@@ -229,14 +229,25 @@ export function AssetsManager() {
             Setiap aset baru otomatis mendapat UUID unik untuk URL detail dan label QR Code.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={openCreate}
-          className="px-4 py-2.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary text-title-sm inline-flex items-center gap-1.5"
-        >
-          <span className="material-symbols-outlined text-[18px]">add_circle</span>
-          Tambah Aset Baru
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setQrItems(filtered.filter((a) => !a.archivedAt))}
+            disabled={filtered.filter((a) => !a.archivedAt).length === 0}
+            className="px-4 py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high disabled:opacity-40 text-primary text-title-sm inline-flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-[18px]">qr_code_2</span>
+            Cetak Semua QR
+          </button>
+          <button
+            type="button"
+            onClick={openCreate}
+            className="px-4 py-2.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary text-title-sm inline-flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-[18px]">add_circle</span>
+            Tambah Aset Baru
+          </button>
+        </div>
       </div>
 
       {feedback && (
@@ -318,7 +329,7 @@ export function AssetsManager() {
                   <div className="inline-flex items-center gap-1.5">
                     <button
                       type="button"
-                      onClick={() => setQrTarget(a)}
+                      onClick={() => setQrItems([a])}
                       className="p-1.5 rounded bg-surface-container hover:bg-surface-container-high text-primary"
                       title="Cetak QR Code"
                     >
@@ -616,20 +627,14 @@ export function AssetsManager() {
       )}
 
       <QrLabelModal
-        open={Boolean(qrTarget)}
-        onClose={() => setQrTarget(null)}
-        items={
-          qrTarget
-            ? [
-                {
-                  id: qrTarget.id,
-                  inventoryCode: qrTarget.inventoryCode,
-                  name: qrTarget.name,
-                  roomLabel: qrTarget.roomCode ? `${qrTarget.roomCode} • ${qrTarget.placementDetail ?? ''}` : qrTarget.placementDetail,
-                },
-              ]
-            : []
-        }
+        open={qrItems.length > 0}
+        onClose={() => setQrItems([])}
+        items={qrItems.map((a) => ({
+          id: a.id,
+          inventoryCode: a.inventoryCode,
+          name: a.name,
+          roomLabel: a.roomCode ? `${a.roomCode} • ${a.placementDetail ?? ''}` : a.placementDetail,
+        }))}
       />
     </div>
   );
