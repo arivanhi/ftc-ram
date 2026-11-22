@@ -17,9 +17,10 @@ describe('PostgreSQL Drizzle schema contracts', () => {
     schema.issueTickets,
     schema.faqs,
     schema.researchGroups,
+    schema.smtpSettings,
   ];
 
-  it('uses native PostgreSQL uuid PK on all 13 tables', () => {
+  it('uses native PostgreSQL uuid PK on all 14 tables', () => {
     for (const table of tables) {
       const cfg = getTableConfig(table);
       const idCol = cfg.columns.find((c) => c.name === 'id');
@@ -49,6 +50,8 @@ describe('PostgreSQL Drizzle schema contracts', () => {
     const loanCols = getTableConfig(schema.loans).columns.map((c) => c.name);
     const itemCols = getTableConfig(schema.loanItems).columns.map((c) => c.name);
     expect(loanCols).toContain('borrower_id_type');
+    expect(loanCols).toContain('borrower_email');
+    expect(loanCols).toContain('return_reminder_sent_at');
     expect(loanCols).not.toContain('return_condition_notes');
     expect(itemCols).toEqual(expect.arrayContaining(['return_condition', 'return_notes']));
   });

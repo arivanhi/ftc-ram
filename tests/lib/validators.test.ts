@@ -4,8 +4,9 @@ import {
   assetInputSchema,
   adminLoanTransitionSchema,
   researchGroupInputSchema,
+  smtpSettingsInputSchema,
 } from '@/lib/validators';
-import { computeNextInventoryCode, resolveVideoEmbedUrl } from '@/lib/format';
+import { computeNextInventoryCode, extractShortGroupName, resolveVideoEmbedUrl } from '@/lib/format';
 
 describe('Zod domain validators', () => {
   const assetUuid = '550e8400-e29b-41d4-a716-446655440000';
@@ -205,6 +206,38 @@ describe('researchGroupInputSchema (Kelompok Keilmuan)', () => {
       researchGroupInputSchema.safeParse({
         name: 'Tanpa skema',
         url: 'ftc.dinus.ac.id',
+      }).success,
+    ).toBe(false);
+  });
+});
+
+describe('extractShortGroupName & smtpSettingsInputSchema', () => {
+  it('extracts abbreviation before opening parenthesis cleanly', () => {
+    expect(extractShortGroupName('CEMTI (Center for Media & Tech Innovation)')).toBe('CEMTI');
+    expect(extractShortGroupName('REGRESI (Rekayasa Teknologi Cerdas)')).toBe('REGRESI');
+    expect(extractShortGroupName('KK Kecerdasan Buatan')).toBe('KK Kecerdasan Buatan');
+    expect(extractShortGroupName('(Leading) Group')).toBe('(Leading) Group');
+  });
+
+  it('validates Gmail SMTP settings and borrowerEmail on loan input', () => {
+    expect(
+      smtpSettingsInputSchema.safeParse({
+        enabled: true,
+        smtpHost: 'smtp.gmail.com',
+        smtpPort: 465,
+        smtpUser: 'ftc.asset@gmail.com',
+        smtpPassword: 'abcd efgh ijkl mnop',
+        senderName: 'SIM-Aset FTC',
+        adminNotifyEmail: 'admin@ftc.dinus.ac.id',
+      }).success,
+    ).toBe(true);
+
+    expect(
+      smtpSettingsInputSchema.safeParse({
+        enabled: true,
+        smtpHost: 'smtp.gmail.com',
+        smtpPort: 99999,
+        smtpUser: 'not-an-email',
       }).success,
     ).toBe(false);
   });

@@ -129,11 +129,33 @@ export const researchGroupInputSchema = z.object({
   sortOrder: z.coerce.number().int().min(0).max(999).optional().default(0),
 });
 
+export const smtpSettingsInputSchema = z.object({
+  enabled: z.boolean().default(false),
+  smtpHost: z.string().trim().min(3).max(120).default('smtp.gmail.com'),
+  smtpPort: z.coerce.number().int().min(1).max(65535).default(465),
+  smtpUser: z.union([z.string().trim().email().max(160), z.literal('')]).default(''),
+  smtpPassword: z.string().max(200).optional(),
+  clearPassword: z.boolean().optional(),
+  senderName: z.string().trim().min(2).max(120).default('SIM-Aset Penelitian FTC UDINUS'),
+  adminNotifyEmail: z.union([z.string().trim().email().max(160), z.literal('')]).default(''),
+  reminderHoursBefore: z.coerce.number().int().min(1).max(168).default(24),
+});
+
+export const smtpTestInputSchema = z.object({
+  to: z.string().trim().email('Alamat email tujuan tes tidak valid.').max(160),
+});
+
+const optionalNullableEmail = z
+  .union([z.string().trim().email().max(160), z.literal(''), z.null()])
+  .optional()
+  .transform((v) => (v && v.length > 0 ? v.toLowerCase() : null));
+
 export const publicLoanInputSchema = z
   .object({
     borrowerName: z.string().trim().min(2).max(160),
     borrowerIdType: z.enum(['NIM', 'NPP', 'UNIT']),
     borrowerIdValue: z.string().trim().min(1).max(80),
+    borrowerEmail: optionalNullableEmail,
     borrowerWhatsapp: z.string().trim().min(8).max(30),
     borrowerUnitDetail: optionalNullableText,
     purposeTitle: z.string().trim().min(3).max(240),

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { isSafeHttpUrl } from '@/lib/format';
+import { extractShortGroupName, isSafeHttpUrl } from '@/lib/format';
 
 const NAV_ITEMS = [
   { href: '/', label: 'Katalog & Kondisi Aset' },
@@ -92,10 +92,10 @@ export function PublicHeader() {
           </div>
         </Link>
 
-        <div className="hidden lg:flex items-center gap-2.5 ml-auto min-w-0">
+        <div className="hidden lg:flex items-center gap-4 ml-auto min-w-0">
           {researchGroups.length > 0 && (
-            <div ref={kkRef} data-kelompok-keilmuan className="relative flex items-center gap-1.5 shrink-0">
-              {researchGroups.length <= 2 ? (
+            <div ref={kkRef} data-kelompok-keilmuan className="relative flex items-center gap-4 shrink-0">
+              {researchGroups.length <= 5 ? (
                 researchGroups.map((g) => (
                   <a
                     key={g.id}
@@ -103,13 +103,9 @@ export function PublicHeader() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title={g.description ? `${g.name} — ${g.description}` : g.name}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/15 text-primary text-title-sm font-semibold whitespace-nowrap transition-colors"
+                    className="text-title-sm font-semibold text-primary hover:text-secondary hover:underline whitespace-nowrap transition-colors"
                   >
-                    <span className="material-symbols-outlined text-[16px] shrink-0">groups</span>
-                    <span className={researchGroups.length === 1 ? 'max-w-[220px] truncate' : 'max-w-[160px] truncate'}>
-                      {g.name}
-                    </span>
-                    <span className="material-symbols-outlined text-[14px] opacity-75 shrink-0">open_in_new</span>
+                    {extractShortGroupName(g.name)}
                   </a>
                 ))
               ) : (
@@ -118,11 +114,10 @@ export function PublicHeader() {
                     type="button"
                     onClick={() => setKkOpen((o) => !o)}
                     aria-expanded={kkOpen}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/15 text-primary text-title-sm font-semibold whitespace-nowrap transition-colors"
+                    className="inline-flex items-center gap-0.5 text-title-sm font-semibold text-primary hover:text-secondary whitespace-nowrap transition-colors"
                   >
-                    <span className="material-symbols-outlined text-[17px]">groups</span>
-                    <span>Kelompok Keilmuan ({researchGroups.length})</span>
-                    <span className="material-symbols-outlined text-[17px]">
+                    <span>Kelompok Keilmuan</span>
+                    <span className="material-symbols-outlined text-[16px]">
                       {kkOpen ? 'expand_less' : 'expand_more'}
                     </span>
                   </button>
@@ -138,12 +133,14 @@ export function PublicHeader() {
                           className="flex items-start justify-between gap-2 px-3.5 py-2 hover:bg-surface-container-low transition-colors"
                         >
                           <div className="min-w-0">
-                            <div className="text-title-sm font-semibold text-primary truncate">{g.name}</div>
-                            {g.description && (
-                              <div className="text-[12px] text-on-surface-variant line-clamp-1">{g.description}</div>
-                            )}
+                            <div className="text-title-sm font-semibold text-primary truncate">
+                              {extractShortGroupName(g.name)}
+                            </div>
+                            <div className="text-[12px] text-on-surface-variant line-clamp-1">
+                              {g.name}
+                            </div>
                           </div>
-                          <span className="material-symbols-outlined text-[16px] text-primary shrink-0 mt-0.5">
+                          <span className="material-symbols-outlined text-[15px] text-primary shrink-0 mt-0.5">
                             open_in_new
                           </span>
                         </a>
@@ -205,17 +202,17 @@ export function PublicHeader() {
             );
           })}
           {researchGroups.length > 0 && (
-            <div className="flex lg:hidden items-center gap-1.5 pl-2 ml-1 border-l border-outline-variant/40">
+            <div className="flex lg:hidden items-center gap-3 pl-3 ml-1 border-l border-outline-variant/40">
               {researchGroups.map((g) => (
                 <a
                   key={g.id}
                   href={g.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-primary/10 text-primary text-title-sm whitespace-nowrap"
+                  title={g.name}
+                  className="text-title-sm font-semibold text-primary hover:underline whitespace-nowrap"
                 >
-                  <span>{g.name}</span>
-                  <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+                  {extractShortGroupName(g.name)}
                 </a>
               ))}
             </div>

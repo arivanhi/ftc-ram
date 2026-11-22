@@ -10,6 +10,12 @@ import {
   resolveReturnAssetUpdates,
   validateReturnItemsMembership,
 } from '@/lib/loan-rules';
+import {
+  notifyDamagedReturnToAdmin,
+  notifyLoanApprovedWithGuides,
+  notifyLoanStatusChange,
+} from '@/lib/mailer';
+import { resolveRequestOrigin } from '@/lib/qr';
 
 export async function PATCH(
   req: Request,
@@ -190,13 +196,39 @@ export async function PATCH(
         .where(eq(loans.id, uuid))
         .returning();
 
-      return { loan: updated, status: 200 as const };
+      const damagedItems = input.items
+        .filter((i) => i.returnCondition !== 'prima')
+        .map((i) => {
+          const asset = lockedById.get(i.assetId);
+          return {
+            inventoryCode: asset?.inventoryCode ?? i.assetId,
+            name: asset?.name ?? 'Aset FTC',
+            returnCondition: i.returnCondition,
+            returnNotes: i.returnNotes ?? null,
+          };
+        });
+
+      return { loan: updated, damagedItems, status: 200 as const };
     });
 
     if ('error' in outcome) {
       return NextResponse.json({ error: outcome.error }, { status: outcome.status });
     }
-    return NextResponse.json({ loan: outcome.loan });
+
+    const origin = resolveRequestOrigin(req);
+    let emailNotification: { sent: boolean; reason?: string } | undefined;
+    if (input.status === 'approved') {
+      emailNotification = await notifyLoanApprovedWithGuides(uuid, origin);
+    } else if (input.status === 'borrowed' || input.status === 'rejected') {
+      emailNotification = await notifyLoanStatusChange(uuid, input.status, origin);
+    } else if (input.status === 'returned') {
+      const damagedItems = 'damagedItems' in outcome ? (outcome.damagedItems ?? []) : [];
+      if (damagedItems.length > 0) {
+        void notifyDamagedReturnToAdmin(uuid, damagedItems, origin);
+      }
+    }
+
+    return NextResponse.json({ loan: outcome.loan, emailNotification });
   } catch {
     return NextResponse.json({ error: 'Gagal memperbarui status peminjaman.' }, { status: 400 });
   }

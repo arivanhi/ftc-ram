@@ -5,6 +5,8 @@ import { assets, issueTickets } from '@/db/schema';
 import { publicIssueInputSchema } from '@/lib/validators';
 import { formatTicketCode } from '@/lib/loan-rules';
 import { saveUploadedFile } from '@/lib/uploads';
+import { notifyIssueReported } from '@/lib/mailer';
+import { resolveRequestOrigin } from '@/lib/qr';
 
 async function parseIssuePayload(req: Request): Promise<{ data: unknown; photo: File | null }> {
   const ct = req.headers.get('content-type') || '';
@@ -107,6 +109,7 @@ export async function POST(req: Request) {
       return row;
     });
 
+    void notifyIssueReported(created.id, resolveRequestOrigin(req));
     return NextResponse.json(created, { status: 201 });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Gagal mengirim laporan kendala.';

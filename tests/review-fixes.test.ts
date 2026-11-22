@@ -93,9 +93,11 @@ describe('Final review Important fixes', () => {
     const adminShellSrc = readFileSync('src/components/admin/AdminShell.tsx', 'utf8');
     expect(adminShellSrc).toContain('/admin/kelompok-keilmuan');
     expect(adminShellSrc).toContain('Kelompok Keilmuan');
+    expect(adminShellSrc).toContain('/admin/smtp');
 
     const headerSrc = readFileSync('src/components/PublicHeader.tsx', 'utf8');
     expect(headerSrc).toContain('/api/research-groups');
+    expect(headerSrc).toContain('extractShortGroupName');
     const kkIdx = headerSrc.indexOf('researchGroups');
     const searchFormIdx = headerSrc.indexOf('onSubmit={onSearchSubmit}');
     expect(kkIdx).toBeGreaterThan(-1);

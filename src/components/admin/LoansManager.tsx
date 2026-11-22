@@ -20,6 +20,7 @@ type AdminLoan = {
   borrowerName: string;
   borrowerIdType: string;
   borrowerIdValue: string;
+  borrowerEmail: string | null;
   borrowerWhatsapp: string;
   borrowerUnitDetail: string | null;
   purposeTitle: string;
@@ -31,6 +32,7 @@ type AdminLoan = {
   attachmentUrl: string | null;
   status: LoanStatus;
   adminNotes: string | null;
+  returnReminderSentAt: string | null;
   items: AdminLoanItem[];
 };
 
@@ -38,6 +40,7 @@ export function LoansManager() {
   const [statusFilter, setStatusFilter] = useState('');
   const [loans, setLoans] = useState<AdminLoan[]>([]);
   const [msg, setMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
+  const [remindingId, setRemindingId] = useState<string | null>(null);
   const [returningLoan, setReturningLoan] = useState<AdminLoan | null>(null);
   const [returnState, setReturnState] = useState<Record<string, { returnCondition: AssetCondition; returnNotes: string }>>({});
   const [returnAdminNotes, setReturnAdminNotes] = useState('');
@@ -73,8 +76,30 @@ export function LoansManager() {
       setMsg({ type: 'err', text: d.error || 'Gagal mengubah status peminjaman.' });
       return;
     }
-    setMsg({ type: 'ok', text: `Tiket ${loan.ticketCode} diubah menjadi ${LOAN_STATUS_META[status].label}.` });
+    const emailInfo = d.emailNotification
+      ? d.emailNotification.sent
+        ? ' • Email notifikasi terkirim ke peminjam.'
+        : ` • Email belum terkirim (${d.emailNotification.reason || 'SMTP nonaktif'}).`
+      : '';
+    setMsg({ type: 'ok', text: `Tiket ${loan.ticketCode} diubah menjadi ${LOAN_STATUS_META[status].label}.${emailInfo}` });
     load();
+  }
+
+  async function sendReminder(loan: AdminLoan) {
+    setRemindingId(loan.id);
+    setMsg(null);
+    try {
+      const res = await fetch(`/api/admin/loans/${loan.id}/remind`, { method: 'POST' });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setMsg({ type: 'err', text: d.error || 'Gagal mengirim pengingat pengembalian.' });
+        return;
+      }
+      setMsg({ type: 'ok', text: `Pengingat pengembalian terkirim ke ${loan.borrowerEmail} (${loan.ticketCode}).` });
+      load();
+    } finally {
+      setRemindingId(null);
+    }
   }
 
   function openReturnModal(loan: AdminLoan) {
@@ -163,6 +188,7 @@ export function LoansManager() {
                     <div className="text-body-sm text-on-surface-variant">
                       <strong>{l.borrowerName}</strong> • {l.borrowerIdType}: {l.borrowerIdValue}
                       {l.borrowerUnitDetail ? ` • ${l.borrowerUnitDetail}` : ''} • WA: {l.borrowerWhatsapp}
+                      {l.borrowerEmail ? ` • Email: ${l.borrowerEmail}` : ''}
                     </div>
                     <div className="text-body-sm text-on-surface-variant mt-0.5">
                       Periode: <strong>{formatIndonesianDate(l.startDate)} – {formatIndonesianDate(l.endDate)}</strong> ({l.dailySession}) •{' '}
@@ -237,9 +263,22 @@ export function LoansManager() {
                     </>
                   )}
                   {l.status === 'borrowed' && (
-                    <button type="button" onClick={() => openReturnModal(l)} className="px-4 py-1.5 rounded-lg bg-[#059669] text-white text-title-sm font-bold">
-                      Proses Pengembalian Per Aset
-                    </button>
+                    <>
+                      {l.borrowerEmail && (
+                        <button
+                          type="button"
+                          disabled={remindingId === l.id}
+                          onClick={() => sendReminder(l)}
+                          className="px-3.5 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-title-sm inline-flex items-center gap-1 disabled:opacity-50"
+                        >
+                          <span className="material-symbols-outlined text-[17px]">mail</span>
+                          {remindingId === l.id ? 'Mengirim...' : 'Kirim Pengingat Email'}
+                        </button>
+                      )}
+                      <button type="button" onClick={() => openReturnModal(l)} className="px-4 py-1.5 rounded-lg bg-[#059669] text-white text-title-sm font-bold">
+                        Proses Pengembalian Per Aset
+                      </button>
+                    </>
                   )}
                 </div>
               </div>

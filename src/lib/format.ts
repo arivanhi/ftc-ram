@@ -126,6 +126,16 @@ export function isImageUrl(url: string | null | undefined): boolean {
   return /\.(jpg|jpeg|png|webp)(\?.*)?$/i.test(url);
 }
 
+export function extractShortGroupName(name: string): string {
+  const trimmed = name.trim();
+  const idx = trimmed.indexOf('(');
+  if (idx > 0) {
+    const shortName = trimmed.slice(0, idx).trim();
+    if (shortName.length > 0) return shortName;
+  }
+  return trimmed;
+}
+
 export function isSafeHttpUrl(rawUrl: string | null | undefined): boolean {
   if (!rawUrl) return false;
   try {

@@ -140,6 +140,7 @@ export const loans = pgTable('loans', {
   borrowerName: text('borrower_name').notNull(),
   borrowerIdType: text('borrower_id_type').notNull(),
   borrowerIdValue: text('borrower_id_value').notNull(),
+  borrowerEmail: text('borrower_email'),
   borrowerWhatsapp: text('borrower_whatsapp').notNull(),
   borrowerUnitDetail: text('borrower_unit_detail'),
   purposeTitle: text('purpose_title').notNull(),
@@ -156,6 +157,7 @@ export const loans = pgTable('loans', {
   approvedAt: timestamp('approved_at', { withTimezone: true }),
   borrowedAt: timestamp('borrowed_at', { withTimezone: true }),
   returnedAt: timestamp('returned_at', { withTimezone: true }),
+  returnReminderSentAt: timestamp('return_reminder_sent_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
@@ -212,6 +214,19 @@ export const researchGroups = pgTable('research_groups', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const smtpSettings = pgTable('smtp_settings', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  enabled: boolean('enabled').notNull().default(false),
+  smtpHost: text('smtp_host').notNull().default('smtp.gmail.com'),
+  smtpPort: integer('smtp_port').notNull().default(465),
+  smtpUser: text('smtp_user').notNull().default(''),
+  smtpPasswordEnc: text('smtp_password_enc').notNull().default(''),
+  senderName: text('sender_name').notNull().default('SIM-Aset Penelitian FTC UDINUS'),
+  adminNotifyEmail: text('admin_notify_email').notNull().default(''),
+  reminderHoursBefore: integer('reminder_hours_before').notNull().default(24),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+});
+
 export type AssetRow = typeof assets.$inferSelect;
 export type LoanRow = typeof loans.$inferSelect;
 export type LoanItemRow = typeof loanItems.$inferSelect;
@@ -221,3 +236,4 @@ export type TutorialRow = typeof tutorials.$inferSelect;
 export type IssueTicketRow = typeof issueTickets.$inferSelect;
 export type FaqRow = typeof faqs.$inferSelect;
 export type ResearchGroupRow = typeof researchGroups.$inferSelect;
+export type SmtpSettingsRow = typeof smtpSettings.$inferSelect;

@@ -5,6 +5,8 @@ import { assets, loanItems, loans } from '@/db/schema';
 import { publicLoanInputSchema } from '@/lib/validators';
 import { checkAssetLoanEligibility, formatTicketCode } from '@/lib/loan-rules';
 import { saveUploadedFile } from '@/lib/uploads';
+import { notifyLoanSubmitted } from '@/lib/mailer';
+import { resolveRequestOrigin } from '@/lib/qr';
 
 async function parseLoanPayload(req: Request): Promise<{ data: unknown; attachment: File | null }> {
   const ct = req.headers.get('content-type') || '';
@@ -23,6 +25,7 @@ async function parseLoanPayload(req: Request): Promise<{ data: unknown; attachme
         borrowerName: String(fd.get('borrowerName') ?? ''),
         borrowerIdType: String(fd.get('borrowerIdType') ?? ''),
         borrowerIdValue: String(fd.get('borrowerIdValue') ?? ''),
+        borrowerEmail: fd.get('borrowerEmail') ? String(fd.get('borrowerEmail')) : null,
         borrowerWhatsapp: String(fd.get('borrowerWhatsapp') ?? ''),
         borrowerUnitDetail: fd.get('borrowerUnitDetail') ? String(fd.get('borrowerUnitDetail')) : null,
         purposeTitle: String(fd.get('purposeTitle') ?? ''),
@@ -122,6 +125,7 @@ export async function POST(req: Request) {
           borrowerName: input.borrowerName,
           borrowerIdType: input.borrowerIdType,
           borrowerIdValue: input.borrowerIdValue,
+          borrowerEmail: input.borrowerEmail,
           borrowerWhatsapp: input.borrowerWhatsapp,
           borrowerUnitDetail: input.borrowerUnitDetail,
           purposeTitle: input.purposeTitle,
@@ -147,6 +151,7 @@ export async function POST(req: Request) {
     if ('error' in result) {
       return NextResponse.json({ error: result.error }, { status: result.status });
     }
+    void notifyLoanSubmitted(result.created.id, resolveRequestOrigin(req));
     return NextResponse.json(result.created, { status: 201 });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Gagal mengirim pengajuan peminjaman.';

@@ -13,6 +13,7 @@ const ADMIN_NAV = [
   { href: '/admin/narahubung', label: 'Narahubung', icon: 'support_agent' },
   { href: '/admin/peminjaman', label: 'Peminjaman', icon: 'assignment_turned_in' },
   { href: '/admin/kendala', label: 'Laporan Kendala', icon: 'report_problem' },
+  { href: '/admin/smtp', label: 'Pengaturan SMTP', icon: 'mail' },
 ];
 
 export function AdminShell({

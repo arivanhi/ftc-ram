@@ -71,6 +71,7 @@ export function LoanPortalClient() {
   const [borrowerName, setBorrowerName] = useState('');
   const [borrowerIdType, setBorrowerIdType] = useState<'NIM' | 'NPP' | 'UNIT'>('NIM');
   const [borrowerIdValue, setBorrowerIdValue] = useState('');
+  const [borrowerEmail, setBorrowerEmail] = useState('');
   const [borrowerWhatsapp, setBorrowerWhatsapp] = useState('');
   const [borrowerUnitDetail, setBorrowerUnitDetail] = useState('');
   const [purposeTitle, setPurposeTitle] = useState('');
@@ -187,6 +188,7 @@ export function LoanPortalClient() {
       fd.set('borrowerName', borrowerName);
       fd.set('borrowerIdType', borrowerIdType);
       fd.set('borrowerIdValue', borrowerIdValue);
+      if (borrowerEmail.trim()) fd.set('borrowerEmail', borrowerEmail.trim());
       fd.set('borrowerWhatsapp', borrowerWhatsapp);
       if (borrowerUnitDetail.trim()) fd.set('borrowerUnitDetail', borrowerUnitDetail.trim());
       fd.set('purposeTitle', purposeTitle);
@@ -212,6 +214,7 @@ export function LoanPortalClient() {
       setCreatedTicket(body);
       setBorrowerName('');
       setBorrowerIdValue('');
+      setBorrowerEmail('');
       setBorrowerWhatsapp('');
       setBorrowerUnitDetail('');
       setPurposeTitle('');
@@ -375,6 +378,17 @@ export function LoanPortalClient() {
                   </div>
                 </div>
                 <div>
+                  <label className="text-label-md text-on-surface-variant block mb-1">Email Aktif Pemohon *</label>
+                  <input
+                    required
+                    type="email"
+                    value={borrowerEmail}
+                    onChange={(e) => setBorrowerEmail(e.target.value)}
+                    placeholder="nama@dinus.ac.id / gmail.com (notifikasi & panduan alat)"
+                    className="w-full bg-white px-3.5 py-2 rounded-lg text-body-md border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
                   <label className="text-label-md text-on-surface-variant block mb-1">Nomor WhatsApp Aktif *</label>
                   <input
                     required
@@ -384,7 +398,7 @@ export function LoanPortalClient() {
                     className="w-full bg-white px-3.5 py-2 rounded-lg text-body-md border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
-                <div>
+                <div className="md:col-span-2">
                   <label className="text-label-md text-on-surface-variant block mb-1">Program Studi / Bagian / Tim</label>
                   <input
                     value={borrowerUnitDetail}
