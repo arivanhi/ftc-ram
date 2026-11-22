@@ -6,7 +6,12 @@ import {
   researchGroupInputSchema,
   smtpSettingsInputSchema,
 } from '@/lib/validators';
-import { computeNextInventoryCode, extractShortGroupName, resolveVideoEmbedUrl } from '@/lib/format';
+import {
+  computeNextInventoryCode,
+  extractShortGroupName,
+  getVisiblePageNumbers,
+  resolveVideoEmbedUrl,
+} from '@/lib/format';
 
 describe('Zod domain validators', () => {
   const assetUuid = '550e8400-e29b-41d4-a716-446655440000';
@@ -240,5 +245,15 @@ describe('extractShortGroupName & smtpSettingsInputSchema', () => {
         smtpUser: 'not-an-email',
       }).success,
     ).toBe(false);
+  });
+
+  it('computes a 3-page sliding window for pagination numbering', () => {
+    expect(getVisiblePageNumbers(1, 1, 3)).toEqual([1]);
+    expect(getVisiblePageNumbers(1, 2, 3)).toEqual([1, 2]);
+    expect(getVisiblePageNumbers(1, 5, 3)).toEqual([1, 2, 3]);
+    expect(getVisiblePageNumbers(2, 5, 3)).toEqual([1, 2, 3]);
+    expect(getVisiblePageNumbers(3, 5, 3)).toEqual([2, 3, 4]);
+    expect(getVisiblePageNumbers(4, 5, 3)).toEqual([3, 4, 5]);
+    expect(getVisiblePageNumbers(5, 5, 3)).toEqual([3, 4, 5]);
   });
 });

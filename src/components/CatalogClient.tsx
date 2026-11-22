@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { AvailabilityBadge, ConditionBadge } from '@/components/StatusBadge';
+import { PaginationBar } from '@/components/PaginationBar';
 import { formatIndonesianDate } from '@/lib/format';
 
 type AssetItem = {
@@ -50,6 +51,7 @@ export function CatalogClient() {
   const [condition, setCondition] = useState('');
   const [sort, setSort] = useState('newest');
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [data, setData] = useState<CatalogResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -68,14 +70,14 @@ export function CatalogClient() {
     if (condition) sp.set('condition', condition);
     if (sort) sp.set('sort', sort);
     sp.set('page', String(page));
-    sp.set('limit', '9');
+    sp.set('limit', String(pageSize));
     try {
       const res = await fetch(`/api/assets?${sp.toString()}`);
       if (res.ok) setData(await res.json());
     } finally {
       setLoading(false);
     }
-  }, [q, category, roomId, condition, sort, page]);
+  }, [q, category, roomId, condition, sort, page, pageSize]);
 
   useEffect(() => {
     const t = setTimeout(loadData, 150);
@@ -501,30 +503,18 @@ export function CatalogClient() {
           )}
 
           {/* Pagination */}
-          {data && data.totalPages > 1 && (
-            <div className="flex items-center justify-between bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/25">
-              <span className="text-body-sm text-on-surface-variant">
-                Halaman <strong>{data.page}</strong> dari <strong>{data.totalPages}</strong> ({data.total} produk)
-              </span>
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  disabled={page <= 1}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  className="px-3 py-1.5 rounded-lg bg-surface-container-low text-label-md disabled:opacity-40"
-                >
-                  Sebelumnya
-                </button>
-                <button
-                  type="button"
-                  disabled={page >= data.totalPages}
-                  onClick={() => setPage((p) => p + 1)}
-                  className="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-label-md disabled:opacity-40"
-                >
-                  Selanjutnya
-                </button>
-              </div>
-            </div>
+          {data && data.total > 0 && (
+            <PaginationBar
+              page={page}
+              pageSize={pageSize}
+              totalItems={data.total}
+              itemLabel="produk"
+              onPageChange={setPage}
+              onPageSizeChange={(nextSize) => {
+                setPageSize(nextSize);
+                setPage(1);
+              }}
+            />
           )}
         </div>
 

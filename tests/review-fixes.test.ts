@@ -148,4 +148,15 @@ describe('Final review Important fixes', () => {
       expect(src, `${file} still calls native confirm/prompt/alert`).not.toMatch(/\b(window\.)?(confirm|prompt|alert)\s*\(/);
     }
   });
+
+  it('uses PaginationBar with 5/10/50/100 page sizes and 3-page Prev/Next controls on admin assets table and public catalog', () => {
+    const barSrc = readFileSync('src/components/PaginationBar.tsx', 'utf8');
+    expect(barSrc).toContain('getVisiblePageNumbers');
+    expect(barSrc).toContain('Prev');
+    expect(barSrc).toContain('Next');
+    expect(barSrc).toContain('5, 10, 50, 100');
+
+    expect(readFileSync('src/components/admin/AssetsManager.tsx', 'utf8')).toContain('PaginationBar');
+    expect(readFileSync('src/components/CatalogClient.tsx', 'utf8')).toContain('PaginationBar');
+  });
 });

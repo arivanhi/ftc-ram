@@ -7,6 +7,7 @@ import { QrLabelModal } from '@/components/QrLabelModal';
 import { FileDropzone } from '@/components/FileDropzone';
 import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
 import { ConfirmModal, type ConfirmModalState } from '@/components/ConfirmModal';
+import { PaginationBar } from '@/components/PaginationBar';
 import { formatIndonesianDate } from '@/lib/format';
 
 type AssetSpec = { label: string; value: string };
@@ -64,6 +65,8 @@ export function AssetsManager() {
   const [contacts, setContacts] = useState<ContactOption[]>([]);
   const [includeArchived, setIncludeArchived] = useState(false);
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<AdminAsset | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
@@ -253,6 +256,10 @@ export function AssetsManager() {
     );
   });
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const paginated = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
+
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -286,7 +293,10 @@ export function AssetsManager() {
       <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3.5 rounded-xl border border-outline-variant/25">
         <input
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
           placeholder="Cari nama, kode inventaris, atau UUID..."
           className="bg-surface-container-low px-3.5 py-2 rounded-lg text-body-md min-w-[260px]"
         />
@@ -294,7 +304,10 @@ export function AssetsManager() {
           <input
             type="checkbox"
             checked={includeArchived}
-            onChange={(e) => setIncludeArchived(e.target.checked)}
+            onChange={(e) => {
+              setIncludeArchived(e.target.checked);
+              setPage(1);
+            }}
             className="accent-primary"
           />
           Tampilkan aset yang diarsipkan
@@ -314,7 +327,14 @@ export function AssetsManager() {
             </tr>
           </thead>
           <tbody className="divide-y divide-surface-container">
-            {filtered.map((a) => (
+            {paginated.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="py-8 px-4 text-center text-body-sm text-on-surface-variant">
+                  Tidak ada data aset yang cocok.
+                </td>
+              </tr>
+            ) : (
+              paginated.map((a) => (
               <tr key={a.id} className={a.archivedAt ? 'bg-surface-container-low/50 opacity-75' : 'hover:bg-surface-container-low/40'}>
                 <td className="py-3 px-4">
                   <div className="text-mono-data text-primary font-bold">{a.inventoryCode}</div>
@@ -389,10 +409,23 @@ export function AssetsManager() {
                   </div>
                 </td>
               </tr>
-            ))}
+              ))
+            )}
           </tbody>
         </table>
       </div>
+
+      <PaginationBar
+        page={safePage}
+        pageSize={pageSize}
+        totalItems={filtered.length}
+        itemLabel="aset"
+        onPageChange={setPage}
+        onPageSizeChange={(nextSize) => {
+          setPageSize(nextSize);
+          setPage(1);
+        }}
+      />
 
       {/* Create / Edit Modal */}
       {modalOpen && (

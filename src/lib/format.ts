@@ -136,6 +136,23 @@ export function extractShortGroupName(name: string): string {
   return trimmed;
 }
 
+export function getVisiblePageNumbers(
+  currentPage: number,
+  totalPages: number,
+  maxVisible = 3,
+): number[] {
+  const safeTotal = Math.max(1, Math.trunc(totalPages));
+  const safeCurrent = Math.min(safeTotal, Math.max(1, Math.trunc(currentPage)));
+  const size = Math.min(safeTotal, Math.max(1, Math.trunc(maxVisible)));
+  const half = Math.floor(size / 2);
+  let start = Math.max(1, safeCurrent - half);
+  const end = Math.min(safeTotal, start + size - 1);
+  start = Math.max(1, end - size + 1);
+  const pages: number[] = [];
+  for (let p = start; p <= end; p += 1) pages.push(p);
+  return pages;
+}
+
 export function isSafeHttpUrl(rawUrl: string | null | undefined): boolean {
   if (!rawUrl) return false;
   try {
