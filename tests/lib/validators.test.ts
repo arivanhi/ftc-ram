@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { publicLoanInputSchema, assetInputSchema, adminLoanTransitionSchema } from '@/lib/validators';
+import { computeNextInventoryCode } from '@/lib/format';
 
 describe('Zod domain validators', () => {
   const assetUuid = '550e8400-e29b-41d4-a716-446655440000';
@@ -88,5 +89,41 @@ describe('Zod domain validators', () => {
     expect(
       adminLoanTransitionSchema.safeParse({ status: 'returned', items: [] }).success,
     ).toBe(false);
+  });
+
+  it('allows omitting or blank inventoryCode for auto-generation while still validating explicit values', () => {
+    const baseAsset = {
+      name: 'Smart Sensor Node',
+      category: 'IoT',
+      description: 'Desc',
+      condition: 'prima',
+      availability: 'tersedia',
+      completionDate: '2026-01-10',
+    };
+
+    const omitted = assetInputSchema.safeParse(baseAsset);
+    expect(omitted.success).toBe(true);
+    if (omitted.success) expect(omitted.data.inventoryCode).toBeUndefined();
+
+    const blank = assetInputSchema.safeParse({ ...baseAsset, inventoryCode: '   ' });
+    expect(blank.success).toBe(true);
+    if (blank.success) expect(blank.data.inventoryCode).toBeUndefined();
+
+    expect(assetInputSchema.safeParse({ ...baseAsset, inventoryCode: 'X' }).success).toBe(false);
+  });
+});
+
+describe('computeNextInventoryCode (FTC-RA-00X)', () => {
+  it('starts at FTC-RA-001 when empty or only legacy prefixes exist', () => {
+    expect(computeNextInventoryCode([])).toBe('FTC-RA-001');
+    expect(computeNextInventoryCode(['FTC-IOT-001', 'FTC-ROB-008'])).toBe('FTC-RA-001');
+    expect(computeNextInventoryCode(['FTC-RA-ABC', 'FTC-RA-001-BETA'])).toBe('FTC-RA-001');
+  });
+
+  it('increments from the highest FTC-RA numeric suffix with 3-digit zero padding', () => {
+    expect(computeNextInventoryCode(['FTC-RA-001'])).toBe('FTC-RA-002');
+    expect(computeNextInventoryCode(['ftc-ra-002', 'FTC-RA-009', 'FTC-RA-005'])).toBe('FTC-RA-010');
+    expect(computeNextInventoryCode(['FTC-RA-099'])).toBe('FTC-RA-100');
+    expect(computeNextInventoryCode(['FTC-RA-999'])).toBe('FTC-RA-1000');
   });
 });

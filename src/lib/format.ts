@@ -78,6 +78,21 @@ export const CONTACT_STATUS_META = {
   offline: { label: 'Di Luar Jam Tugas', bgClass: 'bg-surface-container-high text-on-surface-variant', dotClass: 'bg-outline' },
 } as const;
 
+export const ASSET_CODE_PREFIX = 'FTC-RA-';
+
+export function computeNextInventoryCode(existingCodes: readonly string[]): string {
+  let maxNum = 0;
+  for (const code of existingCodes) {
+    const match = /^FTC-RA-(\d+)$/i.exec(code.trim());
+    if (!match) continue;
+    const num = Number.parseInt(match[1], 10);
+    if (Number.isSafeInteger(num) && num > maxNum) {
+      maxNum = num;
+    }
+  }
+  return `${ASSET_CODE_PREFIX}${String(maxNum + 1).padStart(3, '0')}`;
+}
+
 export type AssetCondition = keyof typeof CONDITION_META;
 export type AssetAvailability = keyof typeof AVAILABILITY_META;
 export type LoanStatus = keyof typeof LOAN_STATUS_META;

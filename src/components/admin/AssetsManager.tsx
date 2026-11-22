@@ -56,6 +56,7 @@ const EMPTY_FORM = {
 
 export function AssetsManager() {
   const [items, setItems] = useState<AdminAsset[]>([]);
+  const [nextInventoryCode, setNextInventoryCode] = useState('FTC-RA-001');
   const [rooms, setRooms] = useState<RoomOption[]>([]);
   const [contacts, setContacts] = useState<ContactOption[]>([]);
   const [includeArchived, setIncludeArchived] = useState(false);
@@ -75,7 +76,11 @@ export function AssetsManager() {
       fetch('/api/admin/rooms'),
       fetch('/api/admin/contacts'),
     ]);
-    if (aRes.ok) setItems((await aRes.json()).items ?? []);
+    if (aRes.ok) {
+      const aData = await aRes.json();
+      setItems(aData.items ?? []);
+      if (aData.nextInventoryCode) setNextInventoryCode(aData.nextInventoryCode);
+    }
     if (rRes.ok) setRooms((await rRes.json()).items ?? []);
     if (cRes.ok) setContacts((await cRes.json()).items ?? []);
   }, [includeArchived]);
@@ -86,7 +91,10 @@ export function AssetsManager() {
 
   function openCreate() {
     setEditing(null);
-    setForm(EMPTY_FORM);
+    setForm({
+      ...EMPTY_FORM,
+      completionDate: new Date().toISOString().slice(0, 10),
+    });
     setModalError(null);
     setModalOpen(true);
   }
@@ -140,8 +148,10 @@ export function AssetsManager() {
     setFeedback(null);
     setModalError(null);
     try {
+      const { inventoryCode, ...restForm } = form;
       const payload = {
-        ...form,
+        ...restForm,
+        ...(editing ? { inventoryCode } : {}),
         specifications: form.specifications.filter((s) => s.label.trim() && s.value.trim()),
         roomId: form.roomId || null,
         contactId: form.contactId || null,
@@ -171,7 +181,7 @@ export function AssetsManager() {
           type: 'ok',
           msg: editing
             ? `Aset ${body.asset.inventoryCode} berhasil diperbarui.`
-            : `Aset baru berhasil dibuat dengan UUID: ${body.asset.id}`,
+            : `Aset baru ${body.asset.inventoryCode} berhasil dibuat (UUID: ${body.asset.id})`,
         });
       }
       loadAll();
@@ -398,14 +408,30 @@ export function AssetsManager() {
                 </div>
               )}
               <div>
-                <label className="text-label-md block mb-1">Kode Inventaris *</label>
-                <input
-                  required
-                  value={form.inventoryCode}
-                  onChange={(e) => setForm({ ...form, inventoryCode: e.target.value })}
-                  placeholder="FTC-IOT-009"
-                  className="w-full bg-surface-container-low px-3 py-2 rounded-lg text-mono-data uppercase"
-                />
+                <label className="text-label-md block mb-1">
+                  {editing ? 'Kode Inventaris *' : 'Kode Inventaris (Otomatis)'}
+                </label>
+                {editing ? (
+                  <input
+                    required
+                    value={form.inventoryCode}
+                    onChange={(e) => setForm({ ...form, inventoryCode: e.target.value })}
+                    placeholder="FTC-RA-001"
+                    className="w-full bg-surface-container-low px-3 py-2 rounded-lg text-mono-data uppercase"
+                  />
+                ) : (
+                  <>
+                    <input
+                      readOnly
+                      disabled
+                      value={nextInventoryCode}
+                      className="w-full bg-surface-container px-3 py-2 rounded-lg text-mono-data uppercase text-primary font-bold cursor-not-allowed"
+                    />
+                    <p className="text-[11px] text-on-surface-variant mt-1">
+                      Diisi otomatis berurutan (FTC-RA-00X) saat aset disimpan.
+                    </p>
+                  </>
+                )}
               </div>
               <div>
                 <label className="text-label-md block mb-1">Tanggal Jadi Aset *</label>

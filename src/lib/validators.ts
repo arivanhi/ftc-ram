@@ -9,8 +9,18 @@ export const assetSpecSchema = z.object({
   value: z.string().trim().min(1).max(300),
 });
 
+const optionalInventoryCode = z
+  .string()
+  .trim()
+  .max(60)
+  .optional()
+  .transform((v) => (v && v.length > 0 ? v : undefined))
+  .refine((v) => v === undefined || v.length >= 2, {
+    message: 'Kode inventaris minimal 2 karakter.',
+  });
+
 export const assetInputSchema = z.object({
-  inventoryCode: z.string().trim().min(2).max(60),
+  inventoryCode: optionalInventoryCode,
   name: z.string().trim().min(2).max(200),
   category: z.string().trim().min(2).max(120),
   description: z.string().trim().max(4000).optional().default(''),
