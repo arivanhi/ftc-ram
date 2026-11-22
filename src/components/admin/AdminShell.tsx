@@ -9,6 +9,7 @@ const ADMIN_NAV = [
   { href: '/admin/aset', label: 'Aset & QR Code', icon: 'science' },
   { href: '/admin/lokasi', label: 'Gedung & Denah', icon: 'map' },
   { href: '/admin/tutorial', label: 'Tutorial & FAQ', icon: 'menu_book' },
+  { href: '/admin/kelompok-keilmuan', label: 'Kelompok Keilmuan', icon: 'groups' },
   { href: '/admin/narahubung', label: 'Narahubung', icon: 'support_agent' },
   { href: '/admin/peminjaman', label: 'Peminjaman', icon: 'assignment_turned_in' },
   { href: '/admin/kendala', label: 'Laporan Kendala', icon: 'report_problem' },

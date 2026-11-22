@@ -126,6 +126,72 @@ export function isImageUrl(url: string | null | undefined): boolean {
   return /\.(jpg|jpeg|png|webp)(\?.*)?$/i.test(url);
 }
 
+export function isSafeHttpUrl(rawUrl: string | null | undefined): boolean {
+  if (!rawUrl) return false;
+  try {
+    const parsed = new URL(rawUrl.trim());
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+export type VideoEmbedInfo = {
+  provider: 'youtube' | 'drive';
+  embedUrl: string;
+};
+
+const YOUTUBE_ID_RE = /^[a-zA-Z0-9_-]{11}$/;
+const DRIVE_ID_RE = /^[a-zA-Z0-9_-]{10,120}$/;
+
+export function resolveVideoEmbedUrl(rawUrl: string | null | undefined): VideoEmbedInfo | null {
+  if (!rawUrl || !isSafeHttpUrl(rawUrl)) return null;
+  const parsed = new URL(rawUrl.trim());
+  const host = parsed.hostname.toLowerCase();
+
+  if (host === 'youtu.be' || host === 'www.youtu.be') {
+    const id = parsed.pathname.split('/').filter(Boolean)[0] ?? '';
+    return YOUTUBE_ID_RE.test(id)
+      ? { provider: 'youtube', embedUrl: `https://www.youtube.com/embed/${id}` }
+      : null;
+  }
+
+  if (
+    host === 'youtube.com' ||
+    host === 'www.youtube.com' ||
+    host === 'm.youtube.com' ||
+    host === 'music.youtube.com' ||
+    host === 'youtube-nocookie.com' ||
+    host === 'www.youtube-nocookie.com'
+  ) {
+    let id = '';
+    if (parsed.pathname === '/watch') {
+      id = parsed.searchParams.get('v') ?? '';
+    } else {
+      const m = /^\/(?:embed|shorts|live|v)\/([a-zA-Z0-9_-]{11})(?:\/|$)/.exec(parsed.pathname);
+      if (m) id = m[1];
+    }
+    return YOUTUBE_ID_RE.test(id)
+      ? { provider: 'youtube', embedUrl: `https://www.youtube.com/embed/${id}` }
+      : null;
+  }
+
+  if (host === 'drive.google.com' || host === 'docs.google.com') {
+    let id = '';
+    const pathMatch = /^(?:\/u\/\d+)?\/file\/d\/([a-zA-Z0-9_-]{10,120})(?:\/|$)/.exec(parsed.pathname);
+    if (pathMatch) {
+      id = pathMatch[1];
+    } else if (parsed.pathname === '/open' || parsed.pathname === '/uc') {
+      id = parsed.searchParams.get('id') ?? '';
+    }
+    return DRIVE_ID_RE.test(id)
+      ? { provider: 'drive', embedUrl: `https://drive.google.com/file/d/${id}/preview` }
+      : null;
+  }
+
+  return null;
+}
+
 export type AssetCondition = keyof typeof CONDITION_META;
 export type AssetAvailability = keyof typeof AVAILABILITY_META;
 export type LoanStatus = keyof typeof LOAN_STATUS_META;

@@ -202,6 +202,16 @@ export const faqs = pgTable('faqs', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const researchGroups = pgTable('research_groups', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').notNull(),
+  url: text('url').notNull(),
+  description: text('description').notNull().default(''),
+  sortOrder: integer('sort_order').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+});
+
 export type AssetRow = typeof assets.$inferSelect;
 export type LoanRow = typeof loans.$inferSelect;
 export type LoanItemRow = typeof loanItems.$inferSelect;
@@ -210,3 +220,4 @@ export type ContactRow = typeof contacts.$inferSelect;
 export type TutorialRow = typeof tutorials.$inferSelect;
 export type IssueTicketRow = typeof issueTickets.$inferSelect;
 export type FaqRow = typeof faqs.$inferSelect;
+export type ResearchGroupRow = typeof researchGroups.$inferSelect;

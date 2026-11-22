@@ -4,12 +4,13 @@ import { and, asc, eq, inArray, isNull } from 'drizzle-orm';
 import { db } from '@/db';
 import { assets, buildings, contacts, floors, loanItems, loans, rooms, tutorials } from '@/db/schema';
 import { isValidUuid } from '@/lib/uuid';
-import { formatIndonesianDate } from '@/lib/format';
+import { formatIndonesianDate, isSafeHttpUrl, resolveVideoEmbedUrl } from '@/lib/format';
 import { buildWhatsAppUrl } from '@/lib/loan-rules';
 import { PublicHeader } from '@/components/PublicHeader';
 import { PublicFooter } from '@/components/PublicFooter';
 import { AvailabilityBadge, ConditionBadge } from '@/components/StatusBadge';
 import { SafeStepsRenderer } from '@/components/SafeStepsRenderer';
+import { VideoEmbed } from '@/components/VideoEmbed';
 
 export const dynamic = 'force-dynamic';
 
@@ -176,6 +177,7 @@ export default async function AssetDetailPage({
                         </div>
                         <h4 className="text-title-md text-on-surface font-bold">{tut.title}</h4>
                         <p className="text-body-sm text-on-surface-variant">{tut.summary}</p>
+                        <VideoEmbed url={tut.videoUrl} title={tut.title} />
                         {tut.stepsMarkdown && (
                           <div className="pt-2 border-t border-surface-container">
                             <SafeStepsRenderer content={tut.stepsMarkdown} />
@@ -193,7 +195,7 @@ export default async function AssetDetailPage({
                               Unduh Berkas SOP
                             </a>
                           )}
-                          {tut.videoUrl && (
+                          {tut.videoUrl && isSafeHttpUrl(tut.videoUrl) && !resolveVideoEmbedUrl(tut.videoUrl) && (
                             <a
                               href={tut.videoUrl}
                               target="_blank"

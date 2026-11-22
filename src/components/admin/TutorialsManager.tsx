@@ -180,7 +180,12 @@ export function TutorialsManager() {
             <input placeholder="Penyusun / Instruktur" value={form.instructorName} onChange={(e) => setForm({ ...form, instructorName: e.target.value })} className="bg-surface-container-low px-3 py-2 rounded-lg text-body-sm" />
             <textarea rows={2} placeholder="Ringkasan singkat" value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} className="bg-surface-container-low p-3 rounded-lg text-body-sm" />
             <textarea rows={5} placeholder="Langkah penggunaan (gunakan ## Judul, 1. Langkah, - Poin)" value={form.stepsMarkdown} onChange={(e) => setForm({ ...form, stepsMarkdown: e.target.value })} className="bg-surface-container-low p-3 rounded-lg text-body-sm" />
-            <input placeholder="Tautan Video (YouTube / Google Drive)" value={form.videoUrl} onChange={(e) => setForm({ ...form, videoUrl: e.target.value })} className="bg-surface-container-low px-3 py-2 rounded-lg text-body-sm" />
+            <div className="flex flex-col gap-1">
+              <input placeholder="Tautan Video (YouTube / Google Drive)" value={form.videoUrl} onChange={(e) => setForm({ ...form, videoUrl: e.target.value })} className="bg-surface-container-low px-3 py-2 rounded-lg text-body-sm" />
+              <span className="text-[11px] text-on-surface-variant">
+                Link YouTube atau Google Drive (atur akses &ldquo;Siapa saja yang memiliki link&rdquo;) akan langsung bisa diputar di halaman.
+              </span>
+            </div>
             <div className="flex flex-col gap-1">
               <label className="text-label-sm text-on-surface-variant">Unggah PDF / Gambar SOP (Opsional)</label>
               <FileDropzone

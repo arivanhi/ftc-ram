@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { SafeStepsRenderer } from '@/components/SafeStepsRenderer';
+import { VideoEmbed } from '@/components/VideoEmbed';
 import { buildWhatsAppUrl } from '@/lib/loan-rules';
+import { isSafeHttpUrl, resolveVideoEmbedUrl } from '@/lib/format';
 
 type TutorialItem = {
   id: string;
@@ -39,12 +41,6 @@ const EXHIBITION_CHECKLIST = [
   'Simpan nomor WhatsApp narahubung produk di ponsel PIC Pameran',
   'Dokumentasikan foto kondisi aset sebelum dan sesudah acara',
 ];
-
-function extractYoutubeEmbedUrl(url: string | null): string | null {
-  if (!url) return null;
-  const m = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/.exec(url);
-  return m ? `https://www.youtube.com/embed/${m[1]}` : null;
-}
 
 export function TutorialClient() {
   const [q, setQ] = useState('');
@@ -183,6 +179,7 @@ export function TutorialClient() {
 
                 <h3 className="text-title-md text-on-surface font-bold">{tut.title}</h3>
                 <p className="text-body-md text-on-surface-variant">{tut.summary}</p>
+                <VideoEmbed url={tut.videoUrl} title={tut.title} />
 
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-surface-container-high">
                   <div className="text-body-sm text-on-surface-variant">
@@ -208,7 +205,7 @@ export function TutorialClient() {
                         Unduh Berkas
                       </a>
                     )}
-                    {tut.videoUrl && (
+                    {tut.videoUrl && isSafeHttpUrl(tut.videoUrl) && !resolveVideoEmbedUrl(tut.videoUrl) && (
                       <a
                         href={tut.videoUrl}
                         target="_blank"
@@ -337,16 +334,7 @@ export function TutorialClient() {
               </button>
             </div>
             <div className="p-6 overflow-y-auto flex flex-col gap-4">
-              {extractYoutubeEmbedUrl(activeTutorial.videoUrl) && (
-                <div className="aspect-video w-full rounded-xl overflow-hidden bg-black">
-                  <iframe
-                    src={extractYoutubeEmbedUrl(activeTutorial.videoUrl)!}
-                    title={activeTutorial.title}
-                    className="w-full h-full"
-                    allowFullScreen
-                  />
-                </div>
-              )}
+              <VideoEmbed url={activeTutorial.videoUrl} title={activeTutorial.title} />
               <p className="text-body-md text-on-surface-variant">{activeTutorial.summary}</p>
               <SafeStepsRenderer content={activeTutorial.stepsMarkdown} />
               <div className="flex flex-wrap gap-2 pt-2">
@@ -361,7 +349,7 @@ export function TutorialClient() {
                     Buka / Unduh Lampiran
                   </a>
                 )}
-                {activeTutorial.videoUrl && (
+                {activeTutorial.videoUrl && isSafeHttpUrl(activeTutorial.videoUrl) && !resolveVideoEmbedUrl(activeTutorial.videoUrl) && (
                   <a
                     href={activeTutorial.videoUrl}
                     target="_blank"

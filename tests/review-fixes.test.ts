@@ -83,4 +83,24 @@ describe('Final review Important fixes', () => {
       expect(src).toContain('FileDropzone');
     }
   });
+
+  it('embeds YouTube/Drive videos inline on tutorial & asset detail pages and places Kelompok Keilmuan hyperlinks to the left of public searchbar', () => {
+    const tutSrc = readFileSync('src/components/TutorialClient.tsx', 'utf8');
+    const assetDetailSrc = readFileSync('src/app/aset/[uuid]/page.tsx', 'utf8');
+    expect(tutSrc).toContain('VideoEmbed');
+    expect(assetDetailSrc).toContain('VideoEmbed');
+
+    const adminShellSrc = readFileSync('src/components/admin/AdminShell.tsx', 'utf8');
+    expect(adminShellSrc).toContain('/admin/kelompok-keilmuan');
+    expect(adminShellSrc).toContain('Kelompok Keilmuan');
+
+    const headerSrc = readFileSync('src/components/PublicHeader.tsx', 'utf8');
+    expect(headerSrc).toContain('/api/research-groups');
+    const kkIdx = headerSrc.indexOf('researchGroups');
+    const searchFormIdx = headerSrc.indexOf('onSubmit={onSearchSubmit}');
+    expect(kkIdx).toBeGreaterThan(-1);
+    expect(searchFormIdx).toBeGreaterThan(-1);
+    expect(headerSrc.indexOf('data-kelompok-keilmuan')).toBeGreaterThan(-1);
+    expect(headerSrc.indexOf('data-kelompok-keilmuan')).toBeLessThan(searchFormIdx);
+  });
 });

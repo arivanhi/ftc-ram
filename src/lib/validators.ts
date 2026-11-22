@@ -1,8 +1,25 @@
 import { z } from 'zod';
+import { isSafeHttpUrl } from '@/lib/format';
 
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const optionalNullableUuid = z.union([z.string().uuid(), z.literal(''), z.null()]).optional().transform((v) => (v ? v : null));
 const optionalNullableText = z.string().trim().max(4000).nullable().optional().transform((v) => (v && v.length > 0 ? v : null));
+const safeHttpUrlSchema = z
+  .string()
+  .trim()
+  .min(8)
+  .max(500)
+  .refine((v) => isSafeHttpUrl(v), { message: 'URL harus diawali http:// atau https:// yang valid.' });
+const optionalNullableHttpUrl = z
+  .string()
+  .trim()
+  .max(500)
+  .nullable()
+  .optional()
+  .transform((v) => (v && v.length > 0 ? v : null))
+  .refine((v) => v === null || isSafeHttpUrl(v), {
+    message: 'Tautan video harus berupa URL http:// atau https:// yang valid.',
+  });
 
 export const assetSpecSchema = z.object({
   label: z.string().trim().min(1).max(120),
@@ -94,7 +111,7 @@ export const tutorialInputSchema = z.object({
   summary: z.string().trim().max(1000).optional().default(''),
   stepsMarkdown: optionalNullableText,
   fileUrl: optionalNullableText,
-  videoUrl: optionalNullableText,
+  videoUrl: optionalNullableHttpUrl,
   version: z.string().trim().min(1).max(30).optional().default('1.0'),
   instructorName: optionalNullableText,
 });
@@ -102,6 +119,13 @@ export const tutorialInputSchema = z.object({
 export const faqInputSchema = z.object({
   question: z.string().trim().min(5).max(400),
   answer: z.string().trim().min(5).max(4000),
+  sortOrder: z.coerce.number().int().min(0).max(999).optional().default(0),
+});
+
+export const researchGroupInputSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  url: safeHttpUrlSchema,
+  description: z.string().trim().max(300).optional().default(''),
   sortOrder: z.coerce.number().int().min(0).max(999).optional().default(0),
 });
 

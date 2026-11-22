@@ -16,9 +16,10 @@ describe('PostgreSQL Drizzle schema contracts', () => {
     schema.loanItems,
     schema.issueTickets,
     schema.faqs,
+    schema.researchGroups,
   ];
 
-  it('uses native PostgreSQL uuid PK on all 12 tables', () => {
+  it('uses native PostgreSQL uuid PK on all 13 tables', () => {
     for (const table of tables) {
       const cfg = getTableConfig(table);
       const idCol = cfg.columns.find((c) => c.name === 'id');

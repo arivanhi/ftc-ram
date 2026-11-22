@@ -13,6 +13,8 @@ import { PATCH as patchLoan } from '@/app/api/admin/loans/[uuid]/route';
 import { PATCH as patchIssue } from '@/app/api/admin/issues/[uuid]/route';
 import { GET as getPrivateUpload } from '@/app/api/admin/uploads/[filename]/route';
 import { GET as getAssetQr } from '@/app/api/assets/[uuid]/qr/route';
+import { GET as getResearchGroups, POST as createResearchGroup } from '@/app/api/admin/research-groups/route';
+import { PATCH as patchResearchGroup, DELETE as deleteResearchGroup } from '@/app/api/admin/research-groups/[uuid]/route';
 
 describe('Admin API auth guard enforcement', () => {
   const validUuid = '550e8400-e29b-41d4-a716-446655440000';
@@ -50,6 +52,26 @@ describe('Admin API auth guard enforcement', () => {
         await getAssetQr(new Request('http://localhost/api/assets/' + validUuid + '/qr'), {
           params: Promise.resolve({ uuid: validUuid }),
         })
+      ).status,
+    ).toBe(401);
+    expect((await getResearchGroups()).status).toBe(401);
+    expect(
+      (await createResearchGroup(new Request('http://localhost/api/admin/research-groups', { method: 'POST', body: '{}' }))).status,
+    ).toBe(401);
+    expect(
+      (
+        await patchResearchGroup(
+          new Request('http://localhost/api/admin/research-groups/' + validUuid, { method: 'PATCH', body: '{}' }),
+          { params: Promise.resolve({ uuid: validUuid }) },
+        )
+      ).status,
+    ).toBe(401);
+    expect(
+      (
+        await deleteResearchGroup(
+          new Request('http://localhost/api/admin/research-groups/' + validUuid, { method: 'DELETE' }),
+          { params: Promise.resolve({ uuid: validUuid }) },
+        )
       ).status,
     ).toBe(401);
   });

@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { publicLoanInputSchema, assetInputSchema, adminLoanTransitionSchema } from '@/lib/validators';
-import { computeNextInventoryCode } from '@/lib/format';
+import {
+  publicLoanInputSchema,
+  assetInputSchema,
+  adminLoanTransitionSchema,
+  researchGroupInputSchema,
+} from '@/lib/validators';
+import { computeNextInventoryCode, resolveVideoEmbedUrl } from '@/lib/format';
 
 describe('Zod domain validators', () => {
   const assetUuid = '550e8400-e29b-41d4-a716-446655440000';
@@ -125,5 +130,82 @@ describe('computeNextInventoryCode (FTC-RA-00X)', () => {
     expect(computeNextInventoryCode(['ftc-ra-002', 'FTC-RA-009', 'FTC-RA-005'])).toBe('FTC-RA-010');
     expect(computeNextInventoryCode(['FTC-RA-099'])).toBe('FTC-RA-100');
     expect(computeNextInventoryCode(['FTC-RA-999'])).toBe('FTC-RA-1000');
+  });
+});
+
+describe('resolveVideoEmbedUrl (YouTube & Google Drive inline player)', () => {
+  it('resolves YouTube watch, youtu.be, shorts, live, and embed URLs', () => {
+    expect(resolveVideoEmbedUrl('https://www.youtube.com/watch?v=abcDEF12345&t=12s')).toEqual({
+      provider: 'youtube',
+      embedUrl: 'https://www.youtube.com/embed/abcDEF12345',
+    });
+    expect(resolveVideoEmbedUrl('https://youtu.be/abcDEF12345?si=xyz')).toEqual({
+      provider: 'youtube',
+      embedUrl: 'https://www.youtube.com/embed/abcDEF12345',
+    });
+    expect(resolveVideoEmbedUrl('https://www.youtube.com/shorts/abcDEF12345')).toEqual({
+      provider: 'youtube',
+      embedUrl: 'https://www.youtube.com/embed/abcDEF12345',
+    });
+    expect(resolveVideoEmbedUrl('https://m.youtube.com/live/abcDEF12345')).toEqual({
+      provider: 'youtube',
+      embedUrl: 'https://www.youtube.com/embed/abcDEF12345',
+    });
+    expect(resolveVideoEmbedUrl('https://www.youtube.com/embed/abcDEF12345')).toEqual({
+      provider: 'youtube',
+      embedUrl: 'https://www.youtube.com/embed/abcDEF12345',
+    });
+  });
+
+  it('resolves Google Drive view, preview, open, and uc share URLs', () => {
+    const id = '1AbCdEfGhIjKlMnOpQrStUvWxYz_12345';
+    expect(resolveVideoEmbedUrl(`https://drive.google.com/file/d/${id}/view?usp=sharing`)).toEqual({
+      provider: 'drive',
+      embedUrl: `https://drive.google.com/file/d/${id}/preview`,
+    });
+    expect(resolveVideoEmbedUrl(`https://drive.google.com/u/0/file/d/${id}/preview`)).toEqual({
+      provider: 'drive',
+      embedUrl: `https://drive.google.com/file/d/${id}/preview`,
+    });
+    expect(resolveVideoEmbedUrl(`https://drive.google.com/open?id=${id}`)).toEqual({
+      provider: 'drive',
+      embedUrl: `https://drive.google.com/file/d/${id}/preview`,
+    });
+    expect(resolveVideoEmbedUrl(`https://drive.google.com/uc?export=download&id=${id}`)).toEqual({
+      provider: 'drive',
+      embedUrl: `https://drive.google.com/file/d/${id}/preview`,
+    });
+  });
+
+  it('rejects javascript:, non-video domains, and malformed URLs', () => {
+    expect(resolveVideoEmbedUrl('javascript:alert(1)')).toBeNull();
+    expect(resolveVideoEmbedUrl('https://evil.example.com/watch?v=abcDEF12345')).toBeNull();
+    expect(resolveVideoEmbedUrl('not-a-url')).toBeNull();
+    expect(resolveVideoEmbedUrl(null)).toBeNull();
+  });
+});
+
+describe('researchGroupInputSchema (Kelompok Keilmuan)', () => {
+  it('accepts valid http/https hyperlinks and rejects unsafe schemes', () => {
+    expect(
+      researchGroupInputSchema.safeParse({
+        name: 'KK Kecerdasan Buatan',
+        url: 'https://ai.ftc.dinus.ac.id',
+        description: 'Portal riset AI FTC',
+        sortOrder: 1,
+      }).success,
+    ).toBe(true);
+    expect(
+      researchGroupInputSchema.safeParse({
+        name: 'XSS',
+        url: 'javascript:alert(1)',
+      }).success,
+    ).toBe(false);
+    expect(
+      researchGroupInputSchema.safeParse({
+        name: 'Tanpa skema',
+        url: 'ftc.dinus.ac.id',
+      }).success,
+    ).toBe(false);
   });
 });
