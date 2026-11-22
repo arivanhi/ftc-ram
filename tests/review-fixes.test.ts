@@ -105,4 +105,29 @@ describe('Final review Important fixes', () => {
     expect(headerSrc.indexOf('data-kelompok-keilmuan')).toBeGreaterThan(-1);
     expect(headerSrc.indexOf('data-kelompok-keilmuan')).toBeLessThan(searchFormIdx);
   });
+
+  it('uses NotificationModal for CRUD + loan submission and scoped upload loading overlay in FileDropzone', () => {
+    const modalSrc = readFileSync('src/components/NotificationModal.tsx', 'utf8');
+    expect(modalSrc).toContain('role="dialog"');
+    expect(modalSrc).toContain('aria-modal="true"');
+
+    const dropzoneSrc = readFileSync('src/components/FileDropzone.tsx', 'utf8');
+    expect(dropzoneSrc).toContain('absolute inset-0');
+    expect(dropzoneSrc).not.toContain('fixed inset-0');
+
+    for (const file of [
+      'src/components/LoanPortalClient.tsx',
+      'src/components/admin/AssetsManager.tsx',
+      'src/components/admin/LocationsManager.tsx',
+      'src/components/admin/TutorialsManager.tsx',
+      'src/components/admin/ResearchGroupsManager.tsx',
+      'src/components/admin/ContactsManager.tsx',
+      'src/components/admin/LoansManager.tsx',
+      'src/components/admin/IssuesManager.tsx',
+      'src/components/admin/SmtpSettingsManager.tsx',
+    ]) {
+      const src = readFileSync(file, 'utf8');
+      expect(src, `${file} missing NotificationModal`).toContain('NotificationModal');
+    }
+  });
 });

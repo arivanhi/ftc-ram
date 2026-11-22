@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
 
 type Room = {
   id: string;
@@ -23,7 +24,7 @@ type Building = { id: string; code: string; name: string; subtitle: string; icon
 
 export function LocationsManager() {
   const [buildings, setBuildings] = useState<Building[]>([]);
-  const [msg, setMsg] = useState<string | null>(null);
+  const [notice, setNotice] = useState<NotificationModalState | null>(null);
 
   // Quick create forms
   const [bCode, setBCode] = useState('');
@@ -73,12 +74,14 @@ export function LocationsManager() {
       body: JSON.stringify({ code: bCode, name: bName, subtitle: bSub }),
     });
     const d = await res.json();
-    setMsg(res.ok ? `Gedung ${d.building.name} ditambahkan.` : d.error);
     if (res.ok) {
+      setNotice({ type: 'success', title: 'Gedung Berhasil Ditambahkan', message: `Gedung ${d.building.name} telah disimpan.` });
       setBCode('');
       setBName('');
       setBSub('');
       load();
+    } else {
+      setNotice({ type: 'error', title: 'Gagal Menambahkan Gedung', message: d.error || 'Terjadi kesalahan.' });
     }
   }
 
@@ -90,8 +93,12 @@ export function LocationsManager() {
       body: JSON.stringify({ buildingId: fBuildingId, floorNumber: Number(fNumber), label: fLabel }),
     });
     const d = await res.json();
-    setMsg(res.ok ? `Lantai ${d.floor.label} ditambahkan.` : d.error);
-    if (res.ok) load();
+    if (res.ok) {
+      setNotice({ type: 'success', title: 'Lantai Berhasil Ditambahkan', message: `Lantai ${d.floor.label} telah disimpan.` });
+      load();
+    } else {
+      setNotice({ type: 'error', title: 'Gagal Menambahkan Lantai', message: d.error || 'Terjadi kesalahan.' });
+    }
   }
 
   async function addRoom(e: React.FormEvent) {
@@ -102,10 +109,12 @@ export function LocationsManager() {
       body: JSON.stringify({ ...rForm, capacity: Number(rForm.capacity), gridColSpan: Number(rForm.gridColSpan) }),
     });
     const d = await res.json();
-    setMsg(res.ok ? `Ruangan ${d.room.code} ditambahkan ke denah.` : d.error);
     if (res.ok) {
+      setNotice({ type: 'success', title: 'Ruangan Berhasil Ditambahkan', message: `Ruangan ${d.room.code} telah ditambahkan ke denah.` });
       setRForm((p) => ({ ...p, code: '', name: '', subtitle: '', picName: '', picExt: '', notes: '' }));
       load();
+    } else {
+      setNotice({ type: 'error', title: 'Gagal Menambahkan Ruangan', message: d.error || 'Terjadi kesalahan.' });
     }
   }
 
@@ -113,8 +122,12 @@ export function LocationsManager() {
     if (!confirm(`Hapus ruangan ${code}?`)) return;
     const res = await fetch(`/api/admin/rooms/${id}`, { method: 'DELETE' });
     const d = await res.json().catch(() => ({}));
-    setMsg(res.ok ? `Ruangan ${code} dihapus.` : d.error || 'Gagal menghapus ruangan.');
-    if (res.ok) load();
+    if (res.ok) {
+      setNotice({ type: 'success', title: 'Ruangan Berhasil Dihapus', message: `Ruangan ${code} telah dihapus dari denah.` });
+      load();
+    } else {
+      setNotice({ type: 'error', title: 'Gagal Menghapus Ruangan', message: d.error || 'Gagal menghapus ruangan.' });
+    }
   }
 
   async function updateRoomGrid(room: Room, gridZone: 'top' | 'bottom', gridColSpan: number) {
@@ -124,8 +137,12 @@ export function LocationsManager() {
       body: JSON.stringify({ gridZone, gridColSpan }),
     });
     const d = await res.json().catch(() => ({}));
-    setMsg(res.ok ? `Tata letak blok ${room.code} diperbarui.` : d.error || 'Gagal memperbarui tata letak.');
-    if (res.ok) load();
+    if (res.ok) {
+      setNotice({ type: 'success', title: 'Tata Letak Ruangan Diperbarui', message: `Posisi blok ruangan ${room.code} berhasil diubah.` });
+      load();
+    } else {
+      setNotice({ type: 'error', title: 'Gagal Memperbarui Tata Letak', message: d.error || 'Gagal memperbarui tata letak.' });
+    }
   }
 
   const allFloors = buildings.flatMap((b) => b.floors.map((f) => ({ id: f.id, label: `${b.name} — ${f.label}` })));
@@ -138,8 +155,6 @@ export function LocationsManager() {
           Atur zona atas/bawah koridor dan lebar kolom (1–12) setiap ruangan untuk membentuk denah modular interaktif.
         </p>
       </div>
-
-      {msg && <div className="p-3 rounded-xl bg-primary-fixed text-on-primary-fixed text-body-sm font-medium">{msg}</div>}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <form onSubmit={addBuilding} className="bg-white p-4 rounded-xl border border-outline-variant/25 flex flex-col gap-2.5">
@@ -237,6 +252,8 @@ export function LocationsManager() {
           </div>
         ))}
       </div>
+
+      <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );
 }

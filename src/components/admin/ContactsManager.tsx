@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ContactStatusBadge } from '@/components/StatusBadge';
 import { FileDropzone } from '@/components/FileDropzone';
+import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
 
 type ContactRow = {
   id: string;
@@ -38,7 +39,7 @@ export function ContactsManager() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(EMPTY_CONTACT);
   const [uploading, setUploading] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
+  const [notice, setNotice] = useState<NotificationModalState | null>(null);
 
   const load = useCallback(async () => {
     const res = await fetch('/api/admin/contacts');
@@ -58,7 +59,7 @@ export function ContactsManager() {
       const res = await fetch('/api/admin/uploads', { method: 'POST', body: fd });
       const d = await res.json();
       if (res.ok) setForm((p) => ({ ...p, photoUrl: d.url }));
-      else setMsg(d.error);
+      else setNotice({ type: 'error', title: 'Gagal Mengunggah Foto', message: d.error || 'Foto tidak dapat diunggah.' });
     } finally {
       setUploading(false);
     }
@@ -66,6 +67,7 @@ export function ContactsManager() {
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
+    const isEdit = Boolean(editingId);
     const url = editingId ? `/api/admin/contacts/${editingId}` : '/api/admin/contacts';
     const res = await fetch(url, {
       method: editingId ? 'PATCH' : 'POST',
@@ -73,8 +75,17 @@ export function ContactsManager() {
       body: JSON.stringify({ ...form, photoUrl: form.photoUrl || null }),
     });
     const d = await res.json();
-    if (!res.ok) return setMsg(d.error || 'Gagal menyimpan narahubung.');
-    setMsg(editingId ? 'Data narahubung diperbarui.' : 'Narahubung baru ditambahkan.');
+    if (!res.ok) {
+      setNotice({ type: 'error', title: 'Gagal Menyimpan Narahubung', message: d.error || 'Data narahubung tidak valid.' });
+      return;
+    }
+    setNotice({
+      type: 'success',
+      title: isEdit ? 'Narahubung Berhasil Diperbarui' : 'Narahubung Baru Berhasil Ditambahkan',
+      message: isEdit
+        ? `Perubahan data narahubung "${form.name}" telah disimpan.`
+        : `Narahubung "${form.name}" berhasil ditambahkan ke direktori.`,
+    });
     setEditingId(null);
     setForm(EMPTY_CONTACT);
     load();
@@ -84,8 +95,11 @@ export function ContactsManager() {
     if (!confirm('Hapus narahubung ini?')) return;
     const res = await fetch(`/api/admin/contacts/${id}`, { method: 'DELETE' });
     const d = await res.json().catch(() => ({}));
-    if (!res.ok) return setMsg(d.error || 'Gagal menghapus narahubung.');
-    setMsg('Narahubung dihapus.');
+    if (!res.ok) {
+      setNotice({ type: 'error', title: 'Gagal Menghapus Narahubung', message: d.error || 'Narahubung tidak dapat dihapus.' });
+      return;
+    }
+    setNotice({ type: 'success', title: 'Narahubung Berhasil Dihapus', message: 'Data narahubung telah dihapus dari direktori.' });
     load();
   }
 
@@ -97,8 +111,6 @@ export function ContactsManager() {
           Daftar personel pengelola produk penelitian yang dapat dihubungi PIC Pameran lewat WhatsApp &amp; Email.
         </p>
       </div>
-      {msg && <div className="p-3 rounded-xl bg-primary-fixed text-on-primary-fixed text-body-sm font-medium">{msg}</div>}
-
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         <form onSubmit={save} className="lg:col-span-5 bg-white p-5 rounded-xl border border-outline-variant/25 shadow-sm flex flex-col gap-3">
           <h2 className="text-title-md text-primary font-bold">{editingId ? 'Edit Narahubung' : 'Tambah Narahubung Baru'}</h2>
@@ -179,6 +191,8 @@ export function ContactsManager() {
           ))}
         </div>
       </div>
+
+      <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );
 }

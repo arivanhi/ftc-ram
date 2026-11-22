@@ -99,11 +99,11 @@ export function FileDropzone({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`w-full rounded-xl border-2 border-dashed transition-all select-none ${
+        className={`relative overflow-hidden w-full rounded-xl border-2 border-dashed transition-all select-none ${
           compact ? 'px-3 py-2.5' : 'p-4'
         } ${
           isBusy
-            ? 'opacity-60 cursor-wait bg-surface-container-low border-outline-variant'
+            ? 'cursor-wait bg-surface-container-low border-primary/50'
             : dragging
               ? 'border-primary bg-primary/5 ring-2 ring-primary/20 cursor-copy'
               : 'border-outline-variant/70 bg-surface-container-low hover:bg-surface-container hover:border-primary/60 cursor-pointer'
@@ -122,12 +122,7 @@ export function FileDropzone({
           }}
         />
 
-        {uploading ? (
-          <div className="flex items-center justify-center gap-2 py-1 text-primary text-body-sm font-medium">
-            <span className="material-symbols-outlined text-[20px] animate-spin">progress_activity</span>
-            <span>Mengunggah berkas...</span>
-          </div>
-        ) : dragging ? (
+        {dragging ? (
           <div className="flex items-center justify-center gap-2 py-1 text-primary text-title-sm font-semibold">
             <span className="material-symbols-outlined text-[22px]">download</span>
             <span>Lepaskan berkas di sini</span>
@@ -209,6 +204,31 @@ export function FileDropzone({
             <span className="material-symbols-outlined text-primary text-[28px]">cloud_upload</span>
             <span className="text-title-sm text-on-surface font-semibold">{idleLabel}</span>
             {hint && <span className="text-[12px] text-on-surface-variant">{hint}</span>}
+          </div>
+        )}
+
+        {/* Scoped loading modal strictly inside upload area */}
+        {uploading && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="absolute inset-0 z-10 bg-white/85 backdrop-blur-[2px] flex items-center justify-center p-2"
+          >
+            <div className="bg-white border border-primary/25 shadow-md rounded-xl px-4 py-2 flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-primary text-[20px] animate-spin">
+                progress_activity
+              </span>
+              <div className="text-left">
+                <div className="text-title-sm text-primary font-bold leading-tight">
+                  Mengunggah berkas...
+                </div>
+                {!compact && (
+                  <div className="text-[11px] text-on-surface-variant leading-tight">
+                    Mohon tunggu hingga unggahan selesai
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AvailabilityBadge, ConditionBadge } from '@/components/StatusBadge';
 import { QrLabelModal } from '@/components/QrLabelModal';
 import { FileDropzone } from '@/components/FileDropzone';
+import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
 import { formatIndonesianDate } from '@/lib/format';
 
 type AssetSpec = { label: string; value: string };
@@ -67,7 +68,7 @@ export function AssetsManager() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: 'ok' | 'err' | 'warn'; msg: string } | null>(null);
+  const [notice, setNotice] = useState<NotificationModalState | null>(null);
   const [modalError, setModalError] = useState<string | null>(null);
   const [qrItems, setQrItems] = useState<AdminAsset[]>([]);
 
@@ -146,7 +147,6 @@ export function AssetsManager() {
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
-    setFeedback(null);
     setModalError(null);
     try {
       const { inventoryCode, ...restForm } = form;
@@ -173,16 +173,19 @@ export function AssetsManager() {
       setModalOpen(false);
       if (body.affectedApprovedLoans?.length > 0) {
         const codes = body.affectedApprovedLoans.map((l: { ticketCode: string }) => l.ticketCode).join(', ');
-        setFeedback({
-          type: 'warn',
-          msg: `Aset diperbarui. Peringatan: terdapat pinjaman Disetujui mendatang (${codes}) — tinjau di menu Peminjaman.`,
+        setNotice({
+          type: 'warning',
+          title: 'Data Aset Diperbarui (Perlu Perhatian)',
+          message: `Aset ${body.asset.inventoryCode} berhasil diperbarui, namun terdapat pinjaman Disetujui mendatang (${codes}) — tinjau di menu Peminjaman.`,
         });
       } else {
-        setFeedback({
-          type: 'ok',
-          msg: editing
-            ? `Aset ${body.asset.inventoryCode} berhasil diperbarui.`
-            : `Aset baru ${body.asset.inventoryCode} berhasil dibuat (UUID: ${body.asset.id})`,
+        setNotice({
+          type: 'success',
+          title: editing ? 'Data Aset Berhasil Diperbarui' : 'Data Aset Baru Berhasil Dibuat',
+          message: editing
+            ? `Perubahan pada aset ${body.asset.name} telah disimpan.`
+            : `Aset ${body.asset.name} berhasil ditambahkan dengan nomor otomatis dan UUID unik.`,
+          detail: `${body.asset.inventoryCode} • UUID: ${body.asset.id}`,
         });
       }
       loadAll();
@@ -196,15 +199,20 @@ export function AssetsManager() {
     const res = await fetch(`/api/admin/assets/${a.id}`, { method: 'DELETE' });
     const body = await res.json();
     if (!res.ok) {
-      setFeedback({ type: 'err', msg: body.error || 'Gagal menghapus aset.' });
+      setNotice({
+        type: 'error',
+        title: 'Gagal Menghapus Aset',
+        message: body.error || 'Aset tidak dapat dihapus saat ini.',
+      });
       return;
     }
-    setFeedback({
-      type: 'ok',
-      msg:
+    setNotice({
+      type: 'success',
+      title: body.mode === 'archived' ? 'Data Aset Diarsipkan' : 'Data Aset Berhasil Dihapus',
+      message:
         body.mode === 'archived'
-          ? `Aset ${a.inventoryCode} diarsipkan karena memiliki riwayat peminjaman.`
-          : `Aset ${a.inventoryCode} dihapus permanen.`,
+          ? `Aset ${a.inventoryCode} (${a.name}) diarsipkan karena memiliki riwayat peminjaman.`
+          : `Aset ${a.inventoryCode} (${a.name}) telah dihapus permanen.`,
     });
     loadAll();
   }
@@ -216,7 +224,11 @@ export function AssetsManager() {
       body: JSON.stringify({ restore: true, availability: 'tersedia' }),
     });
     if (res.ok) {
-      setFeedback({ type: 'ok', msg: `Aset ${a.inventoryCode} berhasil dipulihkan dari arsip.` });
+      setNotice({
+        type: 'success',
+        title: 'Data Aset Berhasil Dipulihkan',
+        message: `Aset ${a.inventoryCode} (${a.name}) kembali aktif dan tersedia.`,
+      });
       loadAll();
     }
   }
@@ -260,20 +272,6 @@ export function AssetsManager() {
           </button>
         </div>
       </div>
-
-      {feedback && (
-        <div
-          className={`p-3.5 rounded-xl text-body-sm font-medium ${
-            feedback.type === 'err'
-              ? 'bg-error-container text-on-error-container'
-              : feedback.type === 'warn'
-                ? 'bg-secondary-fixed text-on-secondary-fixed'
-                : 'bg-[#ecfdf5] text-[#065f46]'
-          }`}
-        >
-          {feedback.msg}
-        </div>
-      )}
 
       <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3.5 rounded-xl border border-outline-variant/25">
         <input
@@ -660,6 +658,8 @@ export function AssetsManager() {
           roomLabel: a.roomCode ? `${a.roomCode} • ${a.placementDetail ?? ''}` : a.placementDetail,
         }))}
       />
+
+      <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );
 }

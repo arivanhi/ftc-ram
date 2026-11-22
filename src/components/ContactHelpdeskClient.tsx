@@ -476,6 +476,7 @@ export function ContactHelpdeskClient() {
                 <FileDropzone
                   compact
                   accept="image/jpeg,image/png,image/webp"
+                  uploading={submitting && Boolean(photo)}
                   fileName={photo?.name ?? null}
                   idleLabel="Seret foto atau klik (JPG/PNG maks 5 MB)"
                   hint="JPG, PNG, atau WEBP maks 5 MB"

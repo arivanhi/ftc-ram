@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
 
 type ResearchGroupRow = {
   id: string;
@@ -22,7 +23,7 @@ export function ResearchGroupsManager() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
-  const [msg, setMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
+  const [notice, setNotice] = useState<NotificationModalState | null>(null);
 
   const load = useCallback(async () => {
     const res = await fetch('/api/admin/research-groups');
@@ -36,7 +37,7 @@ export function ResearchGroupsManager() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
-    setMsg(null);
+    const isEdit = Boolean(editingId);
     try {
       const url = editingId ? `/api/admin/research-groups/${editingId}` : '/api/admin/research-groups';
       const res = await fetch(url, {
@@ -51,12 +52,15 @@ export function ResearchGroupsManager() {
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setMsg({ type: 'err', text: body.error || 'Gagal menyimpan Kelompok Keilmuan.' });
+        setNotice({ type: 'error', title: 'Gagal Menyimpan Kelompok Keilmuan', message: body.error || 'Gagal menyimpan data.' });
         return;
       }
-      setMsg({
-        type: 'ok',
-        text: editingId ? 'Tautan Kelompok Keilmuan diperbarui.' : 'Tautan Kelompok Keilmuan berhasil ditambahkan.',
+      setNotice({
+        type: 'success',
+        title: isEdit ? 'Kelompok Keilmuan Berhasil Diperbarui' : 'Kelompok Keilmuan Berhasil Ditambahkan',
+        message: isEdit
+          ? `Perubahan pada tautan "${form.name}" telah disimpan.`
+          : `Tautan "${form.name}" telah ditambahkan dan tampil di sebelah kiri searchbar publik.`,
       });
       setEditingId(null);
       setForm(EMPTY_FORM);
@@ -71,14 +75,14 @@ export function ResearchGroupsManager() {
     const res = await fetch(`/api/admin/research-groups/${item.id}`, { method: 'DELETE' });
     const body = await res.json().catch(() => ({}));
     if (!res.ok) {
-      setMsg({ type: 'err', text: body.error || 'Gagal menghapus Kelompok Keilmuan.' });
+      setNotice({ type: 'error', title: 'Gagal Menghapus Kelompok Keilmuan', message: body.error || 'Gagal menghapus data.' });
       return;
     }
     if (editingId === item.id) {
       setEditingId(null);
       setForm(EMPTY_FORM);
     }
-    setMsg({ type: 'ok', text: `Tautan "${item.name}" dihapus.` });
+    setNotice({ type: 'success', title: 'Kelompok Keilmuan Berhasil Dihapus', message: `Tautan "${item.name}" telah dihapus.` });
     load();
   }
 
@@ -90,18 +94,6 @@ export function ResearchGroupsManager() {
           Tambahkan hyperlink menuju web Kelompok Keilmuan FTC. Tautan akan tampil di halaman publik tepat di sebelah kiri kotak pencarian.
         </p>
       </div>
-
-      {msg && (
-        <div
-          className={`p-3 rounded-xl text-body-sm font-medium ${
-            msg.type === 'err'
-              ? 'bg-error-container text-on-error-container'
-              : 'bg-primary-fixed text-on-primary-fixed'
-          }`}
-        >
-          {msg.text}
-        </div>
-      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         <form
@@ -235,6 +227,8 @@ export function ResearchGroupsManager() {
           )}
         </div>
       </div>
+
+      <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );
 }

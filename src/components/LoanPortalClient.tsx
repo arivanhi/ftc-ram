@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { AvailabilityBadge, ConditionBadge, LoanStatusBadge } from '@/components/StatusBadge';
 import { FileDropzone } from '@/components/FileDropzone';
+import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
 import { formatIndonesianDate } from '@/lib/format';
 
 type SelectableAsset = {
@@ -87,6 +88,7 @@ export function LoanPortalClient() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [createdTicket, setCreatedTicket] = useState<{ id: string; ticketCode: string } | null>(null);
+  const [notice, setNotice] = useState<NotificationModalState | null>(null);
 
   // Tracking state
   const [trackQuery, setTrackQuery] = useState('');
@@ -174,11 +176,15 @@ export function LoanPortalClient() {
     setFormError(null);
 
     if (selectedAssets.length === 0) {
-      setFormError('Pilih minimal 1 aset produk penelitian untuk dipinjam.');
+      const msg = 'Pilih minimal 1 aset produk penelitian untuk dipinjam.';
+      setFormError(msg);
+      setNotice({ type: 'error', title: 'Pengajuan Belum Lengkap', message: msg });
       return;
     }
     if (!integrityAgreed) {
-      setFormError('Anda harus menyetujui Pakta Integritas sebelum mengirim pengajuan.');
+      const msg = 'Anda harus menyetujui Pakta Integritas sebelum mengirim pengajuan.';
+      setFormError(msg);
+      setNotice({ type: 'error', title: 'Persetujuan Diperlukan', message: msg });
       return;
     }
 
@@ -204,14 +210,31 @@ export function LoanPortalClient() {
       for (const a of selectedAssets) fd.append('assetIds', a.id);
       if (attachment) fd.set('attachment', attachment);
 
+      const submittedStart = startDate;
+      const submittedEnd = endDate;
+      const submittedEmail = borrowerEmail.trim();
+
       const res = await fetch('/api/loans', { method: 'POST', body: fd });
       const body = await res.json();
       if (!res.ok) {
-        setFormError(body.error || 'Pengajuan peminjaman gagal dikirim.');
+        const errMsg = body.error || 'Pengajuan peminjaman gagal dikirim.';
+        setFormError(errMsg);
+        setNotice({ type: 'error', title: 'Pengajuan Peminjaman Gagal', message: errMsg });
         return;
       }
 
       setCreatedTicket(body);
+      setNotice({
+        type: 'success',
+        title: 'Permintaan Peminjaman Berhasil Dikirim',
+        message: `Pengajuan untuk periode ${formatIndonesianDate(submittedStart)} – ${formatIndonesianDate(submittedEnd)} sedang menunggu verifikasi Admin FTC.${submittedEmail ? ` Konfirmasi & panduan penggunaan alat akan dikirim ke ${submittedEmail}.` : ''}`,
+        detail: `Kode Tiket: ${body.ticketCode}`,
+        actionLabel: 'Lacak Tiket Ini',
+        onAction: () => {
+          setTrackQuery(body.ticketCode);
+          setTab('track');
+        },
+      });
       setBorrowerName('');
       setBorrowerIdValue('');
       setBorrowerEmail('');
@@ -224,7 +247,9 @@ export function LoanPortalClient() {
       setSelectedAssets([]);
       loadPublicLoans();
     } catch {
-      setFormError('Terjadi kesalahan jaringan saat mengirim pengajuan.');
+      const errMsg = 'Terjadi kesalahan jaringan saat mengirim pengajuan.';
+      setFormError(errMsg);
+      setNotice({ type: 'error', title: 'Gangguan Koneksi', message: errMsg });
     } finally {
       setSubmitting(false);
     }
@@ -630,6 +655,7 @@ export function LoanPortalClient() {
               </div>
               <FileDropzone
                 accept=".pdf,image/jpeg,image/png,image/webp"
+                uploading={submitting && Boolean(attachment)}
                 fileName={attachment?.name ?? null}
                 idleLabel="Seret & lepas Surat Tugas / Pengantar Pameran, atau klik (Opsional)"
                 hint="PDF maks 10 MB atau JPG/PNG maks 5 MB (hanya dapat dilihat Admin FTC)"
@@ -823,6 +849,8 @@ export function LoanPortalClient() {
           </div>
         </section>
       )}
+
+      <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );
 }

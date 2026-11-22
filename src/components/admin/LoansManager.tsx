@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { LoanStatusBadge } from '@/components/StatusBadge';
+import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
 import { formatIndonesianDate, LOAN_STATUS_META, type AssetCondition, type LoanStatus } from '@/lib/format';
 import { buildWhatsAppUrl } from '@/lib/loan-rules';
 
@@ -39,7 +40,7 @@ type AdminLoan = {
 export function LoansManager() {
   const [statusFilter, setStatusFilter] = useState('');
   const [loans, setLoans] = useState<AdminLoan[]>([]);
-  const [msg, setMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
+  const [notice, setNotice] = useState<NotificationModalState | null>(null);
   const [remindingId, setRemindingId] = useState<string | null>(null);
   const [returningLoan, setReturningLoan] = useState<AdminLoan | null>(null);
   const [returnState, setReturnState] = useState<Record<string, { returnCondition: AssetCondition; returnNotes: string }>>({});
@@ -73,29 +74,46 @@ export function LoansManager() {
     });
     const d = await res.json();
     if (!res.ok) {
-      setMsg({ type: 'err', text: d.error || 'Gagal mengubah status peminjaman.' });
+      setNotice({
+        type: 'error',
+        title: 'Gagal Memperbarui Peminjaman',
+        message: d.error || 'Gagal mengubah status peminjaman.',
+      });
       return;
     }
     const emailInfo = d.emailNotification
       ? d.emailNotification.sent
-        ? ' • Email notifikasi terkirim ke peminjam.'
-        : ` • Email belum terkirim (${d.emailNotification.reason || 'SMTP nonaktif'}).`
+        ? ' Email notifikasi berhasil dikirim ke peminjam.'
+        : ` Email belum terkirim (${d.emailNotification.reason || 'SMTP nonaktif'}).`
       : '';
-    setMsg({ type: 'ok', text: `Tiket ${loan.ticketCode} diubah menjadi ${LOAN_STATUS_META[status].label}.${emailInfo}` });
+    setNotice({
+      type: 'success',
+      title: 'Status Peminjaman Diperbarui',
+      message: `Tiket ${loan.ticketCode} diubah menjadi ${LOAN_STATUS_META[status].label}.${emailInfo}`,
+      detail: loan.ticketCode,
+    });
     load();
   }
 
   async function sendReminder(loan: AdminLoan) {
     setRemindingId(loan.id);
-    setMsg(null);
     try {
       const res = await fetch(`/api/admin/loans/${loan.id}/remind`, { method: 'POST' });
       const d = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setMsg({ type: 'err', text: d.error || 'Gagal mengirim pengingat pengembalian.' });
+        setNotice({
+          type: 'error',
+          title: 'Gagal Mengirim Pengingat',
+          message: d.error || 'Gagal mengirim pengingat pengembalian.',
+        });
         return;
       }
-      setMsg({ type: 'ok', text: `Pengingat pengembalian terkirim ke ${loan.borrowerEmail} (${loan.ticketCode}).` });
+      setNotice({
+        type: 'success',
+        title: 'Pengingat Pengembalian Terkirim',
+        message: `Email peringatan pengembalian berhasil dikirim ke ${loan.borrowerEmail}.`,
+        detail: loan.ticketCode,
+      });
       load();
     } finally {
       setRemindingId(null);
@@ -133,7 +151,12 @@ export function LoansManager() {
       setModalError(d.error || 'Gagal mencatat pengembalian.');
       return;
     }
-    setMsg({ type: 'ok', text: `Pengembalian tiket ${returningLoan.ticketCode} tercatat dan status aset disinkronkan.` });
+    setNotice({
+      type: 'success',
+      title: 'Pengembalian Aset Berhasil Dicatat',
+      message: `Pengembalian untuk tiket ${returningLoan.ticketCode} telah disimpan dan kondisi aset disinkronkan.`,
+      detail: returningLoan.ticketCode,
+    });
     setReturningLoan(null);
     load();
   }
@@ -161,12 +184,6 @@ export function LoansManager() {
           <option value="cancelled">Dibatalkan</option>
         </select>
       </div>
-
-      {msg && (
-        <div className={`p-3.5 rounded-xl text-body-sm font-medium ${msg.type === 'err' ? 'bg-error-container text-on-error-container' : 'bg-[#ecfdf5] text-[#065f46]'}`}>
-          {msg.text}
-        </div>
-      )}
 
       <div className="flex flex-col gap-4">
         {loans.length === 0 ? (
@@ -351,6 +368,8 @@ export function LoansManager() {
           </form>
         </div>
       )}
+
+      <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { FileDropzone } from '@/components/FileDropzone';
+import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
 
 type TutorialRow = {
   id: string;
@@ -45,7 +46,7 @@ export function TutorialsManager() {
   const [faqQ, setFaqQ] = useState('');
   const [faqA, setFaqA] = useState('');
   const [uploading, setUploading] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
+  const [notice, setNotice] = useState<NotificationModalState | null>(null);
 
   const load = useCallback(async () => {
     const [tRes, fRes, aRes] = await Promise.all([
@@ -70,9 +71,11 @@ export function TutorialsManager() {
       fd.set('kind', 'any');
       const res = await fetch('/api/admin/uploads', { method: 'POST', body: fd });
       const body = await res.json();
-      if (!res.ok) return setMsg(body.error || 'Gagal mengunggah berkas.');
+      if (!res.ok) {
+        setNotice({ type: 'error', title: 'Gagal Mengunggah Berkas', message: body.error || 'Berkas tidak dapat diunggah.' });
+        return;
+      }
       setForm((p) => ({ ...p, fileUrl: body.url }));
-      setMsg('Berkas panduan berhasil diunggah.');
     } finally {
       setUploading(false);
     }
@@ -80,6 +83,7 @@ export function TutorialsManager() {
 
   async function saveTutorial(e: React.FormEvent) {
     e.preventDefault();
+    const isEdit = Boolean(editingId);
     const url = editingId ? `/api/admin/tutorials/${editingId}` : '/api/admin/tutorials';
     const method = editingId ? 'PATCH' : 'POST';
     const res = await fetch(url, {
@@ -88,8 +92,17 @@ export function TutorialsManager() {
       body: JSON.stringify({ ...form, assetId: form.assetId || null, fileUrl: form.fileUrl || null, videoUrl: form.videoUrl || null }),
     });
     const body = await res.json();
-    if (!res.ok) return setMsg(body.error || 'Gagal menyimpan tutorial.');
-    setMsg(editingId ? 'Tutorial diperbarui.' : 'Tutorial baru ditambahkan.');
+    if (!res.ok) {
+      setNotice({ type: 'error', title: 'Gagal Menyimpan Panduan', message: body.error || 'Data panduan tidak valid.' });
+      return;
+    }
+    setNotice({
+      type: 'success',
+      title: isEdit ? 'Panduan Berhasil Diperbarui' : 'Panduan Baru Berhasil Ditambahkan',
+      message: isEdit
+        ? `Perubahan pada panduan "${form.title}" telah disimpan.`
+        : `Panduan "${form.title}" telah ditambahkan ke portal Tutorial & SOP.`,
+    });
     setEditingId(null);
     setForm(EMPTY_TUT);
     load();
@@ -99,7 +112,11 @@ export function TutorialsManager() {
     if (!confirm('Hapus panduan ini?')) return;
     const res = await fetch(`/api/admin/tutorials/${id}`, { method: 'DELETE' });
     const d = await res.json().catch(() => ({}));
-    if (!res.ok) return setMsg(d.error || 'Gagal menghapus panduan.');
+    if (!res.ok) {
+      setNotice({ type: 'error', title: 'Gagal Menghapus Panduan', message: d.error || 'Panduan tidak dapat dihapus.' });
+      return;
+    }
+    setNotice({ type: 'success', title: 'Panduan Berhasil Dihapus', message: 'Data panduan telah dihapus.' });
     load();
   }
 
@@ -111,10 +128,13 @@ export function TutorialsManager() {
       body: JSON.stringify({ question: faqQ, answer: faqA, sortOrder: faqs.length + 1 }),
     });
     const d = await res.json().catch(() => ({}));
-    if (!res.ok) return setMsg(d.error || 'Gagal menyimpan FAQ.');
+    if (!res.ok) {
+      setNotice({ type: 'error', title: 'Gagal Menyimpan FAQ', message: d.error || 'Data FAQ tidak valid.' });
+      return;
+    }
     setFaqQ('');
     setFaqA('');
-    setMsg('FAQ baru ditambahkan.');
+    setNotice({ type: 'success', title: 'FAQ Baru Berhasil Ditambahkan', message: 'Pertanyaan FAQ telah ditambahkan ke portal.' });
     load();
   }
 
@@ -122,7 +142,11 @@ export function TutorialsManager() {
     if (!confirm('Hapus FAQ ini?')) return;
     const res = await fetch(`/api/admin/faqs/${id}`, { method: 'DELETE' });
     const d = await res.json().catch(() => ({}));
-    if (!res.ok) return setMsg(d.error || 'Gagal menghapus FAQ.');
+    if (!res.ok) {
+      setNotice({ type: 'error', title: 'Gagal Menghapus FAQ', message: d.error || 'FAQ tidak dapat dihapus.' });
+      return;
+    }
+    setNotice({ type: 'success', title: 'FAQ Berhasil Dihapus', message: 'Data FAQ telah dihapus.' });
     load();
   }
 
@@ -144,8 +168,6 @@ export function TutorialsManager() {
           </button>
         </div>
       </div>
-
-      {msg && <div className="p-3 rounded-xl bg-primary-fixed text-on-primary-fixed text-body-sm font-medium">{msg}</div>}
 
       {tab === 'tutorials' ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
@@ -268,6 +290,8 @@ export function TutorialsManager() {
           </div>
         </div>
       )}
+
+      <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );
 }

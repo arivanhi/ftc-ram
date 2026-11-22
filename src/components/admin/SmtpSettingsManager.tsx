@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
 
 type SmtpFormState = {
   enabled: boolean;
@@ -33,7 +34,7 @@ export function SmtpSettingsManager() {
   const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
   const [reminding, setReminding] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
+  const [notice, setNotice] = useState<NotificationModalState | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -69,7 +70,6 @@ export function SmtpSettingsManager() {
   async function saveSettings(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
-    setFeedback(null);
     try {
       const res = await fetch('/api/admin/smtp', {
         method: 'PUT',
@@ -87,7 +87,7 @@ export function SmtpSettingsManager() {
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setFeedback({ type: 'err', text: body.error || 'Gagal menyimpan pengaturan SMTP.' });
+        setNotice({ type: 'error', title: 'Gagal Menyimpan SMTP', message: body.error || 'Gagal menyimpan pengaturan SMTP.' });
         return;
       }
       setForm((prev) => ({
@@ -95,7 +95,7 @@ export function SmtpSettingsManager() {
         smtpPassword: '',
         hasAppPassword: Boolean(body.settings?.hasAppPassword),
       }));
-      setFeedback({ type: 'ok', text: 'Pengaturan Email SMTP berhasil disimpan.' });
+      setNotice({ type: 'success', title: 'Pengaturan SMTP Tersimpan', message: 'Konfigurasi Email SMTP Gmail berhasil diperbarui.' });
     } finally {
       setSaving(false);
     }
@@ -104,7 +104,6 @@ export function SmtpSettingsManager() {
   async function clearAppPassword() {
     if (!confirm('Hapus Sandi Aplikasi Gmail yang tersimpan? Pengiriman email akan dinonaktifkan sementara.')) return;
     setSaving(true);
-    setFeedback(null);
     try {
       const res = await fetch('/api/admin/smtp', {
         method: 'PUT',
@@ -122,7 +121,7 @@ export function SmtpSettingsManager() {
       });
       if (res.ok) {
         setForm((prev) => ({ ...prev, enabled: false, smtpPassword: '', hasAppPassword: false }));
-        setFeedback({ type: 'ok', text: 'Sandi Aplikasi berhasil dihapus.' });
+        setNotice({ type: 'success', title: 'Sandi Aplikasi Dihapus', message: 'Sandi Aplikasi Gmail yang tersimpan telah dihapus.' });
       }
     } finally {
       setSaving(false);
@@ -132,7 +131,6 @@ export function SmtpSettingsManager() {
   async function handleTestMail(e: React.FormEvent) {
     e.preventDefault();
     setTesting(true);
-    setFeedback(null);
     try {
       const res = await fetch('/api/admin/smtp/test', {
         method: 'POST',
@@ -141,10 +139,10 @@ export function SmtpSettingsManager() {
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setFeedback({ type: 'err', text: body.error || 'Gagal mengirim email uji coba.' });
+        setNotice({ type: 'error', title: 'Gagal Mengirim Email Tes', message: body.error || 'Periksa kembali email Gmail & Sandi Aplikasi.' });
         return;
       }
-      setFeedback({ type: 'ok', text: body.message || 'Email uji coba berhasil dikirim.' });
+      setNotice({ type: 'success', title: 'Email Tes Berhasil Dikirim', message: body.message || 'Email uji coba berhasil dikirim.' });
     } finally {
       setTesting(false);
     }
@@ -152,17 +150,17 @@ export function SmtpSettingsManager() {
 
   async function handleRunReminders() {
     setReminding(true);
-    setFeedback(null);
     try {
       const res = await fetch('/api/admin/smtp/reminders', { method: 'POST' });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setFeedback({ type: 'err', text: body.error || 'Gagal menjalankan pengecekan pengingat.' });
+        setNotice({ type: 'error', title: 'Gagal Menjalankan Pengingat', message: body.error || 'Terjadi kesalahan saat memeriksa pengingat.' });
         return;
       }
-      setFeedback({
-        type: 'ok',
-        text: `Pengecekan selesai: ${body.sent ?? 0} pengingat terkirim, ${body.failed ?? 0} gagal (dari ${body.checked ?? 0} pinjaman jatuh tempo).`,
+      setNotice({
+        type: 'success',
+        title: 'Pengecekan Pengingat Selesai',
+        message: `${body.sent ?? 0} email pengingat terkirim, ${body.failed ?? 0} gagal (dari ${body.checked ?? 0} pinjaman jatuh tempo).`,
       });
     } finally {
       setReminding(false);
@@ -177,18 +175,6 @@ export function SmtpSettingsManager() {
           Konfigurasi akun Gmail &amp; Sandi Aplikasi untuk notifikasi otomatis ke Admin dan Peminjam. Sandi aplikasi disimpan terenkripsi di server.
         </p>
       </div>
-
-      {feedback && (
-        <div
-          className={`p-3.5 rounded-xl text-body-sm font-medium ${
-            feedback.type === 'err'
-              ? 'bg-error-container text-on-error-container'
-              : 'bg-[#ecfdf5] text-[#065f46]'
-          }`}
-        >
-          {feedback.text}
-        </div>
-      )}
 
       {loading ? (
         <div className="h-64 rounded-xl bg-surface-container-low animate-pulse" />
@@ -383,6 +369,8 @@ export function SmtpSettingsManager() {
           </div>
         </div>
       )}
+
+      <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { UrgencyBadge } from '@/components/StatusBadge';
+import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
 import { formatIndonesianDate } from '@/lib/format';
 import { buildWhatsAppUrl } from '@/lib/loan-rules';
 
@@ -27,7 +28,7 @@ type AdminIssue = {
 export function IssuesManager() {
   const [issues, setIssues] = useState<AdminIssue[]>([]);
   const [statusFilter, setStatusFilter] = useState('');
-  const [msg, setMsg] = useState<string | null>(null);
+  const [notice, setNotice] = useState<NotificationModalState | null>(null);
   const [notesMap, setNotesMap] = useState<Record<string, string>>({});
   const [condMap, setCondMap] = useState<Record<string, string>>({});
 
@@ -63,10 +64,19 @@ export function IssuesManager() {
     });
     const d = await res.json().catch(() => ({}));
     if (!res.ok) {
-      setMsg(`Gagal memperbarui tiket: ${d.error || 'Terjadi kesalahan.'}`);
+      setNotice({
+        type: 'error',
+        title: 'Gagal Memperbarui Tiket Kendala',
+        message: d.error || 'Terjadi kesalahan saat menyimpan perubahan.',
+      });
       return;
     }
-    setMsg(`Tiket ${ticket.ticketCode} berhasil diperbarui.`);
+    setNotice({
+      type: 'success',
+      title: 'Tiket Kendala Berhasil Diperbarui',
+      message: `Status penanganan tiket ${ticket.ticketCode} telah diperbarui.`,
+      detail: ticket.ticketCode,
+    });
     setCondMap((prev) => ({ ...prev, [ticket.id]: '' }));
     load();
   }
@@ -91,8 +101,6 @@ export function IssuesManager() {
           <option value="resolved">Selesai (Resolved)</option>
         </select>
       </div>
-
-      {msg && <div className="p-3 rounded-xl bg-[#ecfdf5] text-[#065f46] text-body-sm font-medium">{msg}</div>}
 
       <div className="flex flex-col gap-4">
         {issues.map((t) => {
@@ -177,6 +185,8 @@ export function IssuesManager() {
           );
         })}
       </div>
+
+      <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );
 }
