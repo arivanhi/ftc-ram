@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { AvailabilityBadge, ConditionBadge, LoanStatusBadge } from '@/components/StatusBadge';
+import { FileDropzone } from '@/components/FileDropzone';
 import { formatIndonesianDate } from '@/lib/format';
 
 type SelectableAsset = {
@@ -613,21 +614,14 @@ export function LoanPortalClient() {
                 <span className="w-7 h-7 rounded-full bg-primary text-on-primary text-label-md flex items-center justify-center font-bold">4</span>
                 <h2 className="text-title-md text-on-surface font-bold">Dokumen Pendukung &amp; Pakta Integritas</h2>
               </div>
-              <label className="p-5 rounded-xl bg-surface-container-low hover:bg-surface-container cursor-pointer flex flex-col items-center text-center gap-1 border border-dashed border-outline-variant">
-                <span className="material-symbols-outlined text-primary text-[28px]">cloud_upload</span>
-                <span className="text-title-sm font-semibold">
-                  {attachment ? `Berkas dipilih: ${attachment.name}` : 'Unggah Surat Tugas / Pengantar Pameran (Opsional)'}
-                </span>
-                <span className="text-body-sm text-on-surface-variant">
-                  PDF maks 10 MB atau JPG/PNG maks 5 MB (hanya dapat dilihat Admin FTC)
-                </span>
-                <input
-                  type="file"
-                  accept=".pdf,image/jpeg,image/png,image/webp"
-                  className="sr-only"
-                  onChange={(e) => setAttachment(e.target.files?.[0] ?? null)}
-                />
-              </label>
+              <FileDropzone
+                accept=".pdf,image/jpeg,image/png,image/webp"
+                fileName={attachment?.name ?? null}
+                idleLabel="Seret & lepas Surat Tugas / Pengantar Pameran, atau klik (Opsional)"
+                hint="PDF maks 10 MB atau JPG/PNG maks 5 MB (hanya dapat dilihat Admin FTC)"
+                onFileSelect={(file) => setAttachment(file)}
+                onClear={() => setAttachment(null)}
+              />
 
               <label className="bg-secondary-container/15 p-4 rounded-xl flex items-start gap-3 cursor-pointer">
                 <input

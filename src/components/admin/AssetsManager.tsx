@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { AvailabilityBadge, ConditionBadge } from '@/components/StatusBadge';
 import { QrLabelModal } from '@/components/QrLabelModal';
+import { FileDropzone } from '@/components/FileDropzone';
 import { formatIndonesianDate } from '@/lib/format';
 
 type AssetSpec = { label: string; value: string };
@@ -551,18 +552,15 @@ export function AssetsManager() {
 
               <div className="md:col-span-2">
                 <label className="text-label-md block mb-1">Foto Produk (Disimpan dengan nama UUID)</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    onChange={(e) => e.target.files?.[0] && handlePhotoUpload(e.target.files[0])}
-                    className="text-body-sm"
-                  />
-                  {uploading && <span className="text-body-sm text-primary">Mengunggah...</span>}
-                  {form.photoUrl && (
-                    <img src={form.photoUrl} alt="Preview" className="h-12 w-16 object-cover rounded border" />
-                  )}
-                </div>
+                <FileDropzone
+                  accept="image/jpeg,image/png,image/webp"
+                  uploading={uploading}
+                  previewUrl={form.photoUrl || null}
+                  idleLabel="Seret & lepas foto produk di sini, atau klik untuk memilih"
+                  hint="Format JPG, PNG, atau WEBP • Maks 5 MB"
+                  onFileSelect={handlePhotoUpload}
+                  onClear={() => setForm((f) => ({ ...f, photoUrl: '' }))}
+                />
               </div>
 
               <div className="md:col-span-2">

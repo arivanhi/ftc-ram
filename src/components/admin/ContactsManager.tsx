@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { ContactStatusBadge } from '@/components/StatusBadge';
+import { FileDropzone } from '@/components/FileDropzone';
 
 type ContactRow = {
   id: string;
@@ -36,6 +37,7 @@ export function ContactsManager() {
   const [items, setItems] = useState<ContactRow[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(EMPTY_CONTACT);
+  const [uploading, setUploading] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
   const load = useCallback(async () => {
@@ -48,13 +50,18 @@ export function ContactsManager() {
   }, [load]);
 
   async function uploadPhoto(file: File) {
-    const fd = new FormData();
-    fd.set('file', file);
-    fd.set('kind', 'image');
-    const res = await fetch('/api/admin/uploads', { method: 'POST', body: fd });
-    const d = await res.json();
-    if (res.ok) setForm((p) => ({ ...p, photoUrl: d.url }));
-    else setMsg(d.error);
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.set('file', file);
+      fd.set('kind', 'image');
+      const res = await fetch('/api/admin/uploads', { method: 'POST', body: fd });
+      const d = await res.json();
+      if (res.ok) setForm((p) => ({ ...p, photoUrl: d.url }));
+      else setMsg(d.error);
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function save(e: React.FormEvent) {
@@ -116,7 +123,15 @@ export function ContactsManager() {
           </div>
           <div>
             <label className="text-label-sm text-on-surface-variant block mb-1">Foto Profil (Opsional)</label>
-            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => e.target.files?.[0] && uploadPhoto(e.target.files[0])} className="text-body-sm" />
+            <FileDropzone
+              accept="image/jpeg,image/png,image/webp"
+              uploading={uploading}
+              previewUrl={form.photoUrl || null}
+              idleLabel="Seret & lepas foto profil di sini, atau klik"
+              hint="JPG, PNG, atau WEBP • Maks 5 MB"
+              onFileSelect={uploadPhoto}
+              onClear={() => setForm((p) => ({ ...p, photoUrl: '' }))}
+            />
           </div>
           <label className="flex items-center gap-2 text-body-sm">
             <input type="checkbox" checked={form.isEmergency} onChange={(e) => setForm({ ...form, isEmergency: e.target.checked })} className="accent-primary" />
@@ -124,7 +139,7 @@ export function ContactsManager() {
           </label>
           <div className="flex gap-2">
             {editingId && <button type="button" onClick={() => { setEditingId(null); setForm(EMPTY_CONTACT); }} className="px-4 py-2 rounded-lg bg-surface-container text-title-sm">Batal</button>}
-            <button type="submit" className="flex-1 py-2 rounded-lg bg-primary text-on-primary text-title-sm font-bold">Simpan Narahubung</button>
+            <button type="submit" disabled={uploading} className="flex-1 py-2 rounded-lg bg-primary text-on-primary text-title-sm font-bold disabled:opacity-50">Simpan Narahubung</button>
           </div>
         </form>
 

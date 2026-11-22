@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { FileDropzone } from '@/components/FileDropzone';
 
 type TutorialRow = {
   id: string;
@@ -43,6 +44,7 @@ export function TutorialsManager() {
   const [form, setForm] = useState(EMPTY_TUT);
   const [faqQ, setFaqQ] = useState('');
   const [faqA, setFaqA] = useState('');
+  const [uploading, setUploading] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
   const load = useCallback(async () => {
@@ -61,14 +63,19 @@ export function TutorialsManager() {
   }, [load]);
 
   async function uploadPdf(file: File) {
-    const fd = new FormData();
-    fd.set('file', file);
-    fd.set('kind', 'any');
-    const res = await fetch('/api/admin/uploads', { method: 'POST', body: fd });
-    const body = await res.json();
-    if (!res.ok) return setMsg(body.error || 'Gagal mengunggah berkas.');
-    setForm((p) => ({ ...p, fileUrl: body.url }));
-    setMsg('Berkas panduan berhasil diunggah.');
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.set('file', file);
+      fd.set('kind', 'any');
+      const res = await fetch('/api/admin/uploads', { method: 'POST', body: fd });
+      const body = await res.json();
+      if (!res.ok) return setMsg(body.error || 'Gagal mengunggah berkas.');
+      setForm((p) => ({ ...p, fileUrl: body.url }));
+      setMsg('Berkas panduan berhasil diunggah.');
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function saveTutorial(e: React.FormEvent) {
@@ -176,14 +183,21 @@ export function TutorialsManager() {
             <input placeholder="Tautan Video (YouTube / Google Drive)" value={form.videoUrl} onChange={(e) => setForm({ ...form, videoUrl: e.target.value })} className="bg-surface-container-low px-3 py-2 rounded-lg text-body-sm" />
             <div className="flex flex-col gap-1">
               <label className="text-label-sm text-on-surface-variant">Unggah PDF / Gambar SOP (Opsional)</label>
-              <input type="file" accept=".pdf,image/jpeg,image/png,image/webp" onChange={(e) => e.target.files?.[0] && uploadPdf(e.target.files[0])} className="text-body-sm" />
-              {form.fileUrl && <span className="text-[12px] text-primary truncate">Terunggah: {form.fileUrl}</span>}
+              <FileDropzone
+                accept=".pdf,image/jpeg,image/png,image/webp"
+                uploading={uploading}
+                previewUrl={form.fileUrl || null}
+                idleLabel="Seret & lepas PDF/gambar panduan di sini, atau klik"
+                hint="PDF maks 10 MB atau JPG, PNG, WEBP maks 5 MB"
+                onFileSelect={uploadPdf}
+                onClear={() => setForm((p) => ({ ...p, fileUrl: '' }))}
+              />
             </div>
             <div className="flex gap-2">
               {editingId && (
                 <button type="button" onClick={() => { setEditingId(null); setForm(EMPTY_TUT); }} className="px-4 py-2 rounded-lg bg-surface-container text-title-sm">Batal</button>
               )}
-              <button type="submit" className="flex-1 py-2 rounded-lg bg-primary text-on-primary text-title-sm font-bold">
+              <button type="submit" disabled={uploading} className="flex-1 py-2 rounded-lg bg-primary text-on-primary text-title-sm font-bold disabled:opacity-50">
                 {editingId ? 'Perbarui Panduan' : 'Simpan Panduan'}
               </button>
             </div>

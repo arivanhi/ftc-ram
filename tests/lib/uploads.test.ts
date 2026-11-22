@@ -3,6 +3,7 @@ import { mkdtempSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { validateMagicBytes, resolveSafeUploadPath, saveUploadedFile } from '@/lib/uploads';
+import { isFileAccepted, isImageUrl } from '@/lib/format';
 
 describe('secure upload validation & path safety', () => {
   let tempDir: string;
@@ -43,5 +44,16 @@ describe('secure upload validation & path safety', () => {
     expect(resolveSafeUploadPath('public', 'logo.png')).toBeNull();
     const ok = resolveSafeUploadPath('public', '550e8400-e29b-41d4-a716-446655440000.png');
     expect(ok).toContain(join('public', '550e8400-e29b-41d4-a716-446655440000.png'));
+  });
+
+  it('validates dropped files against accept list (including MIME-less Windows drops) and detects image URLs', () => {
+    expect(isFileAccepted({ name: 'alat.png', type: 'image/png' }, 'image/jpeg,image/png,image/webp')).toBe(true);
+    expect(isFileAccepted({ name: 'alat.JPG', type: '' }, 'image/jpeg,image/png,image/webp')).toBe(true);
+    expect(isFileAccepted({ name: 'manual.pdf', type: 'application/pdf' }, 'image/jpeg,image/png,image/webp')).toBe(false);
+    expect(isFileAccepted({ name: 'manual.pdf', type: '' }, '.pdf,image/jpeg,image/png,image/webp')).toBe(true);
+    expect(isFileAccepted({ name: 'script.exe', type: 'application/octet-stream' }, '.pdf,image/jpeg,image/png,image/webp')).toBe(false);
+
+    expect(isImageUrl('/api/uploads/public/550e8400-e29b-41d4-a716-446655440000.webp')).toBe(true);
+    expect(isImageUrl('/api/uploads/public/550e8400-e29b-41d4-a716-446655440000.pdf')).toBe(false);
   });
 });

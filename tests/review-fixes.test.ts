@@ -66,4 +66,21 @@ describe('Final review Important fixes', () => {
     expect(detailSrc).not.toContain('/qr');
     expect(detailSrc).not.toContain('AssetDetailActions');
   });
+
+  it('uses drag-and-drop FileDropzone on image and guide upload forms', () => {
+    const dropzoneSrc = readFileSync('src/components/FileDropzone.tsx', 'utf8');
+    expect(dropzoneSrc).toContain('onDragOver');
+    expect(dropzoneSrc).toContain('onDrop');
+
+    for (const file of [
+      'src/components/admin/AssetsManager.tsx',
+      'src/components/admin/TutorialsManager.tsx',
+      'src/components/admin/ContactsManager.tsx',
+      'src/components/LoanPortalClient.tsx',
+      'src/components/ContactHelpdeskClient.tsx',
+    ]) {
+      const src = readFileSync(file, 'utf8');
+      expect(src).toContain('FileDropzone');
+    }
+  });
 });

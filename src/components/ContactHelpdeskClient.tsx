@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ContactStatusBadge, UrgencyBadge } from '@/components/StatusBadge';
+import { FileDropzone } from '@/components/FileDropzone';
 import { buildWhatsAppUrl } from '@/lib/loan-rules';
 import { formatIndonesianDate } from '@/lib/format';
 
@@ -472,16 +473,15 @@ export function ContactHelpdeskClient() {
               </div>
               <div>
                 <label className="text-title-sm font-semibold block mb-1">Foto Kendala (Opsional)</label>
-                <label className="w-full h-[38px] rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer flex items-center justify-center gap-1.5 text-body-sm border border-dashed border-outline-variant px-2 truncate">
-                  <span className="material-symbols-outlined text-[18px]">cloud_upload</span>
-                  <span className="truncate">{photo ? photo.name : 'JPG/PNG (Maks 5 MB)'}</span>
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    className="sr-only"
-                    onChange={(e) => setPhoto(e.target.files?.[0] ?? null)}
-                  />
-                </label>
+                <FileDropzone
+                  compact
+                  accept="image/jpeg,image/png,image/webp"
+                  fileName={photo?.name ?? null}
+                  idleLabel="Seret foto atau klik (JPG/PNG maks 5 MB)"
+                  hint="JPG, PNG, atau WEBP maks 5 MB"
+                  onFileSelect={(file) => setPhoto(file)}
+                  onClear={() => setPhoto(null)}
+                />
               </div>
             </div>
 

@@ -93,6 +93,39 @@ export function computeNextInventoryCode(existingCodes: readonly string[]): stri
   return `${ASSET_CODE_PREFIX}${String(maxNum + 1).padStart(3, '0')}`;
 }
 
+const MIME_TO_EXTS: Record<string, readonly string[]> = {
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/png': ['.png'],
+  'image/webp': ['.webp'],
+  'application/pdf': ['.pdf'],
+};
+
+export function isFileAccepted(
+  file: { name: string; type?: string },
+  accept?: string,
+): boolean {
+  if (!accept || !accept.trim()) return true;
+  const lowerName = file.name.toLowerCase();
+  const lowerType = (file.type ?? '').toLowerCase();
+  const tokens = accept
+    .split(',')
+    .map((t) => t.trim().toLowerCase())
+    .filter(Boolean);
+
+  return tokens.some((token) => {
+    if (token.startsWith('.')) return lowerName.endsWith(token);
+    if (token.endsWith('/*')) return lowerType.startsWith(token.slice(0, -1));
+    if (lowerType && lowerType === token) return true;
+    const exts = MIME_TO_EXTS[token];
+    return exts ? exts.some((ext) => lowerName.endsWith(ext)) : false;
+  });
+}
+
+export function isImageUrl(url: string | null | undefined): boolean {
+  if (!url) return false;
+  return /\.(jpg|jpeg|png|webp)(\?.*)?$/i.test(url);
+}
+
 export type AssetCondition = keyof typeof CONDITION_META;
 export type AssetAvailability = keyof typeof AVAILABILITY_META;
 export type LoanStatus = keyof typeof LOAN_STATUS_META;
