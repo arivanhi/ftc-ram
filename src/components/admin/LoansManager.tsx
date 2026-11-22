@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { LoanStatusBadge } from '@/components/StatusBadge';
 import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
+import { ConfirmModal, type ConfirmModalState } from '@/components/ConfirmModal';
 import { formatIndonesianDate, LOAN_STATUS_META, type AssetCondition, type LoanStatus } from '@/lib/format';
 import { buildWhatsAppUrl } from '@/lib/loan-rules';
 
@@ -41,6 +42,7 @@ export function LoansManager() {
   const [statusFilter, setStatusFilter] = useState('');
   const [loans, setLoans] = useState<AdminLoan[]>([]);
   const [notice, setNotice] = useState<NotificationModalState | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmModalState | null>(null);
   const [remindingId, setRemindingId] = useState<string | null>(null);
   const [returningLoan, setReturningLoan] = useState<AdminLoan | null>(null);
   const [returnState, setReturnState] = useState<Record<string, { returnCondition: AssetCondition; returnNotes: string }>>({});
@@ -57,42 +59,75 @@ export function LoansManager() {
     load();
   }, [load]);
 
-  async function transition(loan: AdminLoan, status: 'approved' | 'rejected' | 'cancelled' | 'borrowed') {
-    const promptText =
-      status === 'rejected'
-        ? 'Masukkan alasan penolakan (opsional):'
-        : status === 'cancelled'
-          ? 'Masukkan alasan pembatalan (opsional):'
-          : 'Catatan Admin (opsional):';
-    const adminNotes = window.prompt(promptText, loan.adminNotes ?? '');
-    if (adminNotes === null) return;
+  function transition(loan: AdminLoan, status: 'approved' | 'rejected' | 'cancelled' | 'borrowed') {
+    const configByStatus = {
+      approved: {
+        title: 'Setujui Peminjaman?',
+        message: 'Status tiket akan diubah menjadi Disetujui dan email verifikasi + panduan alat akan dikirim ke peminjam (jika SMTP aktif).',
+        confirmLabel: 'Ya, Setujui',
+        tone: 'primary' as const,
+        inputLabel: 'Catatan Admin (opsional)',
+        inputPlaceholder: 'Contoh: Ambil di Lab E1.01 pukul 08.00 WIB',
+      },
+      borrowed: {
+        title: 'Konfirmasi Serah Terima Aset?',
+        message: 'Aset pada tiket ini akan ditandai Sedang Dipinjam.',
+        confirmLabel: 'Ya, Serahkan Aset',
+        tone: 'primary' as const,
+        inputLabel: 'Catatan Serah Terima (opsional)',
+        inputPlaceholder: 'Catatan kelengkapan atau serah terima...',
+      },
+      rejected: {
+        title: 'Tolak Pengajuan Peminjaman?',
+        message: 'Pengajuan ini akan ditolak dan peminjam akan menerima pemberitahuan.',
+        confirmLabel: 'Ya, Tolak',
+        tone: 'danger' as const,
+        inputLabel: 'Alasan Penolakan (opsional)',
+        inputPlaceholder: 'Masukkan alasan penolakan...',
+      },
+      cancelled: {
+        title: 'Batalkan Peminjaman?',
+        message: 'Tiket peminjaman ini akan dibatalkan dan jadwal aset kembali kosong.',
+        confirmLabel: 'Ya, Batalkan',
+        tone: 'warning' as const,
+        inputLabel: 'Alasan Pembatalan (opsional)',
+        inputPlaceholder: 'Masukkan alasan pembatalan...',
+      },
+    }[status];
 
-    const res = await fetch(`/api/admin/loans/${loan.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status, adminNotes: adminNotes || null }),
+    setConfirmDialog({
+      ...configByStatus,
+      detail: `${loan.ticketCode} — ${loan.borrowerName} (${loan.purposeTitle})`,
+      defaultInputValue: loan.adminNotes ?? '',
+      onConfirm: async (adminNotes) => {
+        const res = await fetch(`/api/admin/loans/${loan.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status, adminNotes: adminNotes.trim() || null }),
+        });
+        const d = await res.json();
+        if (!res.ok) {
+          setNotice({
+            type: 'error',
+            title: 'Gagal Memperbarui Peminjaman',
+            message: d.error || 'Gagal mengubah status peminjaman.',
+          });
+          return;
+        }
+        const emailInfo = d.emailNotification
+          ? d.emailNotification.sent
+            ? ' Email notifikasi berhasil dikirim ke peminjam.'
+            : ` Email belum terkirim (${d.emailNotification.reason || 'SMTP nonaktif'}).`
+          : '';
+        setNotice({
+          type: 'success',
+          title: 'Status Peminjaman Diperbarui',
+          message: `Tiket ${loan.ticketCode} diubah menjadi ${LOAN_STATUS_META[status].label}.${emailInfo}`,
+          detail: loan.ticketCode,
+        });
+        load();
+      },
     });
-    const d = await res.json();
-    if (!res.ok) {
-      setNotice({
-        type: 'error',
-        title: 'Gagal Memperbarui Peminjaman',
-        message: d.error || 'Gagal mengubah status peminjaman.',
-      });
-      return;
-    }
-    const emailInfo = d.emailNotification
-      ? d.emailNotification.sent
-        ? ' Email notifikasi berhasil dikirim ke peminjam.'
-        : ` Email belum terkirim (${d.emailNotification.reason || 'SMTP nonaktif'}).`
-      : '';
-    setNotice({
-      type: 'success',
-      title: 'Status Peminjaman Diperbarui',
-      message: `Tiket ${loan.ticketCode} diubah menjadi ${LOAN_STATUS_META[status].label}.${emailInfo}`,
-      detail: loan.ticketCode,
-    });
-    load();
   }
 
   async function sendReminder(loan: AdminLoan) {
@@ -369,6 +404,7 @@ export function LoansManager() {
         </div>
       )}
 
+      <ConfirmModal request={confirmDialog} onClose={() => setConfirmDialog(null)} />
       <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );

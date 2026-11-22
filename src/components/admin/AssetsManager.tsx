@@ -6,6 +6,7 @@ import { AvailabilityBadge, ConditionBadge } from '@/components/StatusBadge';
 import { QrLabelModal } from '@/components/QrLabelModal';
 import { FileDropzone } from '@/components/FileDropzone';
 import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
+import { ConfirmModal, type ConfirmModalState } from '@/components/ConfirmModal';
 import { formatIndonesianDate } from '@/lib/format';
 
 type AssetSpec = { label: string; value: string };
@@ -69,6 +70,7 @@ export function AssetsManager() {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState<NotificationModalState | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmModalState | null>(null);
   const [modalError, setModalError] = useState<string | null>(null);
   const [qrItems, setQrItems] = useState<AdminAsset[]>([]);
 
@@ -194,27 +196,35 @@ export function AssetsManager() {
     }
   }
 
-  async function handleDelete(a: AdminAsset) {
-    if (!confirm(`Hapus / arsipkan aset ${a.inventoryCode} (${a.name})?`)) return;
-    const res = await fetch(`/api/admin/assets/${a.id}`, { method: 'DELETE' });
-    const body = await res.json();
-    if (!res.ok) {
-      setNotice({
-        type: 'error',
-        title: 'Gagal Menghapus Aset',
-        message: body.error || 'Aset tidak dapat dihapus saat ini.',
-      });
-      return;
-    }
-    setNotice({
-      type: 'success',
-      title: body.mode === 'archived' ? 'Data Aset Diarsipkan' : 'Data Aset Berhasil Dihapus',
-      message:
-        body.mode === 'archived'
-          ? `Aset ${a.inventoryCode} (${a.name}) diarsipkan karena memiliki riwayat peminjaman.`
-          : `Aset ${a.inventoryCode} (${a.name}) telah dihapus permanen.`,
+  function handleDelete(a: AdminAsset) {
+    setConfirmDialog({
+      title: 'Hapus / Arsipkan Aset?',
+      message: 'Aset tanpa riwayat peminjaman akan dihapus permanen. Aset yang pernah dipinjam akan diarsipkan secara aman.',
+      detail: `${a.inventoryCode} — ${a.name}`,
+      confirmLabel: 'Ya, Hapus',
+      tone: 'danger',
+      onConfirm: async () => {
+        const res = await fetch(`/api/admin/assets/${a.id}`, { method: 'DELETE' });
+        const body = await res.json();
+        if (!res.ok) {
+          setNotice({
+            type: 'error',
+            title: 'Gagal Menghapus Aset',
+            message: body.error || 'Aset tidak dapat dihapus saat ini.',
+          });
+          return;
+        }
+        setNotice({
+          type: 'success',
+          title: body.mode === 'archived' ? 'Data Aset Diarsipkan' : 'Data Aset Berhasil Dihapus',
+          message:
+            body.mode === 'archived'
+              ? `Aset ${a.inventoryCode} (${a.name}) diarsipkan karena memiliki riwayat peminjaman.`
+              : `Aset ${a.inventoryCode} (${a.name}) telah dihapus permanen.`,
+        });
+        loadAll();
+      },
     });
-    loadAll();
   }
 
   async function handleRestore(a: AdminAsset) {
@@ -659,6 +669,7 @@ export function AssetsManager() {
         }))}
       />
 
+      <ConfirmModal request={confirmDialog} onClose={() => setConfirmDialog(null)} />
       <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );

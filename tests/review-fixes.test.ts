@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 import { validateReturnItemsMembership } from '@/lib/loan-rules';
 import { normalizePagination } from '@/lib/asset-queries';
 
@@ -128,6 +129,23 @@ describe('Final review Important fixes', () => {
     ]) {
       const src = readFileSync(file, 'utf8');
       expect(src, `${file} missing NotificationModal`).toContain('NotificationModal');
+    }
+  });
+
+  it('replaces all native browser confirm/prompt/alert dialogs with ConfirmModal', () => {
+    const confirmModalSrc = readFileSync('src/components/ConfirmModal.tsx', 'utf8');
+    expect(confirmModalSrc).toContain('role="dialog"');
+    expect(confirmModalSrc).toContain('aria-modal="true"');
+
+    const walk = (dir: string): string[] =>
+      readdirSync(dir).flatMap((entry) => {
+        const full = join(dir, entry);
+        return statSync(full).isDirectory() ? walk(full) : [full];
+      });
+
+    for (const file of walk('src/components')) {
+      const src = readFileSync(file, 'utf8');
+      expect(src, `${file} still calls native confirm/prompt/alert`).not.toMatch(/\b(window\.)?(confirm|prompt|alert)\s*\(/);
     }
   });
 });

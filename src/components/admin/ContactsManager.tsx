@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ContactStatusBadge } from '@/components/StatusBadge';
 import { FileDropzone } from '@/components/FileDropzone';
 import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
+import { ConfirmModal, type ConfirmModalState } from '@/components/ConfirmModal';
 
 type ContactRow = {
   id: string;
@@ -40,6 +41,7 @@ export function ContactsManager() {
   const [form, setForm] = useState(EMPTY_CONTACT);
   const [uploading, setUploading] = useState(false);
   const [notice, setNotice] = useState<NotificationModalState | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmModalState | null>(null);
 
   const load = useCallback(async () => {
     const res = await fetch('/api/admin/contacts');
@@ -91,16 +93,24 @@ export function ContactsManager() {
     load();
   }
 
-  async function del(id: string) {
-    if (!confirm('Hapus narahubung ini?')) return;
-    const res = await fetch(`/api/admin/contacts/${id}`, { method: 'DELETE' });
-    const d = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      setNotice({ type: 'error', title: 'Gagal Menghapus Narahubung', message: d.error || 'Narahubung tidak dapat dihapus.' });
-      return;
-    }
-    setNotice({ type: 'success', title: 'Narahubung Berhasil Dihapus', message: 'Data narahubung telah dihapus dari direktori.' });
-    load();
+  function del(c: ContactRow) {
+    setConfirmDialog({
+      title: 'Hapus Narahubung?',
+      message: 'Data narahubung ini akan dihapus dari direktori publik dan admin.',
+      detail: `${c.name} (${c.code})`,
+      confirmLabel: 'Ya, Hapus',
+      tone: 'danger',
+      onConfirm: async () => {
+        const res = await fetch(`/api/admin/contacts/${c.id}`, { method: 'DELETE' });
+        const d = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          setNotice({ type: 'error', title: 'Gagal Menghapus Narahubung', message: d.error || 'Narahubung tidak dapat dihapus.' });
+          return;
+        }
+        setNotice({ type: 'success', title: 'Narahubung Berhasil Dihapus', message: `Data narahubung "${c.name}" telah dihapus dari direktori.` });
+        load();
+      },
+    });
   }
 
   return (
@@ -183,7 +193,7 @@ export function ContactsManager() {
                 >
                   Edit
                 </button>
-                <button type="button" onClick={() => del(c.id)} className="text-label-md text-error hover:underline">
+                <button type="button" onClick={() => del(c)} className="text-label-md text-error hover:underline">
                   Hapus
                 </button>
               </div>
@@ -192,6 +202,7 @@ export function ContactsManager() {
         </div>
       </div>
 
+      <ConfirmModal request={confirmDialog} onClose={() => setConfirmDialog(null)} />
       <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );

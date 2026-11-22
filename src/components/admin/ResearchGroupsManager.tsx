@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
+import { ConfirmModal, type ConfirmModalState } from '@/components/ConfirmModal';
 
 type ResearchGroupRow = {
   id: string;
@@ -24,6 +25,7 @@ export function ResearchGroupsManager() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState<NotificationModalState | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmModalState | null>(null);
 
   const load = useCallback(async () => {
     const res = await fetch('/api/admin/research-groups');
@@ -70,20 +72,28 @@ export function ResearchGroupsManager() {
     }
   }
 
-  async function handleDelete(item: ResearchGroupRow) {
-    if (!confirm(`Hapus tautan "${item.name}"?`)) return;
-    const res = await fetch(`/api/admin/research-groups/${item.id}`, { method: 'DELETE' });
-    const body = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      setNotice({ type: 'error', title: 'Gagal Menghapus Kelompok Keilmuan', message: body.error || 'Gagal menghapus data.' });
-      return;
-    }
-    if (editingId === item.id) {
-      setEditingId(null);
-      setForm(EMPTY_FORM);
-    }
-    setNotice({ type: 'success', title: 'Kelompok Keilmuan Berhasil Dihapus', message: `Tautan "${item.name}" telah dihapus.` });
-    load();
+  function handleDelete(item: ResearchGroupRow) {
+    setConfirmDialog({
+      title: 'Hapus Kelompok Keilmuan?',
+      message: 'Hyperlink Kelompok Keilmuan ini akan dihapus dari header portal publik.',
+      detail: `${item.name} (${item.url})`,
+      confirmLabel: 'Ya, Hapus',
+      tone: 'danger',
+      onConfirm: async () => {
+        const res = await fetch(`/api/admin/research-groups/${item.id}`, { method: 'DELETE' });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          setNotice({ type: 'error', title: 'Gagal Menghapus Kelompok Keilmuan', message: body.error || 'Gagal menghapus data.' });
+          return;
+        }
+        if (editingId === item.id) {
+          setEditingId(null);
+          setForm(EMPTY_FORM);
+        }
+        setNotice({ type: 'success', title: 'Kelompok Keilmuan Berhasil Dihapus', message: `Tautan "${item.name}" telah dihapus.` });
+        load();
+      },
+    });
   }
 
   return (
@@ -228,6 +238,7 @@ export function ResearchGroupsManager() {
         </div>
       </div>
 
+      <ConfirmModal request={confirmDialog} onClose={() => setConfirmDialog(null)} />
       <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );

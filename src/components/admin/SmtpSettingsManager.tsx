@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
+import { ConfirmModal, type ConfirmModalState } from '@/components/ConfirmModal';
 
 type SmtpFormState = {
   enabled: boolean;
@@ -35,6 +36,7 @@ export function SmtpSettingsManager() {
   const [testing, setTesting] = useState(false);
   const [reminding, setReminding] = useState(false);
   const [notice, setNotice] = useState<NotificationModalState | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmModalState | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -101,31 +103,38 @@ export function SmtpSettingsManager() {
     }
   }
 
-  async function clearAppPassword() {
-    if (!confirm('Hapus Sandi Aplikasi Gmail yang tersimpan? Pengiriman email akan dinonaktifkan sementara.')) return;
-    setSaving(true);
-    try {
-      const res = await fetch('/api/admin/smtp', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          enabled: false,
-          smtpHost: form.smtpHost,
-          smtpPort: Number(form.smtpPort),
-          smtpUser: form.smtpUser,
-          clearPassword: true,
-          senderName: form.senderName,
-          adminNotifyEmail: form.adminNotifyEmail,
-          reminderHoursBefore: Number(form.reminderHoursBefore) || 24,
-        }),
-      });
-      if (res.ok) {
-        setForm((prev) => ({ ...prev, enabled: false, smtpPassword: '', hasAppPassword: false }));
-        setNotice({ type: 'success', title: 'Sandi Aplikasi Dihapus', message: 'Sandi Aplikasi Gmail yang tersimpan telah dihapus.' });
-      }
-    } finally {
-      setSaving(false);
-    }
+  function clearAppPassword() {
+    setConfirmDialog({
+      title: 'Hapus Sandi Aplikasi Gmail?',
+      message: 'Sandi aplikasi yang tersimpan akan dihapus dan notifikasi email SMTP akan dinonaktifkan sementara hingga Anda mengisi sandi baru.',
+      confirmLabel: 'Ya, Hapus Sandi',
+      tone: 'danger',
+      onConfirm: async () => {
+        setSaving(true);
+        try {
+          const res = await fetch('/api/admin/smtp', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              enabled: false,
+              smtpHost: form.smtpHost,
+              smtpPort: Number(form.smtpPort),
+              smtpUser: form.smtpUser,
+              clearPassword: true,
+              senderName: form.senderName,
+              adminNotifyEmail: form.adminNotifyEmail,
+              reminderHoursBefore: Number(form.reminderHoursBefore) || 24,
+            }),
+          });
+          if (res.ok) {
+            setForm((prev) => ({ ...prev, enabled: false, smtpPassword: '', hasAppPassword: false }));
+            setNotice({ type: 'success', title: 'Sandi Aplikasi Dihapus', message: 'Sandi Aplikasi Gmail yang tersimpan telah dihapus.' });
+          }
+        } finally {
+          setSaving(false);
+        }
+      },
+    });
   }
 
   async function handleTestMail(e: React.FormEvent) {
@@ -370,6 +379,7 @@ export function SmtpSettingsManager() {
         </div>
       )}
 
+      <ConfirmModal request={confirmDialog} onClose={() => setConfirmDialog(null)} />
       <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );

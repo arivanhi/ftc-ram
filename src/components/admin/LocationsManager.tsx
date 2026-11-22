@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
+import { ConfirmModal, type ConfirmModalState } from '@/components/ConfirmModal';
 
 type Room = {
   id: string;
@@ -25,6 +26,7 @@ type Building = { id: string; code: string; name: string; subtitle: string; icon
 export function LocationsManager() {
   const [buildings, setBuildings] = useState<Building[]>([]);
   const [notice, setNotice] = useState<NotificationModalState | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmModalState | null>(null);
 
   // Quick create forms
   const [bCode, setBCode] = useState('');
@@ -118,16 +120,24 @@ export function LocationsManager() {
     }
   }
 
-  async function deleteRoom(id: string, code: string) {
-    if (!confirm(`Hapus ruangan ${code}?`)) return;
-    const res = await fetch(`/api/admin/rooms/${id}`, { method: 'DELETE' });
-    const d = await res.json().catch(() => ({}));
-    if (res.ok) {
-      setNotice({ type: 'success', title: 'Ruangan Berhasil Dihapus', message: `Ruangan ${code} telah dihapus dari denah.` });
-      load();
-    } else {
-      setNotice({ type: 'error', title: 'Gagal Menghapus Ruangan', message: d.error || 'Gagal menghapus ruangan.' });
-    }
+  function deleteRoom(id: string, code: string) {
+    setConfirmDialog({
+      title: 'Hapus Ruangan dari Denah?',
+      message: 'Ruangan ini akan dihapus dari denah lab. Aset di dalamnya akan dilepas dari ruangan.',
+      detail: `Kode Ruangan: ${code}`,
+      confirmLabel: 'Ya, Hapus',
+      tone: 'danger',
+      onConfirm: async () => {
+        const res = await fetch(`/api/admin/rooms/${id}`, { method: 'DELETE' });
+        const d = await res.json().catch(() => ({}));
+        if (res.ok) {
+          setNotice({ type: 'success', title: 'Ruangan Berhasil Dihapus', message: `Ruangan ${code} telah dihapus dari denah.` });
+          load();
+        } else {
+          setNotice({ type: 'error', title: 'Gagal Menghapus Ruangan', message: d.error || 'Gagal menghapus ruangan.' });
+        }
+      },
+    });
   }
 
   async function updateRoomGrid(room: Room, gridZone: 'top' | 'bottom', gridColSpan: number) {
@@ -253,6 +263,7 @@ export function LocationsManager() {
         ))}
       </div>
 
+      <ConfirmModal request={confirmDialog} onClose={() => setConfirmDialog(null)} />
       <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );

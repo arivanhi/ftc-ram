@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { FileDropzone } from '@/components/FileDropzone';
 import { NotificationModal, type NotificationModalState } from '@/components/NotificationModal';
+import { ConfirmModal, type ConfirmModalState } from '@/components/ConfirmModal';
 
 type TutorialRow = {
   id: string;
@@ -47,6 +48,7 @@ export function TutorialsManager() {
   const [faqA, setFaqA] = useState('');
   const [uploading, setUploading] = useState(false);
   const [notice, setNotice] = useState<NotificationModalState | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmModalState | null>(null);
 
   const load = useCallback(async () => {
     const [tRes, fRes, aRes] = await Promise.all([
@@ -108,16 +110,24 @@ export function TutorialsManager() {
     load();
   }
 
-  async function deleteTutorial(id: string) {
-    if (!confirm('Hapus panduan ini?')) return;
-    const res = await fetch(`/api/admin/tutorials/${id}`, { method: 'DELETE' });
-    const d = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      setNotice({ type: 'error', title: 'Gagal Menghapus Panduan', message: d.error || 'Panduan tidak dapat dihapus.' });
-      return;
-    }
-    setNotice({ type: 'success', title: 'Panduan Berhasil Dihapus', message: 'Data panduan telah dihapus.' });
-    load();
+  function deleteTutorial(t: TutorialRow) {
+    setConfirmDialog({
+      title: 'Hapus Panduan / SOP?',
+      message: 'Panduan ini akan dihapus permanen dari portal Tutorial & halaman detail aset.',
+      detail: `${t.docCode} — ${t.title}`,
+      confirmLabel: 'Ya, Hapus',
+      tone: 'danger',
+      onConfirm: async () => {
+        const res = await fetch(`/api/admin/tutorials/${t.id}`, { method: 'DELETE' });
+        const d = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          setNotice({ type: 'error', title: 'Gagal Menghapus Panduan', message: d.error || 'Panduan tidak dapat dihapus.' });
+          return;
+        }
+        setNotice({ type: 'success', title: 'Panduan Berhasil Dihapus', message: `Panduan "${t.title}" telah dihapus.` });
+        load();
+      },
+    });
   }
 
   async function saveFaq(e: React.FormEvent) {
@@ -138,16 +148,24 @@ export function TutorialsManager() {
     load();
   }
 
-  async function deleteFaq(id: string) {
-    if (!confirm('Hapus FAQ ini?')) return;
-    const res = await fetch(`/api/admin/faqs/${id}`, { method: 'DELETE' });
-    const d = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      setNotice({ type: 'error', title: 'Gagal Menghapus FAQ', message: d.error || 'FAQ tidak dapat dihapus.' });
-      return;
-    }
-    setNotice({ type: 'success', title: 'FAQ Berhasil Dihapus', message: 'Data FAQ telah dihapus.' });
-    load();
+  function deleteFaq(f: FaqRow) {
+    setConfirmDialog({
+      title: 'Hapus FAQ?',
+      message: 'Pertanyaan & jawaban FAQ ini akan dihapus permanen dari portal publik.',
+      detail: f.question,
+      confirmLabel: 'Ya, Hapus',
+      tone: 'danger',
+      onConfirm: async () => {
+        const res = await fetch(`/api/admin/faqs/${f.id}`, { method: 'DELETE' });
+        const d = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          setNotice({ type: 'error', title: 'Gagal Menghapus FAQ', message: d.error || 'FAQ tidak dapat dihapus.' });
+          return;
+        }
+        setNotice({ type: 'success', title: 'FAQ Berhasil Dihapus', message: 'Data FAQ telah dihapus.' });
+        load();
+      },
+    });
   }
 
   return (
@@ -258,7 +276,7 @@ export function TutorialsManager() {
                     >
                       Edit
                     </button>
-                    <button type="button" onClick={() => deleteTutorial(t.id)} className="text-label-md text-error hover:underline">
+                    <button type="button" onClick={() => deleteTutorial(t)} className="text-label-md text-error hover:underline">
                       Hapus
                     </button>
                   </div>
@@ -284,13 +302,14 @@ export function TutorialsManager() {
                   <div className="text-title-sm font-bold">{f.question}</div>
                   <p className="text-body-sm text-on-surface-variant mt-1">{f.answer}</p>
                 </div>
-                <button type="button" onClick={() => deleteFaq(f.id)} className="text-label-md text-error shrink-0">Hapus</button>
+                <button type="button" onClick={() => deleteFaq(f)} className="text-label-md text-error shrink-0">Hapus</button>
               </div>
             ))}
           </div>
         </div>
       )}
 
+      <ConfirmModal request={confirmDialog} onClose={() => setConfirmDialog(null)} />
       <NotificationModal notification={notice} onClose={() => setNotice(null)} />
     </div>
   );
